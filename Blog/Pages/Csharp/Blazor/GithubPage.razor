@@ -43,8 +43,8 @@
 
     <img src="images/githubpage_4.png" alt="githubpage_4" style="width:100%; margin-bottom:10px;">
 
-    <CodeSnippet Language="Language.java" Style="Style.AndroidStudio">
-       name: Deploy to GitHub Pages
+    <pre><code class="YAML">
+        name: Deploy to GitHub Pages
 
         # 每次程式碼Push到master，執行workflow
         on:
@@ -92,8 +92,8 @@
                 GITHUB_TOKEN: ${{ secrets.BLOGTOKEN }}
                 BRANCH: gh-pages
                 FOLDER: release/wwwroot
-    </CodeSnippet>
-    
+    </code></pre>
+
     <p>
         順利執行完這個yml檔，就會自動建立好gh-pages分支，並將專案的發佈檔commit過去
     </p>
@@ -108,3 +108,12 @@
     <img src="images/githubpage_5.png" alt="githubpage_5" style="width:100%; margin-bottom:10px;">
 
 </div>
+
+@code{
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
