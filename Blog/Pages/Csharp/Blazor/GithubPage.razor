@@ -1,0 +1,110 @@
+﻿@page "/githubpage"
+
+<div style="width:80%; background-color: white; padding: 30px;">
+    <h2><b>Deploy To GitHub Pages</b></h2>
+    <br />
+
+    <h3><b>Github Pages 簡介</b></h3>
+    <p>GitHub Pages是GitHub提供的一個網頁代管服務，於2008年推出。 可以用於存放靜態網頁，包括部落格、項目文檔甚至整本書。</p>
+
+    <h3><b>GitHub Actions</b></h3>
+    <p>使用 GitHub Actions 可以讓 GitHub Repo 內自訂且自動執行你的軟體開發流程，舉例來說：當有 Contributor 建立 Pull Request 時，會觸發執行自動測試腳本進行測試。你可以建立與共享任何你喜歡的自動化工作(Job)，完整且任意組合它們，進而達到持續整合 (continuous integration) 與持續佈署 (continuous delivery)。</p>
+
+    <p>
+        佈署專案到GitHub Pages，大致上分為以下步驟：   <br />
+        1.Personal access token   <br />
+        2.撰寫yml檔   <br />
+        3.GitHub Pages設定
+    </p>
+
+    <h3><b>Personal access token</b></h3>
+    <p>
+        進入Peersona settings -> Developer Settings -> Personal access tokens <br />
+        在Note下輸入token名稱(在此為blogtoken)，然後勾選repo的權限後，點擊Generate Token <br />
+        請將產生的token記下來，因為離開這個頁面就再也看不到了
+    </p>
+
+    <img src="images/githubpage_1.png" alt="githubpage_1" style="width:100%; margin-bottom:10px;">
+     
+    <img src="images/githubpage_2.png" alt="githubpage_2" style="width:100%; margin-bottom:10px;">
+
+    <p>
+        進入repository的setting -> secrets -> actions <br />
+        點New repository secret，將剛剛記的token填在Secret下，並給這個secret一個名稱，
+        這個名稱等一下在編輯yml檔時會用到，點擊Add secret
+    </p>
+
+    <img src="images/githubpage_3.png" alt="githubpage_3" style="width:100%; margin-bottom:10px;">
+
+    <h3><b>撰寫yml檔</b></h3>
+    <p>
+        進入repository的Actions，按set up a workflow yourself來自訂yml檔內容，將下方的yml檔貼上，
+    </p>
+
+    <img src="images/githubpage_4.png" alt="githubpage_4" style="width:100%; margin-bottom:10px;">
+
+    <CodeSnippet Language="Language.java" Style="Style.AndroidStudio">
+       name: Deploy to GitHub Pages
+
+        # 每次程式碼Push到master，執行workflow
+        on:
+          push:
+            branches: [ master ]
+
+        jobs:
+          deploy-to-github-pages:
+            # 使用ubuntu
+            runs-on: ubuntu-latest
+            steps:
+            # 使用checkout actions
+            - uses: actions/checkout@v2
+    
+            # 安裝.NET Core SDK 3.1
+            - name: Setup .NET Core SDK
+              uses: actions/setup-dotnet@v3
+              with:
+                dotnet-version: 6.0.x   
+    
+            # 執行單元測試專案
+            - name: Run Unit Test 
+              run: dotnet test --no-build
+      
+            # 發佈程式到Release資料夾
+            - name: Publish .NET Core Project
+              run: dotnet publish Blog/Blog.csproj -c Release -o release --nologo
+    
+            # 修改index.html的base href -- 從"/"改為"/Blog/"
+            - name: Change base-tag in index.html from / to Blog
+              run: sed -i 's/<base href="\/" \/>/<base href="\/Blog\/" \/>/g' release/wwwroot/index.html
+    
+            # 複製index.html內容到404.html
+            - name: copy index.html to 404.html
+              run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+            # 加入一個.nojekyll檔案
+            - name: Add .nojekyll file
+              run: touch release/wwwroot/.nojekyll
+    
+            # 將release/wwwroot的程式碼，push到gh-pages分支
+            - name: Commit wwwroot to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@3.5.9
+              with:
+                GITHUB_TOKEN: ${{ secrets.BLOGTOKEN }}
+                BRANCH: gh-pages
+                FOLDER: release/wwwroot
+    </CodeSnippet>
+    
+    <p>
+        順利執行完這個yml檔，就會自動建立好gh-pages分支，並將專案的發佈檔commit過去
+    </p>
+
+    <h3><b>GitHub Pages設定</b></h3>
+    <p>
+        進入repository的Setting，設定分支為gh-pages，然後save。
+        稍待片刻就可以看到已發佈完成的訊息，
+        佈署到GitHub Pages後的網址會是 https://{GitHubAccount}.github.io/{RepositoryName}
+    </p>
+
+    <img src="images/githubpage_5.png" alt="githubpage_5" style="width:100%; margin-bottom:10px;">
+
+</div>
