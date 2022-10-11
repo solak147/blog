@@ -1,0 +1,43 @@
+﻿<div style="width:80%; background-color: white; padding: 30px;">
+    <h2><b>使用Promise達到同步等待js資源載入</b></h2>
+    <br />
+
+    <p>
+        瀏覽器解析 HTML 是一行一行依序向下讀取，在傳統的寫法中，當瀏覽器讀到 &lt;script&gt; 時，便會 暫停解析 DOM，立刻開始下載 &lt;script&gt; 的資源
+        ，並在下載完成後立刻執行。由於這樣的特性，便可能造成在 DOM 樹建構不完全時就執行 JavaScript，其中需要操作 DOM 的程式可能就因此無法正確運作，
+        ；或著是在等待 &lt;script&gt; 資源下載、執行的過程，使用者便會卡在白畫面
+        把 &lt;script&gt; 的位置都放到 &lt;body&gt; 的最後一行，來避免在 DOM 樹未建構完就開始執行程式的問題
+    </p>
+    <p>
+        在HTML5新增的script async屬性
+    </p>
+    <pre><code class="JAVASCRIPT">
+        let scripts = [`你的js路徑`];
+        await Promise.all(scripts.map(async (url) => {
+            let script = document.createElement('script');
+            script.src = url;
+            script.async = false; // 讓瀏覽器保持我們設定的 js 順序
+
+            // 判斷 JS 是否載入完成
+            script.onload = function () {
+                console.log('JS Loading succ:', url);
+                resolve(url);
+            };
+            script.onerror = function () {
+                console.log('JS Loading error:', url);
+                reject(url);
+            };
+
+            document.body.appendChild(script);
+        }));
+    </code></pre>
+</div>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
