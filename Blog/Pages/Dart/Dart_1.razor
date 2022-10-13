@@ -1,7 +1,16 @@
 ﻿@page "/dart1"
 
-Using a metatag helper
-你可以使用package中的@immutable annotation在你打算不可變的類別上獲得分析警告：
+<div style="width:80%; background-color: white; padding: 30px;">
+<h2><b>Metadata - @@immutable</b></h2>
+
+<p>
+Using a metatag helper <br/>
+Metadata 是用來替函數、參數加上註解 <br/>
+你可以使用meta package中的@immutable annotation在你打算不可變的類別上顯示警告 <br/>
+將類別加上 @@immutable 後，表示該類別裡的屬性就不得修改，意指所有屬性都必須加上 final 修飾。 
+</p>
+
+ <img src="images/dart_1.png" alt="githubpage_4" style="width:100%; margin-bottom:10px;">
 
  <pre><code class="DART">
 import 'package:meta/meta.dart';
@@ -13,11 +22,22 @@ class Employee {
 
   Employee(this.id, this.name);
 }
-@@immutable 不會使您的類別不可變（如果它這麼簡單的話​​），但在本例中，你將收到一條警告，指出您的一個或多個屬性不是final. 
-如果您嘗試在建構子的變數內加入const關鍵字，你將收到同樣的錯誤。
-如果一個類別上有@immutable標籤，任何不可變的子類別也會有警告。
 </code></pre>
 
-@code {
+<p>
+    @@immutable 實際上不會使您的類別不可變，但會顯示警告提醒您。在本例中，指出您的一個或多個屬性不是final. <br/>
+    如果您嘗試在建構子的變數內加入const關鍵字，你將收到同樣的錯誤。<br/>
+    如果一個類別上有@immutable標籤，任何不可變的子類別也會有警告。
+</p>
 
+</div>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
 }
+
