@@ -1,0 +1,69 @@
+﻿@page "/csharp1"
+
+<div style="width:80%; background-color: white; padding: 30px;">
+    <h2><b>C# 中的 override 和 new 關鍵字有什麼區別</b></h2>
+
+    <p>
+        override 會「覆寫」父類別的 virtual 方法，new 則會「隱藏」父類別 virtual 方法
+    </p>
+
+    <pre><code class="CSharp">
+        class A {
+            public void CallHello()
+            {
+                Hello();
+            }
+
+            public virtual int Hello() {
+                return 1;
+            }
+        }
+
+        class B : A {
+            new public int Hello() {
+                return 2;
+            }
+        }
+
+        class C : A {
+            public override int Hello() {
+                return 3;
+            }
+        }
+    </code></pre>
+
+    <pre><code class="CSharp">
+        A objectA;
+        B objectB = new B();
+        C objectC = new C();
+
+        Console.WriteLine(objectB.Hello()); // 2
+        Console.WriteLine(objectB.CallHello()); // 1  會執行class A的Hello
+        Console.WriteLine(objectC.Hello()); // 3
+
+        objectA = objectB;
+
+        Console.WriteLine(objectA.Hello()); // 1
+
+        objectA = objectC;
+
+        Console.WriteLine(objectA.Hello()); // 3
+    </code></pre>
+
+    <h3><b>多型</b></h3>
+    <p>
+        上述範例: <br/>
+        1.objectA = objectB，new 因為是隱藏父類別方法的關係，會執行變數型別的方法 <br/>
+        2.objectA = objectC，override 則是執行覆寫類別的方法 <br/>
+   </p>
+</div>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+}
