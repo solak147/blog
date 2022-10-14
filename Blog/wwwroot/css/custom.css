@@ -1,0 +1,25 @@
+﻿.article {
+    width: 80%;
+    background-color: white;
+    padding: 30px;
+}
+
+/* mouse over link */
+a:hover {
+    color: #4DFFFF;
+}
+
+/* selected link */
+a.active {
+    color: #4DFFFF !important;
+}
+
+p {
+    font-size: 20px;
+    line-height: 2;
+}
+
+.imgfmt {
+    width:100%; 
+    margin-bottom:10px;
+}

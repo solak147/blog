@@ -1,6 +1,6 @@
 ﻿@page "/githubpage"
 
-<div style="width:80%; background-color: white; padding: 30px;">
+<div class="article">
     <h2><b>Deploy To GitHub Pages</b></h2>
     <br />
 
@@ -24,9 +24,9 @@
         請將產生的token記下來，因為離開這個頁面就再也看不到了
     </p>
 
-    <img src="images/githubpage_1.png" alt="githubpage_1" style="width:100%; margin-bottom:10px;">
+    <img src="images/githubpage_1.png" alt="githubpage_1" class="imgfmt">
      
-    <img src="images/githubpage_2.png" alt="githubpage_2" style="width:100%; margin-bottom:10px;">
+    <img src="images/githubpage_2.png" alt="githubpage_2" class="imgfmt">
 
     <p>
         進入repository的setting -> secrets -> actions <br />
@@ -34,14 +34,14 @@
         這個名稱等一下在編輯yml檔時會用到，點擊Add secret
     </p>
 
-    <img src="images/githubpage_3.png" alt="githubpage_3" style="width:100%; margin-bottom:10px;">
+    <img src="images/githubpage_3.png" alt="githubpage_3" class="imgfmt">
 
     <h3><b>撰寫yml檔</b></h3>
     <p>
         進入repository的Actions，按set up a workflow yourself來自訂yml檔內容，將下方的yml檔貼上，
     </p>
 
-    <img src="images/githubpage_4.png" alt="githubpage_4" style="width:100%; margin-bottom:10px;">
+    <img src="images/githubpage_4.png" alt="githubpage_4" class="imgfmt">
 
     <pre><code class="YAML">
         name: Deploy to GitHub Pages
@@ -105,7 +105,7 @@
         佈署到GitHub Pages後的網址會是 https://{GitHubAccount}.github.io/{RepositoryName}
     </p>
 
-    <img src="images/githubpage_5.png" alt="githubpage_5" style="width:100%; margin-bottom:10px;">
+    <img src="images/githubpage_5.png" alt="githubpage_5" class="imgfmt">
 
 </div>
 
