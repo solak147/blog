@@ -1,9 +1,20 @@
 ﻿@page "/flutter1"
 
 <PageTitle>is missing an input or output annotation</PageTitle>
+<HeadContent>
+    <meta name="description" content="* What went wrong:
+        Some problems were found with the configuration of task ':app:compileFlutterBuildDebug' (type 'FlutterTask').
+          - In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.
+
+            Reason: A property without annotation isn't considered during up-to-date checking.
+
+            Possible solutions:
+              1. Add an input or output annotation.
+              2. Mark it as @@Internal." />
+</HeadContent>
 
 <h2><b>In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.</b></h2>
-<br/>
+<br />
 
 <pre><code>
 FAILURE: Build failed with an exception.
@@ -69,9 +80,9 @@ Exception: Gradle task assembleDebug failed with exit code 1
 
 <h3><b>解決方式</b></h3>
 <p>
-    發生這種情況是因為您項目中的 gradle/wrapper/gradle-wrapper.properties 的 gdistributionUrl 版本為 gradle 7 以上 <br/>
-    1.降級你的 gradle 版本( 小於 7 )  <br/>
-    2.到flutter sdk 資料夾下，按照<MudLink Href="https://github.com/flutter/flutter/pull/79167/files" Underline="Underline.Always">此方式</MudLink>進行更改。  <br/>
+    發生這種情況是因為您項目中的 gradle/wrapper/gradle-wrapper.properties 的 gdistributionUrl 版本為 gradle 7 以上 <br />
+    1.降級你的 gradle 版本( 小於 7 )  <br />
+    2.到flutter sdk 資料夾下，按照<MudLink Href="https://github.com/flutter/flutter/pull/79167/files" Underline="Underline.Always">此方式</MudLink>進行更改。  <br />
 </p>
 
 @code {
