@@ -1,0 +1,82 @@
+﻿@page "/flutter1"
+
+<h2><b>In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.</b></h2>
+<br/>
+
+<pre><code>
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Some problems were found with the configuration of task ':app:compileFlutterBuildDebug' (type 'FlutterTask').
+  - In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.
+
+    Reason: A property without annotation isn't considered during up-to-date checking.
+
+    Possible solutions:
+      1. Add an input or output annotation.
+      2. Mark it as @@Internal.
+
+    Please refer to https://docs.gradle.org/7.4/userguide/validation_problems.html#missing_annotation for more details about this problem.
+  - In plugin 'FlutterPlugin' type 'FlutterTask' property 'assetsDirectory' is missing an input or output annotation.
+
+    Reason: A property without annotation isn't considered during up-to-date checking.
+
+    Possible solutions:
+      1. Add an input or output annotation.
+      2. Mark it as @@Internal.
+
+    Please refer to https://docs.gradle.org/7.4/userguide/validation_problems.html#missing_annotation for more details about this problem.
+  - In plugin 'FlutterPlugin' type 'FlutterTask' property 'buildMode' is missing an input or output annotation.
+
+    Reason: A property without annotation isn't considered during up-to-date checking.
+
+    Possible solutions:
+      1. Add an input or output annotation.
+      2. Mark it as @@Internal.
+
+    Please refer to https://docs.gradle.org/7.4/userguide/validation_problems.html#missing_annotation for more details about this problem.
+  - In plugin 'FlutterPlugin' type 'FlutterTask' property 'fastStart' doesn't have a configured value.
+
+    Reason: This property isn't marked as optional and no value has been configured.
+
+    Possible solutions:
+      1. Assign a value to 'fastStart'.
+      2. Mark property 'fastStart' as optional.
+
+    Please refer to https://docs.gradle.org/7.4/userguide/validation_problems.html#value_not_set for more details about this problem.
+  - In plugin 'FlutterPlugin' type 'FlutterTask' property 'flutterExecutable' is missing an input or output annotation.
+
+    Reason: A property without annotation isn't considered during up-to-date checking.
+
+    Possible solutions:
+      1. Add an input or output annotation.
+      2. Mark it as @@Internal.
+
+    Please refer to https://docs.gradle.org/7.4/userguide/validation_problems.html#missing_annotation for more details about this problem.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 29s
+Exception: Gradle task assembleDebug failed with exit code 1
+</code></pre>
+
+<h3><b>解決方式</b></h3>
+<p>
+    發生這種情況是因為您項目中的 gradle/wrapper/gradle-wrapper.properties 的 gdistributionUrl 版本為 gradle 7 以上 <br/>
+    1.降級你的 gradle 版本( 小於 7 )  <br/>
+    2.到flutter sdk 資料夾下，按照<MudLink Href="https://github.com/flutter/flutter/pull/79167/files" Underline="Underline.Always">此方式</MudLink>進行更改。  <br/>
+</p>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
