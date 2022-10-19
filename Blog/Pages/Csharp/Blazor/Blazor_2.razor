@@ -1,0 +1,29 @@
+﻿@page "/blazor2"
+
+<PageTitle>Service Lifetime</PageTitle>
+
+<div class="article">
+    <h2><b>Service Lifetime</b></h2>
+    <br />
+
+    <p>
+        自己建立的Service都必須在Program.cs注冊，而在Blazor也有幫你建立好一些基本的Service <br /><br />
+
+        目前Blazor提供内建的Service有三个，分别為：<br /><br />
+
+        1.HttpClient：負責處理http請求，生命周期为Scoped(注意：只有Blazor WebAssembly有提供，Blazor Server必須自己注冊) <br />
+        2.IJSRuntime：提供Javascript runtime组件處理JS功能，Blazor WebAssembly生命周期為Singleton，Blazor Server生命周期為Scoped <br />
+        3.NavigationManager：處理路由導向和狀態，Blazor WebAssembly生命周期為Singleton，Blazor Server生命周期為Scoped <br /><br />
+
+        生命周期指的就是Component存活的時間，有<span class="imtdot">Singleton、Scoped、Transient</span>三種。<br /><br />
+
+        1.Singleton是指從程序啟動到结束都只會有一個實例，所有Component共用一個實例。<br />
+        2.Transient则是每次使用該Component時，都會產生一个新實例。<br />
+        3.Scoped較為特别，Blazor Server跟Blazor WebAssembly模式不相同，Blazor Server的Scoped是指每次HTTP請求都會產生一个新的實例，
+        但Component之間通過SingalR傳遞不會產生。<br /><br />
+
+        微軟文檔说明「Blazor WebAssembly目前没有DI的概念，Scoped相當於Singleton<br />
+        Blazor WebAssembly沒有Server端，每次重新加載網頁都會將程序下載到瀏覽器，這是一个全新的HTTP請求，所以Singleton跟Scoped都是只要一重新加載網頁就會產生新的實例。
+    </p>
+
+</div>
