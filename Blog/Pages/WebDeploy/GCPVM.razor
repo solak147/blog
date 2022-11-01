@@ -89,6 +89,11 @@
     </p>
 
     <h3><b>安裝 Vesta 控制面版</b></h3>
+    <p>
+        Vesta 是一款輕巧、UI 簡潔而且執行速度快的面板，它能安裝在 Red Hat、CentOS 及 Ubuntu 上執行，最特別的是它利用 Nginx 當反向代理來支援 Apache/PHP。
+        Nginx 會用來取代 Apache 監聽 80 port，處理訪問網站的連線請求，過濾請求之後再傳遞給 Apache。還有 JavaScripts、CSS、圖檔等靜態檔案也都是由 Nginx 處理，
+        如此一來， Vesta 基本上就是走 LAEMP 的架構，能夠用來輕鬆的建置網站，而且運行的速度非常快。
+    </p>
     <pre><code class="Linux">
         sudo apt-get update
         sudo curl -O http://vestacp.com/pub/vst-install.sh
@@ -112,10 +117,130 @@
 
     <img src="images/gcpvm_15.png" alt="gcpvm_15" class="imgfmt" style="width:50%">
     <br />
-    
+
     <p>
         安裝完成之後，在這邊會獲得登入 Vesta 的網址與帳號密碼，記得把它整個複製保存起來。
     </p>
+
+    <h3><b>在Liunx上安裝.NET執行環境</b></h3>
+    <p>
+        在ssh中執行以下命令
+    </p>
+
+    <pre><code class="Linux">
+        #安裝 .NET 之前，請執行下列命令，將 Microsoft 套件簽署金鑰新增至信賴起點清單，並新增套件存放庫
+        wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        rm packages-microsoft-prod.deb
+    </code></pre>
+
+    <pre><code class="Linux">
+        #安裝 SDK
+        sudo apt-get update && \
+        sudo apt-get install -y dotnet-sdk-6.0
+    </code></pre>
+
+    <pre><code class="Linux">
+        #安裝 runtime
+        sudo apt-get update && \
+        sudo apt-get install -y aspnetcore-runtime-6.0
+    </code></pre>
+
+    <p>
+        可以使用 dotnet --version 來查看SDK是否安裝成功
+        至此你的VM已經有.NET的執行環境
+    </p>
+
+    <h3><b>發佈Asp.net core 專案</b></h3>
+
+    <pre><code class="Json">
+        {
+          "Logging": {
+            "LogLevel": {
+              "Default": "Information",
+              "Microsoft.AspNetCore": "Warning"
+            }
+          },
+          "urls": "http://*:8093",
+          "AllowedHosts": "*"
+        }
+    </code></pre>
+
+    <p>
+        在發佈你的專案之前，請先在server的 appsetting.json 內設定網站訪問埠，ex "urls": "http://*:8093"
+    </p>
+
+    <img src="images/gcpvm_16.png" alt="gcpvm_16" class="imgfmt" style="width:50%">
+    <img src="images/gcpvm_17.png" alt="gcpvm_17" class="imgfmt" style="width:50%">
+
+    <p>
+        在專案右鍵點選發佈，目標選擇資料夾，完成後即可在你指定的資料夾下看見你發佈的檔案
+    </p>
+
+    <h3><b>使用 Xftp 將檔案上傳至伺服器</b></h3>
+    <img src="images/gcpvm_18.png" alt="gcpvm_18" class="imgfmt">
+
+    <p>
+        輸入你的主機ip 位址後，會要你接著輸入帳密，把剛剛安裝Vesta獲得的帳密填入 <br />
+        接下來把你的專案資料夾直接挪到虛擬主機上。<br />
+        在VM下定位到網站目錄，執行
+    </p>
+
+    <pre><code class="Json">
+        dotnet GCPTest.Server(一般與專案同名).dll
+    </code></pre>
+
+    <img src="images/gcpvm_19.png" alt="gcpvm_19" class="imgfmt" style="width:50%">
+
+    <p>
+        如果看到網站訪問地址，就說明網站已成功啟動。在瀏覽器網址列輸入http://伺服器IP:伺服器PORT，
+        看看這波操作後的成果吧~
+    </p>
+
+    <h3><b>在 Linux Ubuntu 作業系統將 ASP.NET Core 應用程式掛載 為 Linux 服務</b></h3>
+    <p>
+        在 /etc/systemd/system/ 目錄中建立自行定義的服務設定檔案（使用 vim 文字編輯工具）
+    </p>
+
+    <pre><code class="LINUX">
+        sudo vim /etc/systemd/system/{服務設定檔案名稱}.service
+     </code></pre>
+
+     <p>
+         進行服務設定檔案的設定內容
+     </p>
+
+    <pre><code class="LINUX">
+        [Unit]
+        Description=ASP.NET Core Web API Application on Ubuntu
+
+        [Service]
+        WorkingDirectory={應用程式資料夾路徑}
+        ExecStart=/usr/bin/dotnet {應用程式路徑，包含 *.dll檔案}
+        Restart=always
+        RestartSec=10
+        SyslogIdentifier=dotnet-example
+        User={要執行的使用者帳號}
+        Environment=ASPNETCORE_ENVIRONMENT=Production 
+
+        [Install]
+        WantedBy=multi-user.target
+     </code></pre>
+
+     <p>
+         設定完成後儲存設定檔然後開啟服務
+     </p>
+
+     <pre><code class="LINUX">
+        systemctl enable {服務設定檔案名稱}.service
+        systemctl start {服務設定檔案名稱}.service
+     </code></pre>
+
+       <pre><code class="LINUX">
+        systemctl start {服務設定檔案名稱}.service #可使用下列指令檢查服務狀態
+        sudo systemctl stop animateapi.service #停止服務
+     </code></pre>
+
 </div>
 
 @code {
