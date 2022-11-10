@@ -65,3 +65,26 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 }
+
+
+@*
+        function loadScript(url) {
+            return new Promise(function (resolve, reject) {
+                let script = document.createElement('script');
+                script.src = url;
+                script.async = false; // 讓瀏覽器保持我們設定的 js 順序
+
+                // 判斷 JS 是否載入完成
+                script.onload = function () {
+                    console.log('JS Loading succ:', url);
+                    resolve(url);
+                };
+                script.onerror = function () {
+                    console.log('JS Loading error:', url);
+                    reject(url);
+                };
+
+                document.body.appendChild(script);
+            });
+        }
+*@
