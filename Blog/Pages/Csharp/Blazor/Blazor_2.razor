@@ -18,7 +18,7 @@
         生命周期指的就是Component存活的時間，有<span class="imtdot">Singleton、Scoped、Transient</span>三種。<br /><br />
 
         1.Singleton是指從程序啟動到结束都只會有一個實例，所有Component共用一個實例。<br />
-        2.Transient则是每次使用該Component時，都會產生一个新實例。<br />
+        2.Transient則是每次使用該Component時，都會產生一个新實例。<br />
         3.Scoped較為特别，Blazor Server跟Blazor WebAssembly模式不相同，Blazor Server的Scoped是指每次HTTP請求都會產生一个新的實例，
         但Component之間通過SingalR傳遞不會產生。<br /><br />
 
