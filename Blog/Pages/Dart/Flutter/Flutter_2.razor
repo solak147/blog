@@ -1,0 +1,80 @@
+﻿@page "/flutter2"
+
+<div class="article">
+
+    <h2><b>什麼是BLoC Design Pattern</b></h2>
+
+    <p>
+        BLOC全名是「Business Logic Component」，用來分離UI層和商業邏輯層，有助於程式碼的維護、重複利用以及測試。
+    </p>
+
+    <h3><b>Bloc 的流程</b></h3>
+    <img src="images/flutter_2_1.png" alt="flutter_2_1" class="imgfmt">
+
+    <p>
+        BLOC層會接收使用者的行為(例如點擊Button)，根據不同的事件(Event)Bloc會去呼叫相應的函式(可能是去資料庫抓資料或使用api)。
+        之後根據結果回傳相應的狀態(State)給UI層，UI則根據狀態做變化。
+    </p>
+
+    <h3><b>使用Flutter BLoc套件</b></h3>
+    <p>
+        Flutter BLoc套件是由Felix Angelov所開發的套件，能夠幫助開發人員實作BLoC pattern。
+        他將BLoC包裝成更容易理解和維護的框架，而且把許多細節都幫我們做好了(例如關閉Stream、Log等等)。
+    </p>
+
+    <h3><b>Bloc Event</b></h3>
+    <pre><code class="DART">
+        @@immutable
+        abstract class LoginEvent extends Equatable {
+          LoginEvent([List props = const []]) : super(props);
+        }
+
+        class EmailChanged extends LoginEvent {
+          final String email;
+
+          EmailChanged({@@required this.email}) : super([email]);
+
+          @@override
+          String toString() => 'EmailChanged { email :$email }';
+        }
+    </code></pre>
+
+    <h3><b>Bloc State</b></h3>
+    <pre><code class="DART">
+        @@immutable
+        class LoginState {
+          bool isEmailValid;
+          final bool isPasswordValid;
+
+          LoginState({
+            @@required this.isEmailValid,
+            @@required this.isPasswordValid,
+          });
+
+          factory LoginState.empty() {
+            return LoginState(
+              isEmailValid: true,
+              isPasswordValid: true,
+            );
+          }
+        }
+     </code></pre>
+
+    <h3><b>Bloc</b></h3>
+    <p>
+        定義Bloc物件需先繼承套件提供的Bloc class，並給予定義好的Event物件和State物件
+        還需要給予Bloc初始的State，在還沒接收到任何Event前就使用初始的State，不然UI會不知道該顯示什麼畫面才好。
+        另外一定要實作的是mapEventToState，將接收到的Event用對應的商業邏輯(Business Logic)做處理，最後回傳包裝成Stream的State
+    </p>
+
+    <pre><code class="DART">
+        class LoginBloc extends Bloc&lt;LoginEvent, LoginState&gt; {
+            @@override
+            LoginState get initialState => LoginState.init();
+        }
+    </code></pre>
+</div>
+
+@code {
+
+}
