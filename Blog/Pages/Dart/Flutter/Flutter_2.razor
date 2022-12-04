@@ -9,7 +9,7 @@
     </p>
 
     <h3><b>Bloc 的流程</b></h3>
-    <img src="images/flutter_2_1.png" alt="flutter_2_1" class="imgfmt">
+    <img src="images/flutter_2_1.png" alt="flutter_2_1" class="imgfmt" style="width:50%">
 
     <p>
         BLOC層會接收使用者的行為(例如點擊Button)，根據不同的事件(Event)Bloc會去呼叫相應的函式(可能是去資料庫抓資料或使用api)。
@@ -24,46 +24,43 @@
 
     <h3><b>Bloc Event</b></h3>
     <pre><code class="DART">
-        @@immutable
         abstract class LoginEvent extends Equatable {
-          LoginEvent([List props = const []]) : super(props);
+            LoginEvent([List props = const []]) : super(props);
         }
 
         class EmailChanged extends LoginEvent {
-          final String email;
+            final String email;
 
-          EmailChanged({@@required this.email}) : super([email]);
+            EmailChanged({@@required this.email}) : super([email]);
 
-          @@override
-          String toString() => 'EmailChanged { email :$email }';
+            @@override
+            String toString() => 'EmailChanged { email :$email }';
         }
     </code></pre>
 
     <h3><b>Bloc State</b></h3>
     <pre><code class="DART">
-        @@immutable
         class LoginState {
-          bool isEmailValid;
-          final bool isPasswordValid;
+            bool isEmailValid;
+            final bool isPasswordValid;
 
-          LoginState({
-            @@required this.isEmailValid,
-            @@required this.isPasswordValid,
-          });
+            LoginState({
+                @@required this.isEmailValid,
+                @@required this.isPasswordValid,
+            });
 
-          factory LoginState.empty() {
-            return LoginState(
-              isEmailValid: true,
-              isPasswordValid: true,
-            );
-          }
+            factory LoginState.empty() {
+                return LoginState(
+                    isEmailValid: true,
+                    isPasswordValid: true,
+                );
+            }
         }
      </code></pre>
 
     <h3><b>Bloc</b></h3>
     <p>
-        定義Bloc物件需先繼承套件提供的Bloc class，並給予定義好的Event物件和State物件
-        還需要給予Bloc初始的State，在還沒接收到任何Event前就使用初始的State，不然UI會不知道該顯示什麼畫面才好。
+        定義Bloc物件需先繼承套件提供的Bloc class，並給予定義好的Event物件和State物件，和定義Bloc初始的State。<br/>
         另外一定要實作的是mapEventToState，將接收到的Event用對應的商業邏輯(Business Logic)做處理，最後回傳包裝成Stream的State
     </p>
 
@@ -71,10 +68,110 @@
         class LoginBloc extends Bloc&lt;LoginEvent, LoginState&gt; {
             @@override
             LoginState get initialState => LoginState.init();
+
+            @@override
+            Stream&lt;LoginState&gt; mapEventToState(LoginEvent event) async* {
+                // 依照接收到的Event執行對應的方法
+               if (event is LoginWithCredentialsPressed) {
+                    yield* _mapLoginWithCredentialsPressedToState(
+                    email: event.email,
+                    password: event.password,
+                    );
+                }
+            }
+
+            Stream&lt;LoginState&gt; _mapLoginWithCredentialsPressedToState({
+                String email,
+                String password,
+            }) async* {
+            // 使用帳號和密碼進行登入，成功就回傳sucess的State
+            // 失敗則回傳Failure的State
+                try {
+                    await _userRepository.signInWithCredentials(email, password);
+                    yield LoginState.success();
+                } catch (_) {
+                    yield LoginState.failure();
+                }
+            }
         }
+    </code></pre>
+
+    <h3><b>Dispatch</b></h3>
+    <p>
+        那麼該如何觸發Event呢?<br/>
+        Bloc內提供dispatch 方法可以用Event作為參數，它會觸發mapEventToState，接著就是執行Event與State的轉換。
+    </p>
+
+    <pre><code class="DART">
+        // 示意用程式碼
+        void main() {
+            LoginBloc bloc = LoginBloc();
+            // 略...
+            RaisedButton(
+              onPressed: (){
+                  bloc.dispatch(LoginWithGooglePressed);
+              },
+              child: Text('Google Login'),
+            )
+        }
+    </code></pre>
+
+    <h3><b>BlocProvider</b></h3>
+    <p>
+        在 BLoC package中，Widget 本身並不會直接擁有、或是直接參照 BLoC，而是透過 BlocProvider 將 BLoC、<br/>
+        以及用到這個 BLoC 的 Widget 綁起來，Widget 要在 Widget Tree 當中往上找到 BlocProvider 之後，再跟 BlocProvider 詢問 BloC。<br/><br/>
+
+        建立 BlocProvider 的方式像這樣。我們有一個上層的 Widget，裡頭包含了一個與登入相關的 AuthenticationBloC，<br/>
+        而我們 App 中的主要畫面都在 PageWidget 裡頭的話：
+    </p>
+
+     <pre><code class="DART">
+        var _bloc = AuthenticationBloC();
+        Widget build(BuildContext context) {
+            return BlocProvider(
+                bloc: _bloc,
+                child: PageWidget()),
+            );
+        }
+    </code></pre>
+
+     <p>
+        在 PageWidget，以及 PageWidget 以下任何一層的所有 children，都可以往上、在 build context 中找到 AuthenticationBloC：
+    </p>
+
+    <pre><code class="DART">
+        final authenticationBloc = BlocProvider.of&lt;Bloc&lt;AuthenticationEvent, AuthenticationState&gt;&gt;(context);
+    </code></pre>
+
+    <h3><b>BlocBuilder</b></h3>
+    <p>
+        我們會希望 BLoC 在狀態更新之後，自動更新相關的 UI，而不是我們自己再去呼叫 setState()，<br/>
+        而Bloc package 提供了 BlocBuilder，只要是這個 BLoC 發生變動，就會執行我們所指定的 WidgetBuilder。
+    </p>
+
+    <pre><code class="DART">
+        final authenticationBloc = BlocProvider.of&lt;Bloc&lt;AuthenticationEvent, AuthenticationState&gt;&gt;(context);
+        return BlocBuilder&lt;AuthenticationEvent, AuthenticationState&gt;(
+            bloc: authenticationBloc,
+            builder: (context, state) {
+                if (state is AuthenticatedState) {
+                    return Text('已登入 ${state.email}');
+                } else {
+                    return Text('尚未登入');
+                }
+            });
     </code></pre>
 </div>
 
 @code {
-
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
 }
+
+ @*參考 https://ithelp.ithome.com.tw/articles/10219357*@
+ @*https://zonble.medium.com/flutter-%E7%9A%84-bloc-pattern-59b8d4ae24b0*@
+ @*https://chucs.github.io/flutter-013-bloc/*@
