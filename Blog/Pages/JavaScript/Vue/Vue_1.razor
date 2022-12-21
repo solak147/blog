@@ -1,0 +1,81 @@
+﻿@page "/vue1"
+
+<div class="article">
+    <h2><b>Vue 生命週期</b></h2>
+    <br />
+
+    <p>
+        首先附上Vue官網的生命週期圖： <br />
+        主要分為八個項目，分別是：beforeCreate、created、beforeMount、mounted、beforeUpdate、updated、beforeUnmount、unmounted<br />
+        分別對應Vue在不同的時間點你希望他執行的動作
+    </p>
+    <img src="images/vue1.png" alt="gcpvm_11" class="imgfmt" style="width:70%; height:50%">
+
+    <h2><b>Vue2 vs Vue3</b></h2>
+    <p>
+        vue3為了相容於vue2的使用，所以在 上面的生命週期中還保留了beforeCreate和created
+    </p>
+    <img src="images/vue2.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+
+    <h2><b>beforeCreate & created</b></h2>
+    <p>
+       beforeCreate：Vue初始化時期，在這邊的動作會在vue導入期就被執行，但在這個階段還拿不到Vue Data，也沒有辦法使用vue裡面的Methods, Watch, Computed...等。<br/>
+       created：Vue已被建立，在這個階段的動作可以拿到Vue Data, Function, Watch, Computed...等，但網頁內容必須依靠HTML Element才能取得，這時HTML還沒準備好，所以拿不到元素內容。
+    </p>
+
+    <pre><code class="JAVASCRIPT">
+        export default {
+            const state = reactive({ name: "Vue" });
+            console.log("-------------");
+            console.log("beforeCreate");
+            console.log("state.name: ", state.name);
+            console.log("-------------");
+            const { reactive, ref  } = Vue;
+
+            setup(){
+                const content = ref(null);
+                const state = reactive({
+                    name: "Vue",
+                })
+                function changeText(){
+                    state.name = "Vue 3.x";
+                }
+                function unmount() {
+                    myVue.unmount();
+                }
+                console.log("created");
+                console.log("state.name: ", state.name);
+                console.log("changeText: ", changeText);
+                console.log("ref: ", content.value);
+                console.log("-------------");
+                return { state, changeText, content, unmount };
+            }
+            
+        }
+
+        result:
+            -------------
+            beforeCreate
+            state.name:  Stanley
+            -------------
+            created
+            state.name:  Vue
+            changeText:  ƒ changeText(){
+                            state.name = "Vue 3.x";
+                        }
+            ref:  null
+            -------------
+    </code></pre>
+    <p>
+        vue3的composition已經不需要使用beforeCreate和created，但如果真的需要，可以在setup的區段內外來處理
+    </p>
+</div>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
