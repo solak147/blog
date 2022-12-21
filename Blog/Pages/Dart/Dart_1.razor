@@ -1,35 +1,254 @@
 ﻿@page "/dart1"
 
-<div  class="article">
-<h2><b>Metadata - @@immutable</b></h2>
+<div class="article">
 
-<p>
-Using a metatag helper <br/>
-Metadata 是用來替函數、參數加上註解 <br/>
-你可以使用meta package中的@immutable annotation在你打算不可變的類別上顯示警告 <br/>
-將類別加上 @@immutable 後，表示該類別裡的屬性就不得修改，意指所有屬性都必須加上 final 修飾。 
-</p>
+    <h3><b>一般程式語言都有的基本資料型態 (Data type)</b></h3>
+    <p>
+        整數 (int)
+        浮點數 (double)
+        布林值 (bool)
+        字串 (String)
+    </p>
 
- <img src="images/dart_1.png" alt="githubpage_4" class="imgfmt">
+    <h3><b>變數 Variables</b></h3>
+    <p>
+        沒有初始化的變數都會有預設值 null，即空值的意思 <br />
+        在Dart中，一切都是物件，所有的物件都是繼承自Object類別，也就是說所有的變數不管是數值、方法甚至是 null 都是物件
+    </p>
 
- <pre><code class="DART">
-import 'package:meta/meta.dart';
+    <p>
+        <spsn class="imtdot">var</spsn>：推斷資料型態後，就不能再給它其他型態的值
+    </p>
+    <pre><code class="DART">
+         void main() {
+          var pi = 3.14159265359; //3.14159265359，有小數點的數值，推斷變數pi 型態為 double
+          print(pi); //印出 3.14159265359
 
-@@immutable
-class Employee {
-  int id;            // not final
-  final String name;
+          //變數pi 已經是double 型態，若給予它不同型態的值，會報錯
+          pi = "3.14159265359";//Error: A value of type 'String' can't be assigned to a variable of type 'double'.
 
-  Employee(this.id, this.name);
-}
-</code></pre>
+        }
+    </code></pre>
 
-<p>
-    @@immutable 實際上不會使您的類別不可變，但會顯示警告提醒您。在本例中，指出您的一個或多個屬性不是final. <br/>
-    如果您嘗試在建構子的變數內加入const關鍵字，你將收到同樣的錯誤。<br/>
-    如果一個類別上有@immutable標籤，任何不可變的子類別也會有警告。
-</p>
+    <p>
+        <spsn class="imtdot">dynamic</spsn>：所有物件的基礎型態，也就是說任何物件都可以是dynamic型態
+    </p>
+    <pre><code class="DART">
+        void main() {
+          dynamic pi = 3.14159265359; //變數pi 型態為 dynamic，初始值為3.14159265359
+          print(pi); //印出 3.14159265359
 
+          pi = "3.14159265359"; //不會出錯，型態為 dynamic，可以給予任何型態的值
+        }
+    </code></pre>
+
+    <h3><b>常數 const & final</b></h3>
+    <p>
+        const比final更加嚴格，final只是要求資料在初始化後值不能變，所以final可以被指派為編譯後變數運算後得到的值，但const必須在編譯之前就是明確的資料值
+    </p>
+
+
+    <h3><b>Dart 的內建的資料型態有數值型 (num)、布林型 (bool)、字串 (String)、Map、List(Dart中的 Array)、Runes、Symbols</b></h3>
+    <p>
+        在Dart 2.3後，spread operator (...) 以及 null-aware spread operator (...?)，可以插入另一個集合的資料
+    </p>
+    <pre><code class="DART">
+        main() {
+          var list = [1, 2, 3];
+          var list2 = [0, ...list];
+          print(list2); //印出 [0, 1, 2, 3]
+
+          var list3;
+          var list4 = [0, ...?list3];
+          print(list4); //印出 [0]
+        }
+    </code></pre>
+
+    <p>Set的語法跟Map很像，若用未明確宣告資料型態來宣告{ }的話，Dart 會推斷型態為Map</p>
+    <pre><code class="DART">
+        void main() {
+          var set1 = {1, 2, 3}; // 推斷為 Set&lt;int&gt;
+          var set2 = {}; // 推斷為 Map&lt;dynamic, dynamic&gt;, 不是 SET
+          var set3 = &lt;int&gt;{}; // 為 Set&lt;nt&gt;
+  
+          set1.add(3); //新增重複的值，會被省略
+          print(set1.length); //印出 3
+        }
+    </code></pre>
+
+    <p>
+        Runes<br />
+        Runes是代表字串的UTF-32 code points，Unicode為每一個字元、標點符號、表情符號等都定義了一個唯一的數值，<br />
+        通常用\uXXXX的方式表示Unicode code point，這裡的XXXX是4個16進位制的數。<br />
+    </p>
+    <pre><code class="DART">
+        void main() {
+          Runes heart = '\u2665';
+          Runes laugh = '\u{1f600}';
+          print(String.fromCharCodes(heart) + ' ' + String.fromCharCodes(laugh)); //印出 ♥ ?
+
+          String heart2 = '\u2665';
+          String laugh2 = '\u{1f600}';
+          print(heart2 + ' ' + laugh2); //印出 ♥ ?
+        }
+    </code></pre>
+
+     <p>
+        Symbols
+    </p>
+    <pre><code class="DART">
+        void main() {
+          //有兩種新建Symbol的方式：Symbol('name') 或 #name
+          print(Symbol('a') == #a); // 印出 true， == 是相等的運算符號，後面會介紹
+
+          var name = 'test';
+          Symbol symbol = #name;
+          print(symbol); //印出 Symbol("name")
+          print(#name); //印出 Symbol("name")
+        }
+    </code></pre>
+
+    <h3><b>Named constructors(命名建構式)</b></h3>
+    <p>
+        一個類別只能有一個主建構式 Unnamed constructors，不像在Java 擁有多載(Overloading) 的特性，<br />
+        是用引數來區分，但是Dart 用另一種方法來滿足這個要求，並且能更清楚表達程式，<br />
+        增加易讀性，即使用 Named constructors(命名建構式)<br />
+    </p>
+    <pre><code class="DART">
+        class Person {
+
+          String name = "匿名";
+          int age;
+
+          //主建構式 Unnamed constructors
+          //由於建構式引數賦值給物件屬性變數的情況太常見了，Dart提供了一個語法來簡化這個操作
+          Person(this.name, this.age);
+
+          //Named constructors
+          Person.secretAge(this.name);
+
+          //Named constructors
+          Person.anonymous(this.age);
+        }
+
+        void main() {
+          Person a = Person("Ryder",26); 
+          print("a.name = ${a.name}, a.age = ${a.age}");  //印出 a.name = Ryder, a.age = 26
+
+          Person b = Person.secretAge("Judy"); 
+          print("b.name = ${b.name}, b.age = ${b.age}");  //印出 b.name = Judy, b.age = null
+
+          Person c = Person.anonymous(65); 
+          print("c.name = ${c.name}, c.age = ${c.age}");  //印出 c.name = 匿名, c.age = 65
+        }
+    </code></pre>
+
+    <h3><b>Redirecting constructors(重定向建構式)</b></h3>
+    <p>
+        有時候一個建構式會調動類別中的其他建構式，一個重定向建構式是沒有程式碼的，在建構式聲明後，使用冒號呼叫其他建構式
+    </p>
+    <pre><code class="DART">
+        vclass Point {
+          num x;
+          num y;
+
+          // 主建構式
+          Point(this.x, this.y);
+
+          // 呼叫主建構式
+          Point.alongXAxis(num x) : this(x, 0);
+        }
+    </code></pre>
+
+    <h3><b>函數 - Optional Named parameters  & Optional positional parameters</b></h3>
+    <pre><code class="DART">
+        //Optional Named parameters
+        void enableFlags({bool bold, bool hidden}) {...}
+        enableFlags(bold: true, hidden: false);
+
+        //Optional positional parameters
+        void enableFlags([bool bold, bool hidden]) {...}
+        enableFlags(true, false);
+    </code></pre>
+
+    <h3><b>匿名函數：有時候也被稱為lambda或者clourse閉包</b></h3>
+     <pre><code class="DART">
+        語法：
+
+        ([[Type] param1[, …]]) {
+        codeBlock;
+        };
+
+        or
+
+        ([[Type] param1[, …]]) => {
+        codeBlock;
+        };
+    </code></pre>
+
+    <h3><b>Lexical closures(詞法閉包)</b></h3>
+    <p>
+        Closure閉包，是一個方法物件，不管該物件在何處被呼叫，該物件都可以使用其作用域內的變數，方法可以封閉定義到其作用域內的變數。
+    </p>
+    <pre><code class="DART">
+        Function makeAdder(num addBy) {
+          return (num i) => addBy + i;
+        }
+
+        main() {
+          var add2 = makeAdder(2);
+          // add2 為一個匿名方法物件 (num i) => 2 + i;
+
+          var add4 = makeAdder(4);
+          // add4 為一個匿名方法物件 (num i) => 4 + i;
+
+          print(add2(3)); //印出 5
+          print(add4(3)); //印出 7
+        }
+    </code></pre>
+
+    <h3><b>類別 : 多型</b></h3>
+    <p>
+        會限制物件使用的方法數量，只有物件的宣告類別裡存在的方法才能使用<br /><br />
+
+        編譯時，物件使用方法前會去宣告此物件的類別，檢查是否有此方法<br />
+        執行時，則以new的類別方法執行<br />
+        多型new 出來的物件如果要用子類別的方法，需要在父類別新增一個同名稱同引數的方法，來給子類別override
+    </p>
+
+    <h3><b>物件轉型</b></h3>
+    <pre><code class="DART">
+        class Student {}
+
+        class SocialGroupStudent extends Student {}
+
+        class ScienceGroupStudent extends Student {}
+
+        main() {
+            Student student = new ScienceGroupStudent();
+            print(student);
+            //印出Instance of 'ScienceGroupStudent'，為ScienceGroupStudent的例項，但宣告的類別為Student
+
+            /*但是若直接
+            ScienceGroupStudent scienceGroupStudent = student;
+            會編譯失敗，當異質宣告時，宣告類別必須是實體化類別的父類別：
+            父類別 物件 = new 子類別( [ 引數值 ] ) ;
+            上面例子不符合規則
+            */
+
+            //當有繼承關係時，可以運用轉型 ( casting )
+            ScienceGroupStudent scienceGroupStudent = student as ScienceGroupStudent;//降轉
+            print(scienceGroupStudent);
+            //印出Instance of 'ScienceGroupStudent'，同student
+
+            //student宣告類別為Student，與SocialGroupStudent也有繼承關係，也可以轉型，編譯時也可以成功，但是執行時會出現 Unhandled Exception: type 'ScienceGroupStudent' is not a subtype of type 'SocialGroupStudent' in type cast
+            SocialGroupStudent socialGroupStudent = student as SocialGroupStudent;
+            print(socialGroupStudent);
+            //執行時相當於是在做
+            //SocialGroupStudent socialGroupStudent = new ScienceGroupStudent();
+            //故會報錯
+        }
+    </code></pre>
 </div>
 
 @code {
@@ -40,4 +259,3 @@ class Employee {
         await base.OnAfterRenderAsync(firstRender);
     }
 }
-
