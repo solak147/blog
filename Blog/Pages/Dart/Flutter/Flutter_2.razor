@@ -2,24 +2,24 @@
 
 <div class="article">
 
-    <h2><b>什麼是BLoC Design Pattern</b></h2>
+    <h2><b>什麼是Bloc Design Pattern</b></h2>
 
     <p>
-        BLOC全名是「Business Logic Component」，用來分離UI層和商業邏輯層，有助於程式碼的維護、重複利用以及測試。
+        Bloc 全名是「Business Logic Component」，用來分離UI層和商業邏輯層，有助於程式碼的維護、重複利用以及測試。
     </p>
 
     <h3><b>Bloc 的流程</b></h3>
     <img src="images/flutter_2_1.png" alt="flutter_2_1" class="imgfmt" style="width:50%">
 
     <p>
-        BLOC層會接收使用者的行為(例如點擊Button)，根據不同的事件(Event)Bloc會去呼叫相應的函式(可能是去資料庫抓資料或使用api)。
-        之後根據結果回傳相應的狀態(State)給UI層，UI則根據狀態做變化。
+        Bloc 層會接收使用者的行為 (例如點擊Button)，根據不同的事件(Event)Bloc會去呼叫相應的函式(可能是去資料庫抓資料或使用 api )。
+        之後根據結果回傳相應的狀態 (State) 給UI層，UI則根據狀態做變化。
     </p>
 
-    <h3><b>使用Flutter BLoc套件</b></h3>
+    <h3><b>使用Flutter Bloc 套件</b></h3>
     <p>
-        Flutter BLoc套件是由Felix Angelov所開發的套件，能夠幫助開發人員實作BLoC pattern。
-        他將BLoC包裝成更容易理解和維護的框架，而且把許多細節都幫我們做好了(例如關閉Stream、Log等等)。
+        Flutter Bloc 套件是由Felix Angelov所開發的套件，能夠幫助開發人員實作 Bloc pattern。
+        他將 Bloc 包裝成更容易理解和維護的框架，而且把許多細節都幫我們做好了(例如關閉Stream、Log等等)。
     </p>
 
     <h3><b>Bloc Event</b></h3>
@@ -60,7 +60,7 @@
 
     <h3><b>Bloc</b></h3>
     <p>
-        定義Bloc物件需先繼承套件提供的Bloc class，並給予定義好的Event物件和State物件，和定義Bloc初始的State。<br/>
+        定義 Bloc 物件需先繼承套件提供的 Bloc class，並給予定義好的Event物件和State物件，和定義 Bloc 初始的State。<br/>
         另外一定要實作的是mapEventToState，將接收到的Event用對應的商業邏輯(Business Logic)做處理，最後回傳包裝成Stream的State
     </p>
 
@@ -84,8 +84,8 @@
                 String email,
                 String password,
             }) async* {
-            // 使用帳號和密碼進行登入，成功就回傳sucess的State
-            // 失敗則回傳Failure的State
+                // 使用帳號和密碼進行登入，成功就回傳sucess的State
+                // 失敗則回傳Failure的State
                 try {
                     await _userRepository.signInWithCredentials(email, password);
                     yield LoginState.success();
@@ -118,15 +118,15 @@
 
     <h3><b>BlocProvider</b></h3>
     <p>
-        在 BLoC package中，Widget 本身並不會直接擁有、或是直接參照 BLoC，而是透過 BlocProvider 將 BLoC、<br/>
-        以及用到這個 BLoC 的 Widget 綁起來，Widget 要在 Widget Tree 當中往上找到 BlocProvider 之後，再跟 BlocProvider 詢問 BloC。<br/><br/>
+        在 Bloc package中，Widget 本身並不會直接擁有、或是直接參照 Bloc，而是透過 BlocProvider 將 Bloc、<br />
+        以及用到這個 Bloc 的 Widget 綁起來，Widget 要在 Widget Tree 當中往上找到 BlocProvider 之後，再跟 BlocProvider 詢問 Bloc。<br /><br />
 
-        建立 BlocProvider 的方式像這樣。我們有一個上層的 Widget，裡頭包含了一個與登入相關的 AuthenticationBloC，<br/>
+        建立 BlocProvider 的方式像這樣。我們有一個上層的 Widget，裡頭包含了一個與登入相關的 AuthenticationBloc，<br />
         而我們 App 中的主要畫面都在 PageWidget 裡頭的話：
     </p>
 
      <pre><code class="DART">
-        var _bloc = AuthenticationBloC();
+        var _bloc = AuthenticationBloc();
         Widget build(BuildContext context) {
             return BlocProvider(
                 bloc: _bloc,
@@ -136,7 +136,7 @@
     </code></pre>
 
      <p>
-        在 PageWidget，以及 PageWidget 以下任何一層的所有 children，都可以往上、在 build context 中找到 AuthenticationBloC：
+        在 PageWidget，以及 PageWidget 以下任何一層的所有 children，都可以往上、在 build context 中找到 AuthenticationBloc：
     </p>
 
     <pre><code class="DART">
@@ -145,8 +145,8 @@
 
     <h3><b>BlocBuilder</b></h3>
     <p>
-        我們會希望 BLoC 在狀態更新之後，自動更新相關的 UI，而不是我們自己再去呼叫 setState()，<br/>
-        而Bloc package 提供了 BlocBuilder，只要是這個 BLoC 發生變動，就會執行我們所指定的 WidgetBuilder。
+        我們會希望 Bloc 在狀態更新之後，自動更新相關的 UI，而不是我們自己再去呼叫 setState()，<br />
+        而 Bloc package 提供了 BlocBuilder，只要是這個 Bloc 發生變動，就會執行我們所指定的 WidgetBuilder。
     </p>
 
     <pre><code class="DART">
