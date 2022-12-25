@@ -1,13 +1,13 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">中二病也要寫程式</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+     @*   <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
-        </button>
+        </button>*@
     </div>
 </div>
 
-<MudNavMenu Style="color: #fff;">
+<MudNavMenu Style="color: #fff; overflow-y:scroll;  height: 990px;">
     <MudNavGroup Title="C#" Expanded="true" Icon="@Icons.Filled.Storage">
         <MudNavLink Href="./csharp1">C#基礎 - new vs overrvide</MudNavLink>
         <MudNavLink Href="./csharp2">ASP.NET Web API 訊息處理器e</MudNavLink>
@@ -38,7 +38,7 @@
     </MudNavGroup>
 </MudNavMenu>
 
-@code {
+@*@code {
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -47,4 +47,4 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
-}
+}*@
