@@ -1,0 +1,103 @@
+﻿@page "/javascript3"
+
+<div class="article">
+    <h2><b>傳統函式 VS 箭頭函式</b></h2>
+    <br />
+
+    <h3><b>傳統函式的 this 問題</b></h3>
+    <p>
+        傳統函式中 this 的指向是隨著呼叫的方式不同而定
+    </p>
+    <pre><code class="JavaScript">
+        const Ming = {
+          myName: '小明',
+          friends: ['漂亮阿姨', '杰倫', '小美'],
+          getFriends() {
+            this.friends.forEach(function(friend) {
+              console.log(`${friend} 是 ${this.myName} 的朋友`);
+            });
+          }
+        }
+        Ming.getFriends();
+
+        //漂亮阿姨 是 undefined 的朋友
+        //杰倫 是 undefined 的朋友
+        //小美 是 undefined 的朋友
+    </code></pre>
+    <p>
+        第一個 this 指向了呼叫 getFriends() 的 Ming <br />
+        而第二個 this 則指向了外層的 callback function 而轉為 全域，所以最終的都列出 undefined 的結果。
+    </p>
+
+    <h3><b>箭頭函式</b></h3>
+    <p>
+        箭頭函式最大的特點就是沒有自己的 this，因此當箭頭函式中出現了 this ，它則會指向外層的作用域所對應的 this。<br />
+        <span class="imtdot">因為箭頭函式沒有自己的 this，所以要找到箭頭函式的 this 指向時，可直接參考其外層作用域的 this 指向</span>
+    </p>
+    <pre><code class="JavaScript">
+       const Ming = {
+          myName: '小明',
+          friends: ['漂亮阿姨', '杰倫', '小美'],
+          getFriends() {
+            this.friends.forEach(friend => {
+              console.log(`${friend} 是 ${this.myName} 的朋友`);
+            });
+          }
+        }
+        Ming.getFriends();
+
+        //漂亮阿姨 是 小明 的朋友
+        //杰倫 是 小明 的朋友
+        //小美 是 小明 的朋友
+    </code></pre>
+
+    <pre><code class="JavaScript">
+       var Ming = {
+          myName: '小明',
+          family: {
+            myName: '小明家',
+            fn: ()=> {
+              console.log(this.myName);
+            }
+          }
+        };
+        Ming.family.fn();
+
+        //雖然物件有多個層級，但在此也是直接查找最外層的最用域 this 指向全域
+    </code></pre>
+
+    <h3><b>特例</b></h3>
+    <pre><code class="JavaScript">
+       (function () {
+          var myName = '立即函式作用域';
+          var Ming = {
+            myName: '小明',
+            fn:() => {
+              console.log(this.myName);
+            }
+          };
+          Ming.fn();
+        })();
+
+        //立即函式的 this 與全域相同
+        //result : undefined
+    </code></pre>
+
+    <p>
+        箭頭函式使用注意 :<br />
+        1.物件內的屬性方法避免使用箭頭函式定義<br />
+        2.箭頭函式外層的函式越單純越好，避免過度巢狀<br />
+        3.當使用箭頭函式，請先確認外層的 this 指向<br />
+    </p>
+
+</div>
+
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
