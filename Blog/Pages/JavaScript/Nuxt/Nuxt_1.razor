@@ -1,0 +1,120 @@
+﻿@page "/nuxt1"
+
+<div class="article">
+    <h2><b>Nuxt 生命週期</b></h2>
+    <br />
+
+    <img src="images/nuxt_1.jpg" alt="nuxt_1" class="imgfmt">
+
+    <h2><b>asyncData</b></h2>
+    <p>
+        在 Server 執行階段，瀏覽器渲染之前的生命週期，Server 端處理非同步時，如 API 需要做到 SEO，需在 asyncData 處理，asyncData 只會執行一次。<br />
+        ● asyncData 只有在頁面選染前才會執行，所以只有在 pages 裡的 component 才能使用 asyncData，如其他資料夾的 component 也需要 SEO，需把資料往下傳遞或是存進 Vuex 渲染<br />
+        ● 不能使用 this，在 Server 階段執行還沒產生 Vue 實體<br />
+        ● 不能使用瀏覽器有關的 API，如 windiw.alert、document 等，因在 Server 階段執行還沒建構出網站內容<br /><br />
+
+        asyncData 的內容如跟 data 同名 ，asyncData 會覆蓋掉 data
+    </p>
+
+    <pre><code class="JAVASCRIPT">
+        export default {
+          asyncData() {
+            const name = 'Mike';
+            return {
+              name,
+            };
+          },
+          data() {
+            return {
+              name: 'Chris',
+            };
+          },
+        };
+    </code></pre>
+
+    <p>
+        想確保 API 的資料已經回來，可使用 async await 的方式
+    </p>
+    <pre><code class="JAVASCRIPT">
+        async asyncData() {
+          const res = await axios.get(
+            "https://www.youtube.com/list"
+          );
+          return {
+            res: res.data,
+          };
+        }
+    </code></pre>
+    <p>
+        打開檢查原始碼將會發現，資料都被 Server render 到畫面上來了
+    </p>
+
+    <h3><b>fetch</b></h3>
+    <p>
+        fetch 跟 asyncData 一樣都是由 Server 端執行，並 render 到畫面上來，不過有以下幾點跟 asyncData 不太一樣<br />
+        ● 可在任何一個 component 執行<br />
+        ● 可取得 this，因在 created 之後<br />
+        ● 不行 return 資料到 template，只能透過覆寫的方式<br />
+    </p>
+    <pre><code class="JAVASCRIPT">
+        data() {
+          return {
+            name: "Lala",
+          };
+        },
+        fetch() {
+          this.name = "Bobee";
+        }
+    </code></pre>
+
+    <h3><b>Fetch 提供的參數</b></h3>
+    <p>
+        $fetchState.pending ( true | false ) : 讓你在 client 端去判斷 API 載入完成沒有<br />
+        $fetchState.error ( null | { } ) : 當發生畫面上的內容發生錯誤的時候，去判斷錯誤的部分<br />
+        $fetchState.timestamp ( Integer ) : 顯示最後一次非同步處理的時間<br />
+    </p>
+
+    <pre><code class="JAVASCRIPT">
+        &lt;h1 v-if="$fetchState.pending">Loading...&lt;/&lt;h1>
+        &lt;h1 v-if="$fetchState.error">ERROR {{$fetchState.error}}&lt;/&lt;h1>
+    </code></pre>
+
+    <pre><code class="JAVASCRIPT">
+        import axios from 'axios';
+        export default {
+          data() {
+            return {
+              res: [],
+            };
+          },
+          fetchOnServer: false,
+          activated() {
+            // 判斷上次執行的 timestamp 跟現在的時間如相差超過 10 秒，將會重新執行 fetch
+            if (this.$fetchState.timestamp &lt;= Date.now() - 10000) {
+              this.$fetch();
+            }
+          },
+          async fetch() {
+            this.res = await axios.get('https://www.youtube.com/list').then((res) => res.data);
+          },
+        };
+    </code></pre>
+
+    <h3><b>生命週期執行順序</b></h3>
+    <p>
+        asyncData → beforeCreate → created → fetch → beforeCreate → created → mounted<br/>
+        將會發現 beforeCreate、created 會被執行兩次，原因是 Server 端和 Client 端都會有 beforeCreate、created，所以需要再做一些判斷或處理，不然有可能重複的東西會被執行兩次。
+    </p>
+
+</div>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
+
+@*https://happy9990929.github.io/2021/09/10/vue-nuxt-lifecycle-hooks/*@
