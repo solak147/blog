@@ -1,5 +1,12 @@
-﻿.article {
+﻿@media (min-width: 641px) {
+    .sidebar {
+        width: 350px !important;
+    }
+}
+
+.article {
     width: 80%;
+    min-height: 105vh;
     background-color: white;
     padding: 30px;
 }
