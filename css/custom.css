@@ -1,7 +1,5 @@
-﻿@media (min-width: 641px) {
-    .sidebar {
-        width: 350px !important;
-    }
+﻿body {
+    overflow-x: hidden;
 }
 
 .loading {
@@ -49,4 +47,20 @@ p {
     color: #c7254e;
     background-color: #f9f2f4;
     border-radius: 4px;
+}
+
+@media (min-width: 641px) {
+    .sidebar {
+        width: 350px !important;
+    }
+}
+
+@media (max-width: 641px) {
+    .article {
+        width: 100%;
+    }
+
+    .loading {
+        width: 110vw;
+    }
 }
