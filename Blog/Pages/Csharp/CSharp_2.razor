@@ -1,7 +1,7 @@
 ﻿@page "/csharp2"
-<h2><b>ASP.NET Web API 訊息處理器</b></h2>
 
 <div class="article">
+    <h2><b>ASP.NET Web API 訊息處理器</b></h2>
     <p>
         ASP.NET Web API 是以 HttpRequestMessage 類別來代表用戶端發出的 HTTP 請求，並以 HttpResponseMessage 類別來代表伺服器端的回應結果。
         也就是說，ASP.NET Web API 從收到用戶端請求開始到產生回應結果的過程當中，會在某個適當時間分別建立 HttpRequestMessage 和 HttpResponseMessage 物件實體。
@@ -29,7 +29,7 @@
         這個 InnerHandler 會指向下一條管線──這裡稍微改個說法：InnerHandler 會指向下一層管線。
     </p>
 
-    <h3><b>實作DelegatingHandler</b></h3>
+    <h3><b>實作 DelegatingHandler</b></h3>
     <pre><code class="CSharp">
         public class MyRequestHandler : DelegatingHandler
         {

@@ -11,7 +11,7 @@
         因此在極少數情況下您需要 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br/>
     </p>
 
-     <h3><b>Timer內調用StateHasChanged()</b></h3>
+     <h3><b>Timer 內調用 StateHasChanged()</b></h3>
      <p>
         Timer 是一個“外部事件”，所以你不能確定它會在正確的線程上執行。<br/>
         InvokeAsync() 將工作委託給 Blazor 的 SynchronizationContext，這將確保它確實在主線程上運行。<br/><br/>
