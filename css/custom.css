@@ -49,6 +49,15 @@ p {
     border-radius: 4px;
 }
 
+.navlist::-webkit-scrollbar {
+    width: 10px;
+}
+
+.navlist::-webkit-scrollbar-thumb {
+    background: #57deea79;
+    border-radius: 5px;
+}
+
 @media (min-width: 641px) {
     .sidebar {
         width: 350px !important;
