@@ -38,8 +38,8 @@ jobs:
       run: |
         find . -name "*.html" | while read htmlFile; do
             sed -i 's/<base href="\/"/<base href="\/Blog\/"/g' $htmlFile
-            sed -i 's/<script>var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;<\/script>/ /g' $htmlFile
-            sed -i 's/<script src="_framework\/dotnet.6.0.14.iiw8sbvu70.js" defer="" integrity="sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK/ZDzfSXD3FEs=" crossorigin="anonymous"><\/script>/ /g' $htmlFile
+            sed -i 's/<script>var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;<\/script>//g' $htmlFile
+            sed -i 's/<script src="_framework\/dotnet.6.0.14.iiw8sbvu70.js" defer="" integrity="sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK\/ZDzfSXD3FEs=" crossorigin="anonymous"><\/script>//g' $htmlFile
         done
     
     # 複製index.html內容到404.html
