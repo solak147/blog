@@ -29,7 +29,7 @@ jobs:
       
     # Use NodeJS react-snap utitility to prerender static website
     - name: prerender Blazor client
-      working-directory: Prerender/output
+      working-directory: Prerender
       run: npx react-snap
     
     # change base tag in all html files to include subfolder
