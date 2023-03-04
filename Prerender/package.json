@@ -6,5 +6,6 @@
       "removeComments": true
     },
     "puppeteerArgs": [ "--no-sandbox", "--disable-setuid-sandbox" ]
-  }
+  },
+   "skipThirdPartyRequests": true
 }
