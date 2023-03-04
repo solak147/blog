@@ -5,7 +5,7 @@
       "collapseWhitespace": true,
       "removeComments": true
     },
-    "puppeteerArgs": [ "--no-sandbox", "--disable-setuid-sandbox" ]
-  },
-   "skipThirdPartyRequests": true
+    "puppeteerArgs": [ "--no-sandbox", "--disable-setuid-sandbox" ],
+	"skipThirdPartyRequests": true
+  }
 }
