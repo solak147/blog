@@ -25,19 +25,18 @@ jobs:
       
     # 發佈程式到Release資料夾
     - name: Publish .NET Core Project
-      run: dotnet publish Blog/Blog.csproj -c Release -o Prerender/output --nologo
+      run: dotnet publish solak147.github.io/Blog.csproj -c Release -o Prerender/output --nologo
       
     # Use NodeJS react-snap utitility to prerender static website
     - name: prerender Blazor client
       working-directory: Prerender
       run: npx react-snap
     
-    # change base tag in all html files to include subfolder
-    - name: Change base tag
+    # Delete script in all html files to include subfolder
+    - name: Delete script
       working-directory: Prerender/output/wwwroot
       run: |
         find . -name "*.html" | while read htmlFile; do
-            sed -i 's/<base href="\/"/<base href="\/Blog\/"/g' $htmlFile
             sed -i 's/<script>var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;<\/script>//g' $htmlFile
             sed -i 's/<script src="_framework\/dotnet.6.0.14.iiw8sbvu70.js" defer="" integrity="sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK\/ZDzfSXD3FEs=" crossorigin="anonymous"><\/script>//g' $htmlFile
         done
