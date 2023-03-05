@@ -1,5 +1,15 @@
 ﻿@inherits LayoutComponentBase
 
+<PageTitle>@seo.pageTitle</PageTitle>
+<HeadContent>
+    <meta name="keywords" content="@seo.metaTitle" />
+    <meta name="description" content="@seo.metaDescription" />
+    <meta property="og:title" content="@seo.metaTitle" />
+    <meta property="og:description" content="@seo.metaDescription" />
+    <meta name="twitter:title" content="@seo.metaTitle" />
+    <meta name="twitter:description" content="@seo.metaDescription" />
+</HeadContent>
+
 <div class="page">
     <div class="sidebar" style="background-image: url(images/nav.jpg);  background-repeat: no-repeat; background-size: cover;">
         <NavMenu />
@@ -8,8 +18,29 @@
     <main>
         <article class="content px-4">
             <div>
-                @Body
+                <CascadingValue Value="@seo" Name="seo">
+                    @Body
+                </CascadingValue>
             </div>
         </article>
     </main>
 </div>
+
+@code {
+    [Inject] IJSRuntime JSRT { get; set; }
+
+    public class Seo
+    {
+        public string pageTitle = "";
+        public string metaTitle = "";
+        public string metaDescription = "";
+    }
+
+    public Seo seo = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRT.InvokeVoidAsync("drawCode");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

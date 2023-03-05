@@ -8,13 +8,17 @@
 
 
 <url>
-  <loc>https://solak147.github.io/Blog/</loc>
+  <loc>https://solak147.github.io/</loc>
   <lastmod>2023-02-24T16:53:23+00:00</lastmod>
 </url>
 
   <url>
-    <loc>https://solak147.github.io/Blog/gcpvm/</loc>
+    <loc>https://solak147.github.io/gcpvm/</loc>
     <lastmod>2023-02-24T16:53:23+00:00</lastmod>
   </url>
 
+  <url>
+    <loc>https://solak147.github.io/reactsnap/</loc>
+    <lastmod>2023-02-24T16:53:23+00:00</lastmod>
+  </url>
 </urlset>

@@ -1,21 +1,5 @@
 ﻿@page "/"
-
-<PageTitle>中二病也要寫程式</PageTitle>
-
-<HeadContent>
-    <meta name="keywords" content="中二病也要寫程式" />
-    <meta name="description" content="中二病也要寫程式 - 分享前後端程式學習經驗，程式語言教學 Program teaching : C#、Go、Dart、JavaScript、CSS
-        流行框架 Framework : Vue + Nuxt、ASP.NET Core MVC、Blazor、Flutter
-        環境部屬 Environment deployment : Docker、GCP、GitHub Pages" />
-    <meta property="og:title" content="中二病也要寫程式" />
-    <meta property="og:description" content="中二病也要寫程式 - 分享前後端程式學習經驗，程式語言教學 Program teaching : C#、Go、Dart、JavaScript、CSS
-        流行框架 Framework : Vue + Nuxt、ASP.NET Core MVC、Blazor、Flutter
-        環境部屬 Environment deployment : Docker、GCP、GitHub Pages"  />
-    <meta name="twitter:title" content="中二病也要寫程式" />
-    <meta name="twitter:description" content="中二病也要寫程式 - 分享前後端程式學習經驗，程式語言教學 Program teaching : C#、Go、Dart、JavaScript、CSS
-        流行框架 Framework : Vue + Nuxt、ASP.NET Core MVC、Blazor、Flutter
-        環境部屬 Environment deployment : Docker、GCP、GitHub Pages" />
-</HeadContent>
+@inherits Blog.Base.Base
 
 <div class="article">
     <h1><b>簡介</b></h1>
@@ -32,3 +16,18 @@
         </b>
     </p>
 </div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "中二病也要寫程式";
+        seo.metaTitle = "中二病也要寫程式";
+        seo.metaDescription = @"中二病也要寫程式 - 分享前後端程式學習經驗，程式語言教學 Program teaching : C#、Go、Dart、JavaScript、CSS
+            流行框架 Framework : Vue + Nuxt、ASP.NET Core MVC、Blazor、Flutter
+            環境部屬 Environment deployment : Docker、GCP、GitHub Pages";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}

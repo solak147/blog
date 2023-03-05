@@ -1,14 +1,5 @@
 ﻿@page "/gcpvm"
-
-<PageTitle>GCP 免費主機架設網站</PageTitle>
-<HeadContent>
-    <meta name="keywords" content="GCP 免費主機架設網站" />
-    <meta name="description" content="使用 GCP (Google Cloud Platform) 創建免費虛擬主機 (VM) 來架設網站" />
-    <meta property="og:title" content="GCP 免費主機架設網站" />
-    <meta property="og:description" content="使用 GCP (Google Cloud Platform) 創建免費虛擬主機 (VM) 來架設網站" />
-    <meta name="twitter:title" content="GCP 免費主機架設網站" />
-    <meta name="twitter:description" content="使用 GCP (Google Cloud Platform) 創建免費虛擬主機 (VM) 來架設網站" />
-</HeadContent>
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>使用GCP (Google Cloud Platform) 創建免費虛擬主機 (VM) 來架設網站</b></h2>
@@ -249,10 +240,14 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "GCP 免費主機架設網站";
+        seo.metaTitle = "GCP 免費主機架設網站";
+        seo.metaDescription = @"使用 GCP (Google Cloud Platform) 創建免費虛擬主機 (Virtual Machine)，在 Linux 環境下架設 ASP.NET Core 網站";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }
