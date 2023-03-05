@@ -25,7 +25,7 @@ jobs:
       
     # 發佈程式到Release資料夾
     - name: Publish .NET Core Project
-      run: dotnet publish solak147.github.io/Blog.csproj -c Release -o Prerender/output --nologo
+      run: dotnet publish Blog/Blog.csproj -c Release -o Prerender/output --nologo
       
     # Use NodeJS react-snap utitility to prerender static website
     - name: prerender Blazor client
