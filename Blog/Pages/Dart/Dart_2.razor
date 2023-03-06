@@ -1,4 +1,5 @@
 ﻿@page "/dart2"
+@inherits Blog.Base.Base
 
 <div  class="article">
     <h2><b>Dart 建構式</b></h2>
@@ -75,10 +76,18 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Dart 建構式";
+        seo.metaTitle = "Dart 建構式";
+        seo.metaDescription = @"Dart 建構式 : Dart 是一個支援 OOP 的程式語言，其建構式也跟大部分物件導向程式大致相同。
+            在 Dart class constructor 中有提供一個語法糖 factory，
+            和一般constructor最直觀的差異就是 factory constructor 會回傳一個 instance ，
+            而不是像一般的 constructor 只要傳入值或者對this操作來設定值且不用另外撰寫return相關的語法
+            。也因為是直接回傳 instance 所以就無法在 factory constructor 內對 this 進行操作";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

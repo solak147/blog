@@ -1,4 +1,5 @@
 ﻿@page "/javascript4"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>[JavaScript] Cookie、LocalStorage、SessionStorage 差異</b></h2>
@@ -67,10 +68,14 @@
 
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "[JavaScript] Cookie、LocalStorage、SessionStorage 差異";
+        seo.metaTitle = "[JavaScript] Cookie、LocalStorage、SessionStorage 差異";
+        seo.metaDescription = @"[JavaScript] Cookie、LocalStorage、SessionStorage 差異 - 主要差別在於瀏覽器儲存資料的方式不同";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

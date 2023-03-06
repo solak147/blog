@@ -1,7 +1,8 @@
 ﻿@page "/javascript2"
+@inherits Blog.Base.Base
 
 <div  class="article">
-    <h2><b>使用Promise達到同步等待js資源載入</b></h2>
+    <h2><b>使用 Promise 達到同步等待 js 資源載入</b></h2>
     <br />
 
     <h3><b>前言</b></h3>
@@ -64,10 +65,14 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "JavsScript 使用 Promise 達到同步等待 js 資源載入";
+        seo.metaTitle = "JavsScript 使用 Promis 達到同步等待 js 資源載入";
+        seo.metaDescription = @"JavsScript 使用 Promise 達到同步等待 js 資源載入";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/css2"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>VH、VW、VMIN、VMAX</b></h2>
@@ -26,3 +27,17 @@
     </p>
 
 </div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "CSS : VH、VW、VMIN、VMAX";
+        seo.metaTitle = "CSS : VH、VW、VMIN、VMAX";
+        seo.metaDescription = @"VH、VW、VMIN、VMAX :  vh是view height，指螢幕可視範圍高度的百分比；vw則是view width，指螢幕可是範圍寬度的百分比。<br />
+            vmin，意思是選取「長或寬較小的百分比」，反之vmax意思就是選取「長或寬較大的百分比」";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}

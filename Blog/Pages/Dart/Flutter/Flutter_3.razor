@@ -1,4 +1,5 @@
 ﻿@page "/flutter3"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>MaterialApp</b></h2>
@@ -83,10 +84,14 @@
 
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Flutter MaterialApp";
+        seo.metaTitle = "Flutter MaterialApp";
+        seo.metaDescription = @"Flutter MaterialApp 將多個經常使用的 Material Design 所需要的 Widget 包裝起來，在這邊定義主題色，及導航路由… 所有的 Ｗidget 都是由 MaterialApp 往下延伸的。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

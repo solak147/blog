@@ -1,4 +1,5 @@
 ﻿@page "/githubpage"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>Deploy To GitHub Pages</b></h2>
@@ -109,11 +110,15 @@
 
 </div>
 
-@code{
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Deploy To GitHub Pages";
+        seo.metaTitle = "Deploy To GitHub Pages";
+        seo.metaDescription = @"Deploy To GitHub Pages - itHub Pages是GitHub提供的一個網頁代管服務，於2008年推出。 可以用於存放靜態網頁，包括部落格、項目文檔甚至整本書。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

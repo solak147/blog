@@ -1,4 +1,5 @@
 ﻿@page "/dart3"
+@inherits Blog.Base.Base
 
 <div  class="article">
 <h2><b>Metadata - @@immutable</b></h2>
@@ -33,11 +34,16 @@ class Employee {
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Flutter Metadata - @immutable";
+        seo.metaTitle = "Flutter Metadata - @immutable";
+        seo.metaDescription = @"Flutter Metadata - @immutable 
+            你可以使用meta package中的@immutable annotation在你打算不可變的類別上顯示警告
+            將類別加上 @@immutable 後，表示該類別裡的屬性就不得修改，意指所有屬性都必須加上 final 修飾";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }
-

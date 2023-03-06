@@ -1,17 +1,5 @@
 ﻿@page "/flutter1"
-
-<PageTitle>is missing an input or output annotation</PageTitle>
-<HeadContent>
-    <meta name="description" content="* What went wrong:
-        Some problems were found with the configuration of task ':app:compileFlutterBuildDebug' (type 'FlutterTask').
-          - In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.
-
-            Reason: A property without annotation isn't considered during up-to-date checking.
-
-            Possible solutions:
-              1. Add an input or output annotation.
-              2. Mark it as @@Internal." />
-</HeadContent>
+@inherits Blog.Base.Base
 
 <h2><b>In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.</b></h2>
 <br />
@@ -86,10 +74,23 @@ Exception: Gradle task assembleDebug failed with exit code 1
 </p>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "is missing an input or output annotation";
+        seo.metaTitle = "is missing an input or output annotation";
+        seo.metaDescription = @"is missing an input or output annotation 
+            What went wrong:
+                Some problems were found with the configuration of task ':app:compileFlutterBuildDebug' (type 'FlutterTask').
+                  - In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.
+
+                    Reason: A property without annotation isn't considered during up-to-date checking.
+
+                    Possible solutions:
+                      1. Add an input or output annotation.
+                      2. Mark it as @Internal.";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

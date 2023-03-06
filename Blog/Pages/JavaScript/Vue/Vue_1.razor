@@ -1,4 +1,5 @@
 ﻿@page "/vue1"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>Vue 生命週期</b></h2>
@@ -133,10 +134,14 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue 生命週期";
+        seo.metaTitle = "Vue 生命週期";
+        seo.metaDescription = @"Vue 生命週期 - 主要分為八個項目，分別是：beforeCreate、created、beforeMount、mounted、beforeUpdate、updated、beforeUnmount、unmounted";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

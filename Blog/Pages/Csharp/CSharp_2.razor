@@ -1,4 +1,5 @@
 ﻿@page "/csharp2"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>ASP.NET Web API 訊息處理器</b></h2>
@@ -62,15 +63,17 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "ASP.NET Web API 訊息處理器";
+        seo.metaTitle = "ASP.NET Web API 訊息處理器";
+        seo.metaDescription = @"ASP.NET Web API 訊息處理器 :  DelegatingHandler 的用途是處理 HttpRequestMessage 和 HttpResponseMessage 物件，並將處理過的物件交給下一棒繼續處理";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
-
 }
-
 @*
     參考
     https://www.huanlintalk.com/2013/01/aspnet-web-api-message-handlers.html

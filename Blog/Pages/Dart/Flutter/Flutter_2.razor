@@ -1,4 +1,5 @@
 ﻿@page "/flutter2"
+@inherits Blog.Base.Base
 
 <div class="article">
 
@@ -164,11 +165,17 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Flutter 什麼是Bloc Design Pattern";
+        seo.metaTitle = "Flutter 什麼是Bloc Design Pattern";
+        seo.metaDescription = @" Bloc 全名是「Business Logic Component」，用來分離UI層和商業邏輯層，有助於程式碼的維護、重複利用以及測試。
+            Bloc 層會接收使用者的行為 (例如點擊Button)，根據不同的事件(Event)Bloc會去呼叫相應的函式(可能是去資料庫抓資料或使用 api )。
+            之後根據結果回傳相應的狀態 (State) 給UI層，UI則根據狀態做變化。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿@page "/javascript1"
+@inherits Blog.Base.Base
 
 <div  class="article">
     <h2><b>Promise 簡介</b></h2>
@@ -106,11 +107,15 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "JavsScript Promise 簡介";
+        seo.metaTitle = "JavsScript Promise 簡介";
+        seo.metaDescription = @"JavsScript Promise 簡介 - Promise 是 一個 JavaScript 語法，專門用來優化非同步行為，，而 Async、Await 可以基於 Promise 讓非同步的語法的結構類似於 “同步語言”";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }
 

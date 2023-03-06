@@ -1,7 +1,8 @@
 ﻿@page "/gcpdocker"
+@inherits Blog.Base.Base
 
 <div class="article">
-    <h2><b>使用 docker 建立 mysql</b></h2>
+    <h2><b>使用 Docker 建立 MySql</b></h2>
 
     <h3><b>安裝 Docker</b></h3>
     <pre><code class="LINUX">
@@ -98,14 +99,17 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "使用 Docker 建立 MySql";
+        seo.metaTitle = "使用 Docker 建立 MySqls";
+        seo.metaDescription = @"使用 Docker 建立 MySql。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }
-
 @*https://ithelp.ithome.com.tw/articles/10190824*@
 @*默認情況下，gcp引擎中的 VM 沒有設置 root 密碼，因此您首先需要使用以下命令更改密碼
 sudo passwd*@

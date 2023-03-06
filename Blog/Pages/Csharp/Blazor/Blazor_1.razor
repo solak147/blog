@@ -1,4 +1,5 @@
 ﻿@page "/blazor1"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>StateHasChanged() vs InvokeAsync(StateHasChanged)</b></h2>
@@ -8,7 +9,7 @@
         blazor 渲染和調用 StateHasChanged 都必須發生在主（UI）執行緒上<br/><br/>
 
         而主要的 Blazor 生命週期事件（OnInit、AfterRender、ButtonClick）都在該特殊執行緒上執行，<br/>
-        因此在極少數情況下您需要 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br/>
+        因此在極少數情況下 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br/>
     </p>
 
      <h3><b>Timer 內調用 StateHasChanged()</b></h3>
@@ -20,3 +21,16 @@
         你並不會發現錯誤。<br/><br/>
      </p>
 </div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Blazor StateHasChanged() vs InvokeAsync(StateHasChanged)";
+        seo.metaTitle = "Blazor StateHasChanged() vs InvokeAsync(StateHasChanged)";
+        seo.metaDescription = @"在 Blazor 強制畫面重新渲染， 使用 StateHasChanged() vs InvokeAsync(StateHasChanged) 的差別";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}

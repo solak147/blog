@@ -1,4 +1,5 @@
 ﻿@page "/nuxt1"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>Nuxt 生命週期</b></h2>
@@ -109,11 +110,15 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Nuxt 生命週期";
+        seo.metaTitle = "Nuxt 生命週期";
+        seo.metaDescription = @"Nuxt 生命週期";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿@page "/csharp1"
+@inherits Blog.Base.Base
 
 <div  class="article">
     <h2><b>C# 中的 override 和 new 關鍵字有什麼區別</b></h2>
@@ -59,11 +60,15 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
-    }
+        parameters.SetParameterProperties(this);
 
+        seo.pageTitle = "C# 中的 override 和 new 關鍵字有什麼區別";
+        seo.metaTitle = "C# 中的 override 和 new 關鍵字有什麼區別";
+        seo.metaDescription = @"C# 中的 override 和 new 關鍵字有什麼區別，new 因為是隱藏父類別方法的關係，會執行變數型別的方法
+            override 則是執行覆寫類別的方法";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/css1"
+@inherits Blog.Base.Base
 
 <div class="article">
     <h2><b>EM 與 REM 的差異</b></h2>
@@ -61,10 +62,15 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
-        await base.OnAfterRenderAsync(firstRender);
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "CSS : EM 與 REM 的差異";
+        seo.metaTitle = "CSS : EM 與 REM 的差異";
+        seo.metaDescription = @"EM 與 REM 的差異 : em 是相對的的數值單位，它會受到外圍的文字大小所影響
+            rem 也是相對的文字尺寸，和 em 使用方法接近，不同的是他僅相對於 root 層級的文字大小";
+
+        await base.SetParametersAsync(ParameterView.Empty);
     }
 }

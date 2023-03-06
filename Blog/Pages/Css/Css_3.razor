@@ -1,4 +1,6 @@
 ﻿@page "/css3"
+@inherits Blog.Base.Base
+
 <div class="article">
     <h2><b>display : flex</b></h2>
     <br />
@@ -79,7 +81,16 @@
 </div>
 
 @code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
 
+        seo.pageTitle = "CSS - display : flex";
+        seo.metaTitle = "CSS - display : flex";
+        seo.metaDescription = @"CSS display : flex - 現代網頁排版神器 - 外部屬性 : display flex-flow justify-content align-items 內部屬性 : flex order align-self";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
 }
 
 @*https://www.casper.tw/css/2017/07/21/css-flex/*@
