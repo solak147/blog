@@ -7,7 +7,7 @@
 <p>
 Using a metatag helper <br/>
 Metadata 是用來替函數、參數加上註解 <br/>
-你可以使用meta package中的@immutable annotation在你打算不可變的類別上顯示警告 <br/>
+你可以使用 meta package中的@immutable annotation 在你打算不可變的類別上顯示警告 <br/>
 將類別加上 @@immutable 後，表示該類別裡的屬性就不得修改，意指所有屬性都必須加上 final 修飾。 
 </p>
 
@@ -26,9 +26,9 @@ class Employee {
 </code></pre>
 
 <p>
-    @@immutable 實際上不會使您的類別不可變，但會顯示警告提醒您。在本例中，指出您的一個或多個屬性不是final. <br/>
-    如果您嘗試在建構子的變數內加入const關鍵字，你將收到同樣的錯誤。<br/>
-    如果一個類別上有@immutable標籤，任何不可變的子類別也會有警告。
+    @@immutable 實際上不會使您的類別不可變，但會顯示警告提醒您。在本例中，指出您的一個或多個屬性不是 final. <br/>
+    如果您嘗試在建構子的變數內加入 const 關鍵字，你將收到同樣的錯誤。<br/>
+    如果一個類別上有 @@immutable 標籤，任何不可變的子類別也會有警告。
 </p>
 
 </div>
@@ -41,8 +41,8 @@ class Employee {
         seo.pageTitle = "Flutter Metadata - @immutable";
         seo.metaTitle = "Flutter Metadata - @immutable";
         seo.metaDescription = @"Flutter Metadata - @immutable 
-            你可以使用meta package中的@immutable annotation在你打算不可變的類別上顯示警告
-            將類別加上 @@immutable 後，表示該類別裡的屬性就不得修改，意指所有屬性都必須加上 final 修飾";
+            你可以使用 meta package中的@immutable annotation 在你打算不可變的類別上顯示警告
+            將類別加上 @immutable 後，表示該類別裡的屬性就不得修改，意指所有屬性都必須加上 final 修飾";
 
         await base.SetParametersAsync(ParameterView.Empty);
     }

@@ -1,0 +1,265 @@
+﻿@page "/go1"
+@inherits Blog.Base.Base
+
+<div class="article">
+    <h2><b>通道 Channel</b></h2>
+    <p>
+        Channel 可以想像成是一種資料結構，可以 push data 進去也可以 pull data 出來。<br /><br />
+
+        因為Channel會等待另一端完成 Push/Pull 的動作才會繼續往下處理，<br />
+        而且特性使其可以在Goroutines間同步處理的資料，而不用使用 lock、unlock 等方式。
+    </p>
+
+    <h3><b>Create Channel</b></h3>
+    <pre><code class="go">
+        ch := make(chan int)
+    </code></pre>
+
+    <h3><b>Push data to Channel</b></h3>
+    <pre><code class="go">
+       ch &lt;- d 
+    </code></pre>
+
+    <h3><b>Pull data from Channel</b></h3>
+    <pre><code class="go">
+       d := &lt;- ch
+    </code></pre>
+
+    <p>
+        Channel是用來讓Goroutine溝通時使用的一種資料結構，並且由於其阻塞的特性，它也能夠當成一種等待goroutine的方法。
+    </p>
+
+    <pre><code class="go">
+       package main
+
+        import (
+            "fmt"
+            "time"
+        )
+
+        func main() {
+            ch := make(chan string)
+
+            go calculator(ch)
+
+            time.Sleep(3 * time.Second)
+            fmt.Println(&lt;-ch)
+            time.Sleep(time.Second)
+            fmt.Println("main goroutine finished")
+        }
+
+        func work(ch chan string) {
+            fmt.Println("Start to work goroutines")
+            time.Sleep(time.Second)
+            fmt.Println("Stop to work goroutines")
+
+            ch &lt;- "FINISH"
+
+            fmt.Println("Finish work")
+        }
+
+        # Result:
+        # Start to work goroutines
+        # Stop to work goroutines
+        # FINISH
+        # Finish work
+        # Main goroutine finished
+    </code></pre>
+
+    <p>
+        這邊的三秒延遲目的是為了讓 main thread 慢於 goroutines，一秒延遲則是模擬 goroutines 的作業時間！ <br />
+        所以他會依序的去進行 goroutines 作業→打印 channel 的內容→完成 goroutines function →完成 main thread。
+    </p>
+
+    <p>
+        通道分為兩種，有 buffer 與無 buffer 的，也就是有儲存空間限制的 channel 與無限制的 channel。
+    </p>
+
+    <h3><b>Unbuffered channel</b></h3>
+    <pre><code class="go">
+       package main
+
+        import (
+            "fmt"
+	        "time"
+        )
+
+        func main() {
+	        ch := make(chan int)
+	        go f(ch)
+	        got := &lt;-ch
+	        fmt.Println(got)
+        }
+
+        func f(ch chan int) {
+	        time.Sleep(time.Second * 2)
+	        ch &lt;- 999
+        }
+        
+        # Result
+        # 999
+    </code></pre>
+     <p>
+       由上面例子我們可以得知，Unbuffered Channel 有一個特性： <br /> <br />
+
+        Push 一筆資料會造成 Pusher 的等待 <br />
+        Pull 時沒有資料則會造成 Puller 的等待 <br />
+        也因此如果 Pusher 的執行一次時間較 Puller 短，會造成 Pusher 被迫等待 Puller 拉取完後，才能進行下一次的 Push，而這樣的等待是相當浪費時間的。 <br /> <br />
+
+        而 Buffered Channel 正好解決了這種問題。
+    </p>
+
+     <h3><b>Buffered channel</b></h3>
+     <p>
+         差別僅在於
+         Variable := make(chan Type,<span class="imtdot"> Number</span>)
+     </p>
+
+    <h3><b>Deadlock</b></h3>
+    <pre><code class="go">
+        package main
+
+        func main() {
+	        ch := make(chan int, 2)
+	        go func3(ch)
+	        ch  &lt;- 100
+	        ch  &lt;- 99
+
+	        ch  &lt;- 98 // 發生deadlock
+        }
+
+        func func3(ch chan int) {
+        }
+
+        # Result
+        # fatal error: all goroutines are asleep - deadlock!
+    </code></pre>
+    <p>
+       有限制儲存空間的通道，若限制放兩個，就只能有兩筆數據，倘若塞入第三筆的話則會造成死結 DeadLock
+    </p>
+
+    <h3><b>Block vs Deadlock</b></h3>
+    <p>
+        以上例來說，通常 chan 塞不下第三筆數據時，只會 發生 Block，而當 Block <span class="imtdot">永遠無法解開</span>的情況發生，則是 Deadlock。 <br />
+
+        只要通道 Channel 塞不下，或者沒東西可抓，都會發生 Block。 <br />
+    </p>
+
+    <h3><b>Block</b></h3>
+    <pre><code class="go">
+        package main
+
+        import (
+            "fmt"
+	        "time"
+        )
+
+        func main() {
+	        ch := make(chan int, 2)
+	        go func1(ch)
+	        for i := 0; i  &lt; 10; i++ {
+		        ch  &lt;- i
+		        fmt.Println("main sent", i)
+	        }
+	        time.Sleep(time.Second)
+        }
+
+        func func1(ch chan int) {
+	        for {
+		        i :=  &lt;-ch
+		        fmt.Println("func1 got", i)
+		        time.Sleep(time.Millisecond * 100)
+	        }
+        }
+
+        # main sent 0
+        # main sent 1
+        # main sent 2
+        # func1 got 0
+        # func1 got 1
+        # main sent 3
+        # func1 got 2
+        # main sent 4
+        # func1 got 3
+        # main sent 5
+        # func1 got 4
+        # main sent 6
+        # func1 got 5
+        # main sent 7
+        # func1 got 6
+        # main sent 8
+        # func1 got 7
+        # main sent 9
+        # func1 got 8
+        # func1 got 9
+    </code></pre>
+
+    <p>
+        主程式塞2個數字後會 Block，必須由 func1 每0.1秒把數字依序讀出，主程式才可以繼續將數字塞入。<br />
+        把Buffer Size: 2換成5
+    </p>
+
+     <pre><code class="go">
+        package main
+
+        import (
+            "fmt"
+	        "time"
+        )
+
+        func main() {
+	        ch := make(chan int, 5)
+	        go func1(ch)
+	        for i := 0; i  &lt; 10; i++ {
+		        ch  &lt;- i
+		        fmt.Println("main sent", i)
+	        }
+	        time.Sleep(time.Second)
+        }
+
+        func func1(ch chan int) {
+	        for {
+		        i :=  &lt;-ch
+		        fmt.Println("func1 got", i)
+		        time.Sleep(time.Millisecond * 100)
+	        }
+        }
+
+        # main sent 0
+        # main sent 1
+        # main sent 2
+        # main sent 3
+        # main sent 4
+        # main sent 5
+        # func1 got 0
+        # func1 got 1
+        # main sent 6
+        # func1 got 2
+        # main sent 7
+        # func1 got 3
+        # main sent 8
+        # func1 got 4
+        # main sent 9
+        # func1 got 5
+        # func1 got 6
+        # func1 got 7
+        # func1 got 8
+        # func1 got 9
+    </code></pre>
+</div>
+
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Golang Channel";
+        seo.metaTitle = "Golang Channel";
+        seo.metaDescription = @"Golang Channel - Channel 可以想像成是一種資料結構，可以 push data 進去也可以 pull data 出來。
+            因為Channel會等待另一端完成 Push/Pull 的動作才會繼續往下處理，<br />
+            而且特性使其可以在Goroutines間同步處理的資料，而不用使用 lock、unlock 等方式";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
