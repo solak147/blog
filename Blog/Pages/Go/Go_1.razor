@@ -96,7 +96,7 @@
 	        ch &lt;- 999
         }
         
-        # Result
+        # Result:
         # 999
     </code></pre>
      <p>
@@ -131,7 +131,7 @@
         func func3(ch chan int) {
         }
 
-        # Result
+        # Result:
         # fatal error: all goroutines are asleep - deadlock!
     </code></pre>
     <p>
@@ -172,6 +172,7 @@
 	        }
         }
 
+        # Result:
         # main sent 0
         # main sent 1
         # main sent 2
@@ -196,6 +197,7 @@
 
     <p>
         主程式塞2個數字後會 Block，必須由 func1 每0.1秒把數字依序讀出，主程式才可以繼續將數字塞入。<br />
+        雖然慢，但程式不會 Block，只是會造成執行效率低下而已。<br />
         把Buffer Size: 2換成5
     </p>
 
@@ -225,6 +227,7 @@
 	        }
         }
 
+        # Result:
         # main sent 0
         # main sent 1
         # main sent 2
