@@ -68,7 +68,7 @@ p {
     .spinner > div {
         background-color: #3cefff;
         height: 100%;
-        width: 6px;
+        width: 30px;
         margin: auto 2px;
         display: inline-block;
         -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
@@ -134,6 +134,10 @@ p {
     .sidebar {
         width: 350px !important;
     }
+
+    .indexbanner {
+        height: 60vh;
+    }
 }
 
 @media (max-width: 641px) {
@@ -144,4 +148,13 @@ p {
     .loading {
         width: 110vw;
     }
+
+    .indexbanner {
+        max-height: 50vh;
+    }
 }
+
+/*
+max-width，表示這個數字以下的都適用。(<=)
+min-width，表示這個數字以上的都適用。(>=)
+*/
