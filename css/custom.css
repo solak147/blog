@@ -2,6 +2,17 @@
     overflow-x: hidden;
 }
 
+nav {
+    height: 100vh;
+}
+
+article {
+    width: 80%;
+    min-height: 105vh;
+    background-color: white;
+    padding: 30px;
+}
+
 a {
     color: #0f8eec;
 }
