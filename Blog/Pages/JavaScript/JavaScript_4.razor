@@ -1,71 +1,67 @@
 ﻿@page "/javascript4"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>[JavaScript] Cookie、LocalStorage、SessionStorage 差異</b></h2>
+<h2><b>[JavaScript] Cookie、LocalStorage、SessionStorage 差異</b></h2>
+<br />
+
+<h3><b>Cookie</b></h3>
+<p>
+    可設定失效時間。 預設是關閉瀏覽器後失效 <br /> <br />
+
+    HTTP cookie（web cookie、browser cookie）為伺服器傳送給使用者瀏覽器的一個小片段資料。 <br />
+    瀏覽器可能儲存並在下一次請求回傳 cookie 至相同的伺服器。Cookie 通常被用來保持使用者的登入狀態 — — 如果兩次請求都來自相同的瀏覽器。 <br />
+    有個數限制（各瀏覽器不同），一般不能超過20個<br /><br />
+
+    ● 大小約 4kb <br />
+    ● 每次 request 時都會帶上 <br />
+</p>
     <br />
 
-    <h3><b>Cookie</b></h3>
-    <p>
-        可設定失效時間。 預設是關閉瀏覽器後失效 <br /> <br />
+<h3><b>LocalStorage / SessionStorage</b></h3>
+<p>
+    是HTML5提供兩種在客戶端儲存資料的方法，彌補了cookie儲存量小、不適用於大量資料本地儲存的問題。 <br />
+    從字面上的意思就可以看出，sessionStorage將資料儲存在session中，瀏覽器關閉也就沒了； <br />
+    而localStorage則一直將資料儲存在客戶端本地； 不管是sessionStorage，還是localStorage，可使用的API都相同。 <br /> <br />
 
-        HTTP cookie（web cookie、browser cookie）為伺服器傳送給使用者瀏覽器的一個小片段資料。 <br />
-        瀏覽器可能儲存並在下一次請求回傳 cookie 至相同的伺服器。Cookie 通常被用來保持使用者的登入狀態 — — 如果兩次請求都來自相同的瀏覽器。 <br />
-        有個數限制（各瀏覽器不同），一般不能超過20個<br /><br />
+    ● 都是使用 key / value pair 的方式 給值或取值 <br />
+    ● 大小預設有 5mb <br />
+    ● 每次 request 不會帶上 <br /> <br />
 
-        ● 大小約 4kb <br />
-        ● 每次 request 時都會帶上 <br />
-    </p>
-     <br />
+    LocalStorage 不會過期，除非手動清除 <br /> <br />
 
-    <h3><b>LocalStorage / SessionStorage</b></h3>
-    <p>
-        是HTML5提供兩種在客戶端儲存資料的方法，彌補了cookie儲存量小、不適用於大量資料本地儲存的問題。 <br />
-        從字面上的意思就可以看出，sessionStorage將資料儲存在session中，瀏覽器關閉也就沒了； <br />
-        而localStorage則一直將資料儲存在客戶端本地； 不管是sessionStorage，還是localStorage，可使用的API都相同。 <br /> <br />
+    SessionStorage 每次分頁或瀏覽器關掉後就會清除 <br />
+    生命周期只存在瀏覽囂的 單一分頁 ，也就是 另開新分頁的話 ，又是一個 新的sessionStorage ， <br />
+    預設無逾期時間，除非關閉該分頁、關閉瀏覽器等，sessionStorage就會消失。 <br />
+</p>
 
-        ● 都是使用 key / value pair 的方式 給值或取值 <br />
-        ● 大小預設有 5mb <br />
-        ● 每次 request 不會帶上 <br /> <br />
+<img src="images/javascript_3.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+    <br />
 
-        LocalStorage 不會過期，除非手動清除 <br /> <br />
+<h3><b>應用場景</b></h3>
+<p>
+    <span class="imtdot">Cookie</span><br />
+    比較常用的場景就是判斷用戶是否登錄<br />
+    針對登錄過的用戶，服務器端會在他登錄時往Cookie 插入一段加密過的辨識碼，下次只要讀取這個值就可以判斷用戶是否登錄<br />
 
-        SessionStorage 每次分頁或瀏覽器關掉後就會清除 <br />
-        生命周期只存在瀏覽囂的 單一分頁 ，也就是 另開新分頁的話 ，又是一個 新的sessionStorage ， <br />
-        預設無逾期時間，除非關閉該分頁、關閉瀏覽器等，sessionStorage就會消失。 <br />
-    </p>
+    Session 管理<br />
+    &nbsp; &nbsp; &nbsp; 帳號登入、購物車、遊戲分數，或任何其他伺服器應該記住的資訊<br />
+    個人化<br />
+    &nbsp; &nbsp; &nbsp; 使用者設定、佈景主題，以及其他設定<br />
+    追蹤<br />
+    &nbsp; &nbsp; &nbsp; 記錄並分析使用者行為
+</p>
 
-    <img src="images/javascript_3.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
-     <br />
+<p>
+    <span class="imtdot">LocalStorage</span><br />
+    而另一方面 localStorage 代替了 Cookie 管理購物車的工作，同時也能勝任其他工作。<br />
+    比如說HTML遊戲通常會產生一些數據，localStorage 也很適合使用。
+</p>
 
-    <h3><b>應用場景</b></h3>
-    <p>
-        <span class="imtdot">Cookie</span><br />
-        比較常用的場景就是判斷用戶是否登錄<br />
-        針對登錄過的用戶，服務器端會在他登錄時往Cookie 插入一段加密過的辨識碼，下次只要讀取這個值就可以判斷用戶是否登錄<br />
-
-        Session 管理<br />
-        &nbsp; &nbsp; &nbsp; 帳號登入、購物車、遊戲分數，或任何其他伺服器應該記住的資訊<br />
-        個人化<br />
-        &nbsp; &nbsp; &nbsp; 使用者設定、佈景主題，以及其他設定<br />
-        追蹤<br />
-        &nbsp; &nbsp; &nbsp; 記錄並分析使用者行為
-    </p>
-
-    <p>
-        <span class="imtdot">LocalStorage</span><br />
-        而另一方面 localStorage 代替了 Cookie 管理購物車的工作，同時也能勝任其他工作。<br />
-        比如說HTML遊戲通常會產生一些數據，localStorage 也很適合使用。
-    </p>
-
-    <p>
-        <span class="imtdot">SessionStorage</span><br />
-        如果遇到一些內容特別多的表單，為了提升用戶體驗，可能要把表單頁面拆分成多個子頁面，然後按照步驟引導用戶。<br />
-        這時候 sessionStorage 就可以發揮出效用。<br />
-    </p>
-
-</div>
-
+<p>
+    <span class="imtdot">SessionStorage</span><br />
+    如果遇到一些內容特別多的表單，為了提升用戶體驗，可能要把表單頁面拆分成多個子頁面，然後按照步驟引導用戶。<br />
+    這時候 sessionStorage 就可以發揮出效用。<br />
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

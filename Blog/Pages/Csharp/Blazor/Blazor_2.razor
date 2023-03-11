@@ -1,31 +1,28 @@
 ﻿@page "/blazor2"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>Service Lifetime</b></h2>
-    <br />
+<h2><b>Service Lifetime</b></h2>
+<br />
 
-    <p>
-        自己建立的 Service 都必須在 Program.cs 注冊，而在 Blazor 也有幫你建立好一些基本的 Service <br /><br />
+<p>
+    自己建立的 Service 都必須在 Program.cs 注冊，而在 Blazor 也有幫你建立好一些基本的 Service <br /><br />
 
-        目前 Blazor 提供内建的 Service 有三个，分别為：<br /><br />
+    目前 Blazor 提供内建的 Service 有三个，分别為：<br /><br />
 
-        1.HttpClient：負責處理 http 請求，生命周期为 Scoped (注意：只有 Blazor WebAssembly 有提供，Blazor Server 必須自己注冊) <br />
-        2.IJSRuntime：提供 Javascript runtime 组件處理 JS 功能，Blazor WebAssembly 生命周期為 Singleton，Blazor Server 生命周期為 Scoped <br />
-        3.NavigationManager：處理路由導向和狀態，Blazor WebAssembly 生命周期為 Singleton，Blazor Server 生命周期為 Scoped <br /><br />
+    1.HttpClient：負責處理 http 請求，生命周期为 Scoped (注意：只有 Blazor WebAssembly 有提供，Blazor Server 必須自己注冊) <br />
+    2.IJSRuntime：提供 Javascript runtime 组件處理 JS 功能，Blazor WebAssembly 生命周期為 Singleton，Blazor Server 生命周期為 Scoped <br />
+    3.NavigationManager：處理路由導向和狀態，Blazor WebAssembly 生命周期為 Singleton，Blazor Server 生命周期為 Scoped <br /><br />
 
-        生命周期指的就是 Component 存活的時間，有<span class="imtdot">Singleton、Scoped、Transient</span>三種。<br /><br />
+    生命周期指的就是 Component 存活的時間，有<span class="imtdot">Singleton、Scoped、Transient</span>三種。<br /><br />
 
-        1.Singleton 是指從程序啟動到结束都只會有一個實例，所有 Component 共用一個實例。<br />
-        2.Transient 則是每次使用該 Component 時，都會產生一个新實例。<br />
-        3.Scoped 較為特别，Blazor Server 跟 Blazor WebAssembly 模式不相同，Blazor Server 的 Scoped 是指每次 http 請求都會產生一个新的實例，
-        但 Component 之間通過 SingalR 傳遞不會產生。<br /><br />
+    1.Singleton 是指從程序啟動到结束都只會有一個實例，所有 Component 共用一個實例。<br />
+    2.Transient 則是每次使用該 Component 時，都會產生一个新實例。<br />
+    3.Scoped 較為特别，Blazor Server 跟 Blazor WebAssembly 模式不相同，Blazor Server 的 Scoped 是指每次 http 請求都會產生一个新的實例，
+    但 Component 之間通過 SingalR 傳遞不會產生。<br /><br />
 
-        微軟文檔说明「Blazor WebAssembly 目前没有DI的概念，Scoped 相當於 Singleton <br />
-        Blazor WebAssembly 沒有 Server 端，每次重新加載網頁都會將程序下載到瀏覽器，這是一个全新的 http 請求，所以 Singleton 跟 Scoped 都是只要一重新加載網頁就會產生新的實例。
-    </p>
-
-</div>
+    微軟文檔说明「Blazor WebAssembly 目前没有DI的概念，Scoped 相當於 Singleton <br />
+    Blazor WebAssembly 沒有 Server 端，每次重新加載網頁都會將程序下載到瀏覽器，這是一个全新的 http 請求，所以 Singleton 跟 Scoped 都是只要一重新加載網頁就會產生新的實例。
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

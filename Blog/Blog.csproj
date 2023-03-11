@@ -13,4 +13,19 @@
     <PackageReference Include="PSC.Blazor.Components.CodeSnippet" Version="1.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Pages\CSharp\Blazor\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Pages\CSharp\Blazor\Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

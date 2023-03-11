@@ -1,70 +1,123 @@
 ﻿@page "/reactsnap"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>SPA SEO 優化 : react-snap 預渲染</b></h2>
+<h2><b>SPA SEO 優化 : react-snap 預渲染</b></h2>
 
-    <h3><b>前言 : SPA 的 SEO 問題</b></h3>
-    <p>
-        搜索引擎使用“爬蟲" 來抓取您的網站，它會訪問在您網站上可以找到的每個頁面。然後將這些頁面上的內容添加到搜索索引中。<br />
-        但是爬蟲在訪問 SPA 時會看到什麼？以 Blazor WebAssembly 為例：
-    </p>
-    <pre><code class="html">
-        &lt;!DOCTYPE html>
-        &lt;html>
-        &lt;head>
-            &lt;meta charset="utf-8" />
-            &lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            &lt;title>BlazorWasmPrerender&lt;/title>
-            &lt;base href="/" />
-            &lt;link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-            &lt;link href="css/app.css" rel="stylesheet" />
-            &lt;link href="BlazorWasmPrerender.styles.css" rel="stylesheet" />
-        &lt;/head>
-        &lt;body>
-            &lt;div id="app">Loading...&lt;/div>
-            &lt;div id="blazor-error-ui">
-                An unhandled error has occurred.
-                &lt;a href="" class="reload">Reload&lt;/a>
-                &lt;a class="dismiss">🗙&lt;/a>
-            &lt;/div>
-            &lt;script src="_framework/blazor.webassembly.js">&lt;script>
-        &lt;/body>
-        &lt;/html>
-     </code></pre>
+<h3><b>前言 : SPA 的 SEO 問題</b></h3>
+<p>
+    搜索引擎使用“爬蟲" 來抓取您的網站，它會訪問在您網站上可以找到的每個頁面。然後將這些頁面上的內容添加到搜索索引中。<br />
+    但是爬蟲在訪問 SPA 時會看到什麼？以 Blazor WebAssembly 為例：
+</p>
+<pre><code class="html">
+    &lt;!DOCTYPE html>
+    &lt;html>
+    &lt;head>
+        &lt;meta charset="utf-8" />
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        &lt;title>BlazorWasmPrerender&lt;/title>
+        &lt;base href="/" />
+        &lt;link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+        &lt;link href="css/app.css" rel="stylesheet" />
+        &lt;link href="BlazorWasmPrerender.styles.css" rel="stylesheet" />
+    &lt;/head>
+    &lt;body>
+        &lt;div id="app">Loading...&lt;/div>
+        &lt;div id="blazor-error-ui">
+            An unhandled error has occurred.
+            &lt;a href="" class="reload">Reload&lt;/a>
+            &lt;a class="dismiss">🗙&lt;/a>
+        &lt;/div>
+        &lt;script src="_framework/blazor.webassembly.js">&lt;script>
+    &lt;/body>
+    &lt;/html>
+</code></pre>
 
-     <p>
-        像 Blazor 這樣的 SPA 框架需要執行 JavaScript 才能運行。大多數搜索引擎爬蟲不執行 JavaScript，這意味著 JavaScript 生成的內容不會被索引。<br />
-        Google 的爬蟲確實會執行 JavaScript，它可以成功地索引 Blazor WebAssembly。
-     </p>
+<p>
+    像 Blazor 這樣的 SPA 框架需要執行 JavaScript 才能運行。大多數搜索引擎爬蟲不執行 JavaScript，這意味著 JavaScript 生成的內容不會被索引。<br />
+    Google 的爬蟲確實會執行 JavaScript，它可以成功地索引 Blazor WebAssembly。
+</p>
 
-    <h3><b>react-snap</b></h3>
-    <p>
-        原理是在背景啟動一個 headless chrome, 把 virtual DOM 的結果先抓出來，重新幫你貼到 html 裡。<br />
-        而且他會幫你掃專案裡的 route 並產生對應的資料夾，<br />
-        缺點就是只能用在純靜態網頁。<br />
-    </p>
+<h3><b>react-snap</b></h3>
+<p>
+    原理是在背景啟動一個 headless chrome, 把 virtual DOM 的結果先抓出來，重新幫你貼到 html 裡。<br />
+    而且他會幫你掃專案裡的 route 並產生對應的資料夾，<br />
+    缺點就是只能用在純靜態網頁。<br />
+</p>
 
-    <h3><b>在此以 Blazor WebAssenbly 為例</b></h3>
-    <p>將 react-snap 的必要配置 Prerender/package.json 添加到根目錄 </p>
+<h3><b>在此以 Blazor WebAssenbly 為例</b></h3>
+<p>將 react-snap 的必要配置 Prerender/package.json 添加到根目錄 </p>
 
-    <pre><code class="json">
-        {
-          "reactSnap": {
-            "source": "output/wwwroot",
-            "minifyHtml": {
-              "collapseWhitespace": true,
-              "removeComments": true
-            },
-            "puppeteerArgs": [ "--no-sandbox", "--disable-setuid-sandbox" ],
-            "skipThirdPartyRequests": true
-          }
+<pre><code class="json">
+    {
+        "reactSnap": {
+        "source": "output/wwwroot",
+        "minifyHtml": {
+            "collapseWhitespace": true,
+            "removeComments": true
+        },
+        "puppeteerArgs": [ "--no-sandbox", "--disable-setuid-sandbox" ],
+        "skipThirdPartyRequests": true
         }
-     </code></pre>
+    }
+</code></pre>
 
-    <h3><b>修改 main.yml，加入以下片段</b></h3>
-    <p>如 GutHub Action 不知如何操作，可操考此篇 <a href="/githubpage">Deploy To GitHub Pages</a></p>
-    <pre><code class="json">  
+<h3><b>修改 main.yml，加入以下片段</b></h3>
+<p>如 GutHub Action 不知如何操作，可操考此篇 <a href="/githubpage">Deploy To GitHub Pages</a></p>
+<pre><code class="json">  
+    # Use NodeJS react-snap utitility to prerender static website
+    - name: prerender Blazor client
+        working-directory: Prerender
+        run: npx react-snap
+
+    # Delete script in all html files to include subfolder
+    - name: Delete script
+        working-directory: Prerender/output/wwwroot
+        run: |
+        find . -name "*.html" | while read htmlFile; do
+            sed -i 's/&lt;script>var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;&lt;\/script>//g' $htmlFile
+            sed -i 's/&lt;script src="_framework\/dotnet.6.0.14.iiw8sbvu70.js" defer="" integrity="sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK\/ZDzfSXD3FEs=" crossorigin="anonymous">&lt;\/script>//g' $htmlFile
+        done  
+</code></pre>
+
+<p>
+    上述刪除 script tag 的用途 :<br />
+    在一般 Blazor WebAssembly 程序中，script tag 由腳本 blazor.webassembly.js 在瀏覽器加載腳本時生成。<br />
+    如果不刪除會導致網頁在執行 JavaScript 時報錯，影響 Blazor 的運作<br />
+    因為腳本作為預渲染時已經執行一次，但是當瀏覽器加載時腳本又被執行了。<br />
+    <span class="imtdot">其中要刪除的 script tag 內容，會根據你安裝的 .NET Core SDK 版本而有所不同</span>
+</p>
+
+<h3><b>完整 main.yml</b></h3>
+<pre><code class="json">  
+    name: Deploy to GitHub Pages
+
+    # 每次程式碼Push到master，執行workflow
+    on:
+        push:
+        branches: [ master ]
+
+    jobs:
+        deploy-to-github-pages:
+        # 使用ubuntu
+        runs-on: ubuntu-latest
+        steps:
+        # 使用checkout actions
+        - uses: actions/checkout@v2
+
+        # 安裝.NET Core SDK 6.0.x
+        - name: Setup .NET Core SDK
+            uses: actions/setup-dotnet@v3
+            with:
+            dotnet-version: 6.0.x   
+
+        # 執行單元測試專案
+        - name: Run Unit Test 
+            run: dotnet test --no-build
+
+        # 發佈程式到Release資料夾
+        - name: Publish .NET Core Project
+            run: dotnet publish Blog/Blog.csproj -c Release -o Prerender/output --nologo
+
         # Use NodeJS react-snap utitility to prerender static website
         - name: prerender Blazor client
             working-directory: Prerender
@@ -78,84 +131,29 @@
                 sed -i 's/&lt;script>var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;&lt;\/script>//g' $htmlFile
                 sed -i 's/&lt;script src="_framework\/dotnet.6.0.14.iiw8sbvu70.js" defer="" integrity="sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK\/ZDzfSXD3FEs=" crossorigin="anonymous">&lt;\/script>//g' $htmlFile
             done  
-     </code></pre>
 
-    <p>
-        上述刪除 script tag 的用途 :<br />
-        在一般 Blazor WebAssembly 程序中，script tag 由腳本 blazor.webassembly.js 在瀏覽器加載腳本時生成。<br />
-        如果不刪除會導致網頁在執行 JavaScript 時報錯，影響 Blazor 的運作<br />
-        因為腳本作為預渲染時已經執行一次，但是當瀏覽器加載時腳本又被執行了。<br />
-        <span class="imtdot">其中要刪除的 script tag 內容，會根據你安裝的 .NET Core SDK 版本而有所不同</span>
-    </p>
+        # 複製index.html內容到404.html
+        - name: copy index.html to 404.html
+            run: cp Prerender/output/wwwroot/index.html Prerender/output/wwwroot/404.html
 
-    <h3><b>完整 main.yml</b></h3>
-    <pre><code class="json">  
-        name: Deploy to GitHub Pages
+        # 加入一個.nojekyll檔案
+        - name: Add .nojekyll file
+            run: touch Prerender/output/wwwroot/.nojekyll
 
-        # 每次程式碼Push到master，執行workflow
-        on:
-          push:
-            branches: [ master ]
+        # 將release/wwwroot的程式碼，push到gh-pages分支
+        - name: Commit wwwroot to GitHub Pages
+            uses: JamesIves/github-pages-deploy-action@3.5.9
+            with:
+            GITHUB_TOKEN: ${{ secrets.BLOGTOKEN }}
+            BRANCH: gh-pages
+            FOLDER: Prerender/output/wwwroot
+</code></pre>
 
-        jobs:
-          deploy-to-github-pages:
-            # 使用ubuntu
-            runs-on: ubuntu-latest
-            steps:
-            # 使用checkout actions
-            - uses: actions/checkout@v2
-    
-            # 安裝.NET Core SDK 6.0.x
-            - name: Setup .NET Core SDK
-              uses: actions/setup-dotnet@v3
-              with:
-                dotnet-version: 6.0.x   
-    
-            # 執行單元測試專案
-            - name: Run Unit Test 
-              run: dotnet test --no-build
-      
-            # 發佈程式到Release資料夾
-            - name: Publish .NET Core Project
-              run: dotnet publish Blog/Blog.csproj -c Release -o Prerender/output --nologo
-      
-            # Use NodeJS react-snap utitility to prerender static website
-            - name: prerender Blazor client
-                working-directory: Prerender
-                run: npx react-snap
+<p>
+    完成後再到你的網頁下檢視原始碼，已經可以讀到完整的網頁內容<br />
+    使用像 react-snap 這樣的預渲染工具，你可以預渲染 Blazor WebAssembly或其他 SPA 框架，將預渲染的應用程序部署到 GitHub Pages 提高 SEO
+</p>
 
-            # Delete script in all html files to include subfolder
-            - name: Delete script
-                working-directory: Prerender/output/wwwroot
-                run: |
-                find . -name "*.html" | while read htmlFile; do
-                    sed -i 's/&lt;script>var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;&lt;\/script>//g' $htmlFile
-                    sed -i 's/&lt;script src="_framework\/dotnet.6.0.14.iiw8sbvu70.js" defer="" integrity="sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK\/ZDzfSXD3FEs=" crossorigin="anonymous">&lt;\/script>//g' $htmlFile
-                done  
-    
-            # 複製index.html內容到404.html
-            - name: copy index.html to 404.html
-              run: cp Prerender/output/wwwroot/index.html Prerender/output/wwwroot/404.html
-
-            # 加入一個.nojekyll檔案
-            - name: Add .nojekyll file
-              run: touch Prerender/output/wwwroot/.nojekyll
-    
-            # 將release/wwwroot的程式碼，push到gh-pages分支
-            - name: Commit wwwroot to GitHub Pages
-              uses: JamesIves/github-pages-deploy-action@3.5.9
-              with:
-                GITHUB_TOKEN: ${{ secrets.BLOGTOKEN }}
-                BRANCH: gh-pages
-                FOLDER: Prerender/output/wwwroot
-
-     </code></pre>
-
-     <p>
-        完成後再到你的網頁下檢視原始碼，已經可以讀到完整的網頁內容<br />
-        使用像 react-snap 這樣的預渲染工具，你可以預渲染 Blazor WebAssembly或其他 SPA 框架，將預渲染的應用程序部署到 GitHub Pages 提高 SEO
-     </p>
-</div>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

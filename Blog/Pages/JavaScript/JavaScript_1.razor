@@ -1,110 +1,107 @@
 ﻿@page "/javascript1"
 @inherits Blog.Base.Base
 
-<div  class="article">
-    <h2><b>Promise 簡介</b></h2>
-    <br />
+<h2><b>Promise 簡介</b></h2>
+<br />
 
-    <p>
-        Promise 是 一個 JavaScript 語法，專門用來優化非同步行為，，而 Async、Await 可以基於 Promise 讓非同步的語法的結構類似於 “同步語言”。
-    </p>
+<p>
+    Promise 是 一個 JavaScript 語法，專門用來優化非同步行為，，而 Async、Await 可以基於 Promise 讓非同步的語法的結構類似於 “同步語言”。
+</p>
 
-    <h3><b>非同步的問題</b></h3>
-        Promise 本身是用來改善 JavaScript 非同步的語法結構。<br/>
-        在過去的文章中有提到，JavaScript 是屬於同步的程式語言，因此一次僅能做一件事情，但遇到非同步的事件時，<br />
-        就會將非同步的事件移動到程式碼的最後方，等到所有的原始碼運行完以後才會執行非同步的事件。<br />
-        以下列的程式碼來說，在 console 中依序的會出現的順序為：<br /><br />
+<h3><b>非同步的問題</b></h3>
+    Promise 本身是用來改善 JavaScript 非同步的語法結構。<br/>
+    在過去的文章中有提到，JavaScript 是屬於同步的程式語言，因此一次僅能做一件事情，但遇到非同步的事件時，<br />
+    就會將非同步的事件移動到程式碼的最後方，等到所有的原始碼運行完以後才會執行非同步的事件。<br />
+    以下列的程式碼來說，在 console 中依序的會出現的順序為：<br /><br />
 
-        開始 -> 程式碼結束 -> 非同步事件 
-    <br />
+    開始 -> 程式碼結束 -> 非同步事件 
+<br />
 
-    <pre><code class="JAVASCRIPT">
-        console.log('開始');
+<pre><code class="JAVASCRIPT">
+    console.log('開始');
 
-        setTimeout(() => {
-          console.log('非同步事件');
-        }, 0);
+    setTimeout(() => {
+        console.log('非同步事件');
+    }, 0);
 
-        console.log('程式碼結束');
-    </code></pre>
+    console.log('程式碼結束');
+</code></pre>
 
-    <h3><b>狀態</b></h3>
-    <p>
-        Promise 的關鍵在處理非同步的事件，而非同步的過程中也包含著不同的進度狀態，在 Promise 的執行過程中，可以看到以下狀態。<br /><br />
+<h3><b>狀態</b></h3>
+<p>
+    Promise 的關鍵在處理非同步的事件，而非同步的過程中也包含著不同的進度狀態，在 Promise 的執行過程中，可以看到以下狀態。<br /><br />
 
-        pending：事件已經運行中，尚未取得結果<br />
-        resolved：事件已經執行完畢且成功操作，回傳 resolve 的結果（該承諾已經被實現 fulfilled）<br />
-        rejected：事件已經執行完畢但操作失敗，回傳 rejected 的結果<br />
-    </p>
-    <img src="images/javascript_1.png" alt="gcpvm_5" class="imgfmt">
+    pending：事件已經運行中，尚未取得結果<br />
+    resolved：事件已經執行完畢且成功操作，回傳 resolve 的結果（該承諾已經被實現 fulfilled）<br />
+    rejected：事件已經執行完畢但操作失敗，回傳 rejected 的結果<br />
+</p>
+<img src="images/javascript_1.png" alt="gcpvm_5" class="imgfmt">
 
-    <p>
-        Promise 中會使用 resolve 或 reject 回傳結果，並在調用時使用 then 或 catch 取得值。<br />
-        如果要判斷 Promise 是否完成，可依據 Promise 事件中的 resolve 及 reject 是否有被調用，如下Promise 的結果則會停留在 pending
-    </p>
-    <img src="images/javascript_2.png" alt="gcpvm_5" class="imgfmt" style="width:50%;">
+<p>
+    Promise 中會使用 resolve 或 reject 回傳結果，並在調用時使用 then 或 catch 取得值。<br />
+    如果要判斷 Promise 是否完成，可依據 Promise 事件中的 resolve 及 reject 是否有被調用，如下Promise 的結果則會停留在 pending
+</p>
+<img src="images/javascript_2.png" alt="gcpvm_5" class="imgfmt" style="width:50%;">
 
-    <p>
-        Promise 在 .then(onFulfilled, onRejected)中可帶入兩個回呼函式，兩者分別又可以帶入各自的參數：<br />
+<p>
+    Promise 在 .then(onFulfilled, onRejected)中可帶入兩個回呼函式，兩者分別又可以帶入各自的參數：<br />
 
-        ● onFulfilled：執行成功的函式，所帶入參數表示 Promise 函式中 resolve 所帶入的值。<br />
-        ● onRejected：執行失敗的函式，帶入參數表示 Promise 函式中 reject 所帶入的值。<br />
-    </p>
+    ● onFulfilled：執行成功的函式，所帶入參數表示 Promise 函式中 resolve 所帶入的值。<br />
+    ● onRejected：執行失敗的函式，帶入參數表示 Promise 函式中 reject 所帶入的值。<br />
+</p>
 
-    <pre><code class="JAVASCRIPT">
-        // promise.then(onFulfilled, onRejected);
-        // 前者為 resolve callback，後者則為 reject
-        promise()
-          .then((success) => {
-            console.log(success);
-          }, (fail) => {
-            console.log(fail);
+<pre><code class="JAVASCRIPT">
+    // promise.then(onFulfilled, onRejected);
+    // 前者為 resolve callback，後者則為 reject
+    promise()
+        .then((success) => {
+        console.log(success);
+        }, (fail) => {
+        console.log(fail);
+    })
+
+    // 也可寫成
+    // promise.then(onFulfilled);
+    // promise.catch(onRejected)
+    promise()
+        .then(success => {
+        console.log(success);
         })
+        // 失敗的行為一律交給了 catch
+        .catch(fail => {
+        console.log(fail);
+        });
+</code></pre>
 
-        // 也可寫成
-        // promise.then(onFulfilled);
-        // promise.catch(onRejected)
-        promise()
-          .then(success => {
-            console.log(success);
-          })
-            // 失敗的行為一律交給了 catch
-          .catch(fail => {
-            console.log(fail);
-          });
-    </code></pre>
+<h3><b>狀態</b></h3>
+<p>
+    為了確保非同步完成後才執行另一個方法，過去都只能不斷的透過 callback 的方式來確保下一個方法正確執行，形成酷似波動拳的結構，難以維護。<br />
+    而 Promise 改善了這個狀況，使用 then、catch 都可以使用鏈接的方式不斷的進行下一個任務。<br /><br />
 
-    <h3><b>狀態</b></h3>
-    <p>
-        為了確保非同步完成後才執行另一個方法，過去都只能不斷的透過 callback 的方式來確保下一個方法正確執行，形成酷似波動拳的結構，難以維護。<br />
-        而 Promise 改善了這個狀況，使用 then、catch 都可以使用鏈接的方式不斷的進行下一個任務。<br /><br />
+    當我們要進行確保 Promise 任務結束後在進行下一個任務時，就可以使用 return 的方式進入下一個 then，此 return 也有以下特點：<br />
 
-        當我們要進行確保 Promise 任務結束後在進行下一個任務時，就可以使用 return 的方式進入下一個 then，此 return 也有以下特點：<br />
-
-        ● 方法不限於 promise 函式，任何表達式（expression）都可進行回傳<br />
-        ● 如果是 promise 函式，則會繼續遵循 then 及 catch 的運作<br />
-        ●  如果不是 promise 函式，在下一個 then 則可以取得結果<br />
-    </p>
-      <pre><code class="JAVASCRIPT">
-         promise(1)
-          .then(success => {
-            console.log(success);
-            return promise(2);
-          })
-          .then(success => {
-            console.log(success);
-            return promise(0); // 這個階段會進入 catch
-          })
-          .then(success => {   // 由於上一個階段結果是 reject，所以此段不執行
-            console.log(success);
-            return promise(3);
-          })
-          .catch(fail => {
-            console.log(fail);
-          })
-    </code></pre>
-
-</div>
+    ● 方法不限於 promise 函式，任何表達式（expression）都可進行回傳<br />
+    ● 如果是 promise 函式，則會繼續遵循 then 及 catch 的運作<br />
+    ●  如果不是 promise 函式，在下一個 then 則可以取得結果<br />
+</p>
+    <pre><code class="JAVASCRIPT">
+        promise(1)
+        .then(success => {
+        console.log(success);
+        return promise(2);
+        })
+        .then(success => {
+        console.log(success);
+        return promise(0); // 這個階段會進入 catch
+        })
+        .then(success => {   // 由於上一個階段結果是 reject，所以此段不執行
+        console.log(success);
+        return promise(3);
+        })
+        .catch(fail => {
+        console.log(fail);
+        })
+</code></pre>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

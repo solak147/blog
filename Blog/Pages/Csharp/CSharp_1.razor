@@ -1,39 +1,38 @@
 ﻿@page "/csharp1"
 @inherits Blog.Base.Base
 
-<div  class="article">
-    <h2><b>C# 中的 override 和 new 關鍵字有什麼區別</b></h2>
+<h2><b>C# 中的 override 和 new 關鍵字有什麼區別</b></h2>
 
-    <p>
-        override 會「覆寫」父類別的 virtual 方法，new 則會「隱藏」父類別 virtual 方法
-    </p>
+<p>
+    override 會「覆寫」父類別的 virtual 方法，new 則會「隱藏」父類別 virtual 方法
+</p>
 
-    <pre><code class="CSharp">
-        class A {
-            public void CallHello()
-            {
-                Hello();
-            }
-
-            public virtual int Hello() {
-                return 1;
-            }
+<pre><code class="CSharp">
+    class A {
+        public void CallHello()
+        {
+            Hello();
         }
 
-        class B : A {
-            new public int Hello() {
-                return 2;
-            }
+        public virtual int Hello() {
+            return 1;
         }
+    }
 
-        class C : A {
-            public override int Hello() {
-                return 3;
-            }
+    class B : A {
+        new public int Hello() {
+            return 2;
         }
-    </code></pre>
+    }
 
-    <pre><code class="CSharp">
+    class C : A {
+        public override int Hello() {
+            return 3;
+        }
+    }
+</code></pre>
+
+<pre><code class="CSharp">
         A objectA;
         B objectB = new B();
         C objectC = new C();
@@ -51,13 +50,12 @@
         Console.WriteLine(objectA.Hello()); // 3
     </code></pre>
 
-    <h3><b>多型</b></h3>
-    <p>
-        上述範例: <br/>
-        1.objectA = objectB，new 因為是隱藏父類別方法的關係，會執行變數型別的方法 <br/>
-        2.objectA = objectC，override 則是執行覆寫類別的方法 <br/>
-   </p>
-</div>
+<h3><b>多型</b></h3>
+<p>
+    上述範例: <br />
+    1.objectA = objectB，new 因為是隱藏父類別方法的關係，會執行變數型別的方法 <br />
+    2.objectA = objectC，override 則是執行覆寫類別的方法 <br />
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

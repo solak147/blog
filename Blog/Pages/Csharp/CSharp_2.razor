@@ -1,66 +1,65 @@
 ﻿@page "/csharp2"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>ASP.NET Web API 訊息處理器</b></h2>
-    <p>
-        ASP.NET Web API 是以 HttpRequestMessage 類別來代表用戶端發出的 HTTP 請求，並以 HttpResponseMessage 類別來代表伺服器端的回應結果。
-        也就是說，ASP.NET Web API 從收到用戶端請求開始到產生回應結果的過程當中，會在某個適當時間分別建立 HttpRequestMessage 和 HttpResponseMessage 物件實體。
-        這個收到請求、處理請求、至產生回應的過程，一般稱為管線（pipeline）。<br /><br />
+<h2><b>ASP.NET Web API 訊息處理器</b></h2>
+<p>
+    ASP.NET Web API 是以 HttpRequestMessage 類別來代表用戶端發出的 HTTP 請求，並以 HttpResponseMessage 類別來代表伺服器端的回應結果。
+    也就是說，ASP.NET Web API 從收到用戶端請求開始到產生回應結果的過程當中，會在某個適當時間分別建立 HttpRequestMessage 和 HttpResponseMessage 物件實體。
+    這個收到請求、處理請求、至產生回應的過程，一般稱為管線（pipeline）。<br /><br />
 
-        稱為管線，因為 HTTP 請求就像水一般從第一條水管流入，行經數個相互銜接的水管，直到最後一個；處理完請求並產生回應之後，接著又讓回應結果循原路回去，流經先前的各條水管。
-        在這個過程當中，我們也可以安插自己的水管，在裡面動點手腳。<br /><br />
+    稱為管線，因為 HTTP 請求就像水一般從第一條水管流入，行經數個相互銜接的水管，直到最後一個；處理完請求並產生回應之後，接著又讓回應結果循原路回去，流經先前的各條水管。
+    在這個過程當中，我們也可以安插自己的水管，在裡面動點手腳。<br /><br />
 
-        這一截截的「水管」對應到 Web API 的實作，就是訊息處理器（message handler）了。下圖概略描繪了 ASP.NET Web API 的「請求－回應」管線：
-    </p>
+    這一截截的「水管」對應到 Web API 的實作，就是訊息處理器（message handler）了。下圖概略描繪了 ASP.NET Web API 的「請求－回應」管線：
+</p>
 
-    <img src="images/csharp_1.png" alt="csharp_1" class="imgfmt" style="width:50%">
+<img src="images/csharp_1.png" alt="csharp_1" class="imgfmt" style="width:50%">
 
-    <p>
-        圖中的 HttpServer 類別隸屬 System.Web.Http 命名空間，其父類別是 DelegatingHandler，祖父則是抽象類別 HttpMessageHandler。
-        也就是說，HttpSever 本身就是個訊息處理器。根據 MSDN 網站的說明，其責任是分派 HttpRequestMessage，以及建立 HttpResponseMessage。
-    </p>
+<p>
+    圖中的 HttpServer 類別隸屬 System.Web.Http 命名空間，其父類別是 DelegatingHandler，祖父則是抽象類別 HttpMessageHandler。
+    也就是說，HttpSever 本身就是個訊息處理器。根據 MSDN 網站的說明，其責任是分派 HttpRequestMessage，以及建立 HttpResponseMessage。
+</p>
 
-    <h3><b>DelegatingHandler</b></h3>
-    <p>
-        DelegatingHandler 的用途是處理 HttpRequestMessage 和 HttpResponseMessage 物件，並將處理過的物件交給下一棒繼續處理（於是形成了前面提過的管線機制）。
-        當然，在處理的時候，也可以不要傳遞給下一個處理器，亦即停止後續的管線。<br /><br />
+<h3><b>DelegatingHandler</b></h3>
+<p>
+    DelegatingHandler 的用途是處理 HttpRequestMessage 和 HttpResponseMessage 物件，並將處理過的物件交給下一棒繼續處理（於是形成了前面提過的管線機制）。
+    當然，在處理的時候，也可以不要傳遞給下一個處理器，亦即停止後續的管線。<br /><br />
 
-        DelegatingHandler 有個 InnerHandler 屬性，型別是 HttpMessageHandler（它就是 DelegatingHandler 的父類別）。
-        這個 InnerHandler 會指向下一條管線──這裡稍微改個說法：InnerHandler 會指向下一層管線。
-    </p>
+    DelegatingHandler 有個 InnerHandler 屬性，型別是 HttpMessageHandler（它就是 DelegatingHandler 的父類別）。
+    這個 InnerHandler 會指向下一條管線──這裡稍微改個說法：InnerHandler 會指向下一層管線。
+</p>
 
-    <h3><b>實作 DelegatingHandler</b></h3>
-    <pre><code class="CSharp">
-        public class MyRequestHandler : DelegatingHandler
+<h3><b>實作 DelegatingHandler</b></h3>
+<pre><code class="CSharp">
+    public class MyRequestHandler : DelegatingHandler
+    {
+        protected override async Task&lt;HttpResponseMessage&gt; SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            protected override async Task&lt;HttpResponseMessage&gt; SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            //收到response前做的事
+
+            var response = await base.SendAsync(request, cancellationToken);
+
+            //收到response後做的事
+            switch (response.StatusCode)
             {
-                //收到response前做的事
-
-                var response = await base.SendAsync(request, cancellationToken);
-
-                //收到response後做的事
-                switch (response.StatusCode)
-                {
-                case HttpStatusCode.Unauthorized:
-                    break;
-                case (HttpStatusCode)440:
-                    break;
-                case HttpStatusCode.Forbidden:
-                    break;
-                case HttpStatusCode.ServiceUnavailable:
-                    break;
-                }
+            case HttpStatusCode.Unauthorized:
+                break;
+            case (HttpStatusCode)440:
+                break;
+            case HttpStatusCode.Forbidden:
+                break;
+            case HttpStatusCode.ServiceUnavailable:
+                break;
             }
         }
-    </code></pre>
+    }
+</code></pre>
 
-    <h3><b>在Program.cs註冊訊息處理器</b></h3>
-    <pre><code class="CSharp">
-        builder.Services.AddHttpMessageHandler&lt;MyRequestHandler&gt;();
-    </code></pre>
-</div>
+<h3><b>在Program.cs註冊訊息處理器</b></h3>
+<pre><code class="CSharp">
+    builder.Services.AddHttpMessageHandler&lt;MyRequestHandler&gt;();
+</code></pre>
+
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

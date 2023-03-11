@@ -1,7 +1,6 @@
 ﻿@page "/dart3"
 @inherits Blog.Base.Base
 
-<div  class="article">
 <h2><b>Metadata - @@immutable</b></h2>
 
 <p>
@@ -30,8 +29,6 @@ class Employee {
     如果您嘗試在建構子的變數內加入 const 關鍵字，你將收到同樣的錯誤。<br/>
     如果一個類別上有 @@immutable 標籤，任何不可變的子類別也會有警告。
 </p>
-
-</div>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

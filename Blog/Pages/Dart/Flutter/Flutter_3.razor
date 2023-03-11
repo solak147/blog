@@ -1,87 +1,82 @@
 ﻿@page "/flutter3"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>MaterialApp</b></h2>
-    <br />
+<h2><b>MaterialApp</b></h2>
+<br />
 
-    <p>
-        MaterialApp 將多個經常使用的 Material Design 所需要的 Widget 包裝起來，在這邊定義主題色，及導航路由… 所有的 Ｗidget 都是由 MaterialApp 往下延伸的。<br />
+<p>
+    MaterialApp 將多個經常使用的 Material Design 所需要的 Widget 包裝起來，在這邊定義主題色，及導航路由… 所有的 Ｗidget 都是由 MaterialApp 往下延伸的。<br />
 
-        下面介紹 MaterialApp class 的建構子參數：
-    </p>
+    下面介紹 MaterialApp class 的建構子參數：
+</p>
 
-    <h2><b>Home</b></h2>
-    <p>
-        第一個會使用到的參數就是 Home，將 Ｗidget 放在 Home 裡面，進入 App 的時候，就會進入 Home 定義的 Widget 了。
-    </p>
+<h2><b>Home</b></h2>
+<p>
+    第一個會使用到的參數就是 Home，將 Ｗidget 放在 Home 裡面，進入 App 的時候，就會進入 Home 定義的 Widget 了。
+</p>
 
+<h3><b>Routes/initialRoute</b></h3>
+<p>
+    當底下的頁面有很多的時候，可以在 MaterialApp 中的 Routes 定義<br />
+    再利用 Navigator 切換不同的頁面(Route)<br /><br />
 
-    <h2><b>Routes/initialRoute</b></h2>
-    <p>
-        當底下的頁面有很多的時候，可以在 MaterialApp 中的 Routes 定義<br />
-        再利用 Navigator 切換不同的頁面(Route)<br /><br />
-
-        第一頁的路由通常是 “／”；<br />
-        如果是 “／”，initialRoute 則不需要另外設定，因為 Flutter 會自動尋找 “／” 當作 home。<br />
-        如果定義 initialRoute，需要確定 home 沒有設定，否則將會進入 home 的頁面。
-    </p>
-    <pre><code class="Dart">
-        class MyApp extends StatelessWidget {
-          @@override
-          Widget build(BuildContext context) {
-            return MaterialApp(
-              initialRoute: '/',
-              routes: {
-                '/': (_) =>FirstWidget(),
-                '/second':(_) =>SecondWidget(),
-                '/third':(_) =>ThirdWidget(),
-                //&lt;String, WidgetBuilder&gt;{'/register': (_) => new RegisterPage()}
-              },
-            );
-          }
+    第一頁的路由通常是 “／”；<br />
+    如果是 “／”，initialRoute 則不需要另外設定，因為 Flutter 會自動尋找 “／” 當作 home。<br />
+    如果定義 initialRoute，需要確定 home 沒有設定，否則將會進入 home 的頁面。
+</p>
+<pre><code class="Dart">
+    class MyApp extends StatelessWidget {
+        @@override
+        Widget build(BuildContext context) {
+        return MaterialApp(
+            initialRoute: '/',
+            routes: {
+            '/': (_) =>FirstWidget(),
+            '/second':(_) =>SecondWidget(),
+            '/third':(_) =>ThirdWidget(),
+            //&lt;String, WidgetBuilder&gt;{'/register': (_) => new RegisterPage()}
+            },
+        );
         }
+    }
 
-        //切頁
-        Navigator.of(context).pushNamed('/register');
+    //切頁
+    Navigator.of(context).pushNamed('/register');
 
-        //切頁 : 傳遞參數
-        Navigator.of(context).pushNamed('/register',
-            arguments: {'name': 'Raymond'}).then((value) {
-            // 新增第二個變數arguments
-            showDialog(
-                // 新增一個對話框，用來顯示回傳的值
-                context: context,
-                child: AlertDialog(
-                content: Text(value),
-             ));
-        });
+    //切頁 : 傳遞參數
+    Navigator.of(context).pushNamed('/register',
+        arguments: {'name': 'Raymond'}).then((value) {
+        // 新增第二個變數arguments
+        showDialog(
+            // 新增一個對話框，用來顯示回傳的值
+            context: context,
+            child: AlertDialog(
+            content: Text(value),
+            ));
+    });
 
-        //接收參數
-        dynamic obj = ModalRoute.of(context).settings.arguments;
-        name = obj["name"]; // 把接收到的參數存到變數
-        Navigator.of(context).pop("Hello ${name}"); // 當按下按鈕會返回上一頁，並回傳內容
-    </code></pre>
+    //接收參數
+    dynamic obj = ModalRoute.of(context).settings.arguments;
+    name = obj["name"]; // 把接收到的參數存到變數
+    Navigator.of(context).pop("Hello ${name}"); // 當按下按鈕會返回上一頁，並回傳內容
+</code></pre>
 
-    <h2><b>Theme</b></h2>
-    <p>
-        在 theme 參數中，可以設定 App 所有的主題數值，例如背景色，主題色等等…
-    </p>
-    <pre><code class="Dart">
-        class MyApp extends StatelessWidget {
-         @@override
-          Widget build(BuildContext context) {
-            return MaterialApp(
-              theme: ThemeData(
-                  scaffoldBackgroundColor: Colors.lightBlue,
-                  primaryColor: Colors.lime),
-            );
-          }
+<h2><b>Theme</b></h2>
+<p>
+    在 theme 參數中，可以設定 App 所有的主題數值，例如背景色，主題色等等…
+</p>
+<pre><code class="Dart">
+    class MyApp extends StatelessWidget {
+        @@override
+        Widget build(BuildContext context) {
+        return MaterialApp(
+            theme: ThemeData(
+                scaffoldBackgroundColor: Colors.lightBlue,
+                primaryColor: Colors.lime),
+        );
         }
-    </code></pre>
-
-</div>
-
+    }
+</code></pre>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

@@ -1,84 +1,82 @@
 ﻿@page "/css3"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>display : flex</b></h2>
-    <br />
+<h2><b>display : flex</b></h2>
+<br />
 
-    <h3><b> Flex 中分為外容器與內元件</b></h3>
-    <p>
-        Flex 外容器屬性：<br />
-        ●display<br />
-        ●flex-flow<br />
-        &nbsp;&nbsp;&nbsp;●flex-direction<br />
-        &nbsp;&nbsp;&nbsp;●flex-wrap<br />
-        ●justify-content<br />
-        ●align-items<br /><br />
+<h3><b> Flex 中分為外容器與內元件</b></h3>
+<p>
+    Flex 外容器屬性：<br />
+    ●display<br />
+    ●flex-flow<br />
+    &nbsp;&nbsp;&nbsp;●flex-direction<br />
+    &nbsp;&nbsp;&nbsp;●flex-wrap<br />
+    ●justify-content<br />
+    ●align-items<br /><br />
 
-        Flex 內元件屬性：<br />
-        ●flex<br />
-        &nbsp;&nbsp;&nbsp;●flex-grow<br />
-        &nbsp;&nbsp;&nbsp;●flex-shrink<br />
-        &nbsp;&nbsp;&nbsp;●flex-basis<br />
-        ●order<br />
-        ●align-self<br />
-    </p>
+    Flex 內元件屬性：<br />
+    ●flex<br />
+    &nbsp;&nbsp;&nbsp;●flex-grow<br />
+    &nbsp;&nbsp;&nbsp;●flex-shrink<br />
+    &nbsp;&nbsp;&nbsp;●flex-basis<br />
+    ●order<br />
+    ●align-self<br />
+</p>
 
-    <h3><b>外容器</b></h3>
-    <p>先設定 display: flex | inline-flex 才可使用下述大部分屬性</p>
+<h3><b>外容器</b></h3>
+<p>先設定 display: flex | inline-flex 才可使用下述大部分屬性</p>
 
-    <p>
-        <b>flex-direction</b><br />
-        決定內元件排序方向的重要屬性<br />
-        flex-direction: row | row-reverse | column | column-reverse;
-    </p>
-    <img src="images/css_1.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+<p>
+    <b>flex-direction</b><br />
+    決定內元件排序方向的重要屬性<br />
+    flex-direction: row | row-reverse | column | column-reverse;
+</p>
+<img src="images/css_1.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
 
-    <p>
-        <b>flex-wrap</b><br />
-        超出範圍時是否換行的屬性，分為換行、不換行、換行時反轉。<br />
-        flex-wrap: nowrap | wrap | wrap-reverse;
-    </p>
-    <img src="images/css_2.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+<p>
+    <b>flex-wrap</b><br />
+    超出範圍時是否換行的屬性，分為換行、不換行、換行時反轉。<br />
+    flex-wrap: nowrap | wrap | wrap-reverse;
+</p>
+<img src="images/css_2.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
 
-    <p>
-        flex-direction & flex-wrap 的縮寫<br />
-        flex-flow: &lt; 'flex-direction'> || &lt;'flex-wrap'>
-    </p>
+<p>
+    flex-direction & flex-wrap 的縮寫<br />
+    flex-flow: &lt; 'flex-direction'> || &lt;'flex-wrap'>
+</p>
 
-    <p>
-        <b>justify-content</b>: flex-start | flex-end | center | space-between | space-around;
-    </p>
-    <img src="images/css_3.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+<p>
+    <b>justify-content</b>: flex-start | flex-end | center | space-between | space-around;
+</p>
+<img src="images/css_3.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
 
-    <p>
-        <b>align-items</b>: flex-start | flex-end | center | baseline | stretch;<br />
-        多行版本 :<br />
-        <b>align-content</b>: flex-start | flex-end | center | space-between | space-around | stretch;
-    </p>
-    <img src="images/css_4.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+<p>
+    <b>align-items</b>: flex-start | flex-end | center | baseline | stretch;<br />
+    多行版本 :<br />
+    <b>align-content</b>: flex-start | flex-end | center | space-between | space-around | stretch;
+</p>
+<img src="images/css_4.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
 
-    <h3><b>內元件</b></h3>
-    <p>
-        <b>flex</b><br />
-        flex 是縮寫，裡面依序包含三個屬性 flex-grow、flex-shrink 和 flex-basis，如果只設定一個則是 flex-grow。<br />
+<h3><b>內元件</b></h3>
+<p>
+    <b>flex</b><br />
+    flex 是縮寫，裡面依序包含三個屬性 flex-grow、flex-shrink 和 flex-basis，如果只設定一個則是 flex-grow。<br />
 
-        flex-grow: 元件的伸展性，是一個數值，當空間分配還有剩餘時的當前元件的伸展性，預設值為 0，如果設置為 0 則不會縮放。<br />
-        flex-shrink: 元件的收縮性: 元件的伸展性，是一個數值，當空間分配還不足時的當前元件的收縮性，預設值為 1，如果設置為 0 則不會縮放。<br />
-        flex-basis: 元件的基準值。
-    </p>
+    flex-grow: 元件的伸展性，是一個數值，當空間分配還有剩餘時的當前元件的伸展性，預設值為 0，如果設置為 0 則不會縮放。<br />
+    flex-shrink: 元件的收縮性: 元件的伸展性，是一個數值，當空間分配還不足時的當前元件的收縮性，預設值為 1，如果設置為 0 則不會縮放。<br />
+    flex-basis: 元件的基準值。
+</p>
 
-    <p>
-        <b>align-self</b><br />
-        align-self 可以調整內元件交錯軸的對齊設定，且可以個別設定單一元件的值。
-    </p>
-    <img src="images/css_5.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+<p>
+    <b>align-self</b><br />
+    align-self 可以調整內元件交錯軸的對齊設定，且可以個別設定單一元件的值。
+</p>
+<img src="images/css_5.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
 
-    <p>
-        <b>Order</b><br />
-        可以重新定義元件的排列順序，順序會依據數值的大小排列。
-    </p>
-</div>
+<p>
+    <b>Order</b><br />
+    可以重新定義元件的排列順序，順序會依據數值的大小排列。
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

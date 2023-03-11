@@ -1,102 +1,100 @@
 ﻿@page "/gcpdocker"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>使用 Docker 建立 MySql</b></h2>
+<h2><b>使用 Docker 建立 MySql</b></h2>
 
-    <h3><b>安裝 Docker</b></h3>
-    <pre><code class="LINUX">
-        yum install -y docker
-    </code></pre>
+<h3><b>安裝 Docker</b></h3>
+<pre><code class="LINUX">
+    yum install -y docker
+</code></pre>
 
-    <h3><b>啟動 Docker service</b></h3>
-    <pre><code class="LINUX">
-        systemctl start docker
-    </code></pre>
+<h3><b>啟動 Docker service</b></h3>
+<pre><code class="LINUX">
+    systemctl start docker
+</code></pre>
 
-    <h3><b>docker-compose 介紹</b></h3>
-    <p>
-        只要寫一個 docker-compose.yml，把所有要使用 Docker Image 寫上去，<br />
-        最後只要下 docker-compose up 指令，就可以把所有的 docker container 執行起來，<br />
-        這樣可以快速且方便的啟動多個 container。
-    </p>
+<h3><b>docker-compose 介紹</b></h3>
+<p>
+    只要寫一個 docker-compose.yml，把所有要使用 Docker Image 寫上去，<br />
+    最後只要下 docker-compose up 指令，就可以把所有的 docker container 執行起來，<br />
+    這樣可以快速且方便的啟動多個 container。
+</p>
 
-    <h3><b>1.安裝 Docker-Compose，指令如下</b></h3>
-    <pre><code class="LINUX">
-        # cd /usr/bin
-        # wget https://github.com/docker/compose/releases/download/1.18.0/docker-compose-Linux-x86_64
-        # mv docker-compose-Linux-x86_64 docker-compose
-        # chmod 755 docker-compose
-    </code></pre>
+<h3><b>1.安裝 Docker-Compose，指令如下</b></h3>
+<pre><code class="LINUX">
+    # cd /usr/bin
+    # wget https://github.com/docker/compose/releases/download/1.18.0/docker-compose-Linux-x86_64
+    # mv docker-compose-Linux-x86_64 docker-compose
+    # chmod 755 docker-compose
+</code></pre>
 
-    <h3><b>2.撰寫 docker-compose.yml 檔案如下</b></h3>
-    <pre><code class="LINUX">
-        version: '2'
-        services:
-          db:
-             image: mysql
-             environment:
-                MYSQL_ROOT_PASSWORD: 123456
-          admin:
-             image: adminer
-             ports:
-               - 8080:8080 //虛擬機與 doker 之間 port 的映射
-    </code></pre>
+<h3><b>2.撰寫 docker-compose.yml 檔案如下</b></h3>
+<pre><code class="LINUX">
+    version: '2'
+    services:
+        db:
+            image: mysql
+            environment:
+            MYSQL_ROOT_PASSWORD: 123456
+        admin:
+            image: adminer
+            ports:
+            - 8080:8080 //虛擬機與 doker 之間 port 的映射
+</code></pre>
 
-    <p>
-        主要的功能是要啟動 2 個 Docker Container，<br />
-        一個是 mysql 的 Container，另外一個是 admin 管理 mysql Web UI 的 container<br />
-    </p>
+<p>
+    主要的功能是要啟動 2 個 Docker Container，<br />
+    一個是 mysql 的 Container，另外一個是 admin 管理 mysql Web UI 的 container<br />
+</p>
 
-    <h3><b>常用指令:</b></h3>
-    <p>
-        <b>docker-compose up -d</b><br />
-        執行所有在 docker-compose.yml 檔案裡面設定的 Docker Image 啟動 Docker Container，<br />
-        -d 參數代表要執行在背景的方式<br />
+<h3><b>常用指令:</b></h3>
+<p>
+    <b>docker-compose up -d</b><br />
+    執行所有在 docker-compose.yml 檔案裡面設定的 Docker Image 啟動 Docker Container，<br />
+    -d 參數代表要執行在背景的方式<br />
 
-        <b>docker-compose ps</b><br />
-        查看 Docker Container 的執行狀態<br />
-        要輸入此指令之前，要先把資料夾切到和 docker-compose.yml 同一層的資料夾路徑下面<br />
+    <b>docker-compose ps</b><br />
+    查看 Docker Container 的執行狀態<br />
+    要輸入此指令之前，要先把資料夾切到和 docker-compose.yml 同一層的資料夾路徑下面<br />
 
-        <b>docker-compose logs</b><br />
-        logs 後面可以加上 Container Name<br />
+    <b>docker-compose logs</b><br />
+    logs 後面可以加上 Container Name<br />
 
-        <b>docker-compose down</b><br />
-        停止 docker-compose 執行的所有 Container <br />
+    <b>docker-compose down</b><br />
+    停止 docker-compose 執行的所有 Container <br />
 
-        <b>docker-compose rm</b><br />
-        刪除 docker-compose 的所有 Container<br />
-    </p>
-    <br />
+    <b>docker-compose rm</b><br />
+    刪除 docker-compose 的所有 Container<br />
+</p>
+<br />
 
-    <h3><b>Xshell 連接至 GCP VM 設定</b></h3>
-    <p>
-        打開 Xshell > 功能列(工具) > 使用者金鑰管理
-    </p>
-    <img src="images/gcpdocker_1.png" alt="gcpdocker_1" class="imgfmt">
+<h3><b>Xshell 連接至 GCP VM 設定</b></h3>
+<p>
+    打開 Xshell > 功能列(工具) > 使用者金鑰管理
+</p>
+<img src="images/gcpdocker_1.png" alt="gcpdocker_1" class="imgfmt">
 
-    <p>
-        產生完公鑰，將紅色區域的文字貼至下方<br />
-        並於結尾 “==" 加上 “[空格][使用者金鑰名稱]"<br />
-        GCP Console > Compute Engine > 中繼資料 > 安全殼層金鑰
-    </p>
-    <img src="images/gcpdocker_2.png" alt="gcpdocker_2" class="imgfmt">
+<p>
+    產生完公鑰，將紅色區域的文字貼至下方<br />
+    並於結尾 “==" 加上 “[空格][使用者金鑰名稱]"<br />
+    GCP Console > Compute Engine > 中繼資料 > 安全殼層金鑰
+</p>
+<img src="images/gcpdocker_2.png" alt="gcpdocker_2" class="imgfmt">
 
-    <h3><b>VM 上的設定</b></h3>
-    <pre><code class="LINUX">
-        sudo firewall-cmd --permanent --zone=public --add-service=http
-        sudo firewall-cmd --permanent --zone=public --add-service=https
-        firewall-cmd --reload
-        # 找不到 firewall-cmd 的指令，必須先安裝 firewalld
-        # sudo yum install firewalld
-    </code></pre>
+<h3><b>VM 上的設定</b></h3>
+<pre><code class="LINUX">
+    sudo firewall-cmd --permanent --zone=public --add-service=http
+    sudo firewall-cmd --permanent --zone=public --add-service=https
+    firewall-cmd --reload
+    # 找不到 firewall-cmd 的指令，必須先安裝 firewalld
+    # sudo yum install firewalld
+</code></pre>
 
-    <p>
-        設定完後重啟，如使用 GCP 的 VM，想讓外部能連到虛擬機內的 docker service
-        需再設定 GCP 的防火牆規則，<br />
-        可參考<a href="/gcpvm">GCP免費主機架設網站</a>
-    </p>
-</div>
+<p>
+    設定完後重啟，如使用 GCP 的 VM，想讓外部能連到虛擬機內的 docker service
+    需再設定 GCP 的防火牆規則，<br />
+    可參考<a href="/gcpvm">GCP免費主機架設網站</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)
