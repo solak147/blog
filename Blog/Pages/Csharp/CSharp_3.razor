@@ -1,0 +1,89 @@
+﻿@page "/csharp3"
+@inherits Blog.Base.Base
+
+<h2><b>多國語系</b></h2>
+
+<p>
+    想在 C# 程式中建立多國語系，有幾個步驟: <br />
+    1. 新增一個資源檔(.resx) <br />
+    2. 雙擊此資源檔，並在上方沒有程式碼的地方，依你的需求選擇 public 或 internal <br />
+    系統便會幫你產生 Resource.Designer.cs <br />
+    3. 在此資源檔撰寫你的預設語系所對應的 key value <br />
+    4. 如要新增其他語系如英文，檔名可以這樣命名 Resource.en-US.resx，其餘步驟同上<br />
+</p>
+
+<img src="images/csharp3_1.png" alt="Resource 建立" class="imgfmt" style="width: 70%">
+
+<img src="images/csharp3_2.png" alt="Resource 內建程式碼" class="imgfmt" style="width: 70%">
+
+<p>目錄結構如下:</p>
+<img src="images/csharp3_4.png" alt="Resource 目錄" class="imgfmt" style="width: 50%">
+
+<p>
+    以 Blazor WebAssembly 為例:<br />
+    接下來需要安裝 Microsoft.AspNetCore.Localization 這個套件 <br />
+    並在 Program.cs 中加入
+</p>
+
+<pre><code class="CSharp">
+    var requestCulture = new RequestCulture("en-us", "en-us");
+
+    CultureInfo.DefaultThreadCurrentCulture = requestCulture.UICulture;       
+    CultureInfo.DefaultThreadCurrentUICulture = requestCulture.UICulture;       
+</code></pre>
+
+<p>
+    除此之外專案設定檔(.csporj)必須加入這一行 <br />
+    &ltBlazorWebAssemblyLoadAllGlobalizationData>true&lt/&ltBlazorWebAssemblyLoadAllGlobalizationData> <br />
+    如不加會發生以下錯誤
+</p>
+
+<img src="images/csharp3_3.png" alt="culture that is not supported with the current project configuration" class="imgfmt">
+
+<pre><code class="CSharp">
+     &ltPropertyGroup>
+        &ltTargetFramework>net6.0 &lt/TargetFramework>
+        &ltNullable>enable &lt/Nullable>
+        &ltImplicitUsings>enable &lt/ImplicitUsings>
+        &ltBlazorWebAssemblyLoadAllGlobalizationData>true &lt/BlazorWebAssemblyLoadAllGlobalizationData>
+     &lt/PropertyGroup>      
+</code></pre>
+
+<p>
+    更改 new RequestCulture("en-us", "en-us"); 中的語系 ex: zh-cn <br />
+    之後便可以在 .cs 或 .razor 內使用你在資源檔內所設定的語系 <br />
+    格式: @@Resource.{你的 key}<br /><br />
+
+    至於你的語系要儲存在 cookie (.AspNetCore.Culture 利用 CookieRequestCultureProvider.DefaultCookieName) 還是 localStorage 都可以。 <br />
+    以下提供儲存在 cookie 的方式 :
+
+</p>
+
+<pre><code class="CSharp">
+    setValue(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(requestCulture), 365);   
+    
+    public async Task setValue(string key, string value, int? days = null)
+    {
+        var curExp = days != null ? days > 0 ? DateToUTC(days.Value) : "" : expires;
+        var value = $"{key}={value}; expires={curExp}; path=/";
+        await JSRuntime.InvokeVoidAsync("eval", $"document.cookie = \"{value}\"");
+    }
+</code></pre>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "C# - 多國語系";
+        seo.metaTitle = "C# - 多國語系";
+        seo.metaDescription = @"C# - 多國語系 | 想在 C# 程式中建立多國語系，有幾個步驟:
+            1. 新增一個資源檔(.resx)
+            2. 雙擊此資源檔，並在上方沒有程式碼的地方，依你的需求選擇 public 或 internal
+            系統便會幫你產生 Resource.Designer.cs
+            3. 在此資源檔撰寫你的預設語系所對應的 key value
+            4. 如要新增其他語系如英文，檔名可以這樣命名 Resource.en-US.resx，其餘步驟同上";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
