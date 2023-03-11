@@ -1,0 +1,50 @@
+﻿@page "/h5seo"
+@inherits Blog.Base.Base
+
+<h2><b>SEO 優化 - HTM5 語意標籤（Semantic Elements)</b></h2>
+<p>
+    HTM5 語意標籤（Semantic Elements）包括 &ltheader>、&ltnav>、&ltmain>、&ltfooter>、&ltmark>、&lttime> <br/>
+    下面是各個標籤的示意圖:
+</p>
+<img src="images/h5seo_1.png" alt="HTM5 語意標籤" class="imgfmt" style="width: 60%">
+
+<h3><b>語意標籤使用時機</b></h3>
+<p>
+    &ltheader>：網頁的標頭，通常放置網站標題。<br />
+    &ltnav>：網頁的選單或導覽列。<br />
+    &ltmain>：網頁的主要內容。<br />
+    &ltaside>：網頁的側欄、附加內容。<br/>
+    &ltarticle>：一篇文章內容。<br/>
+    &ltsection>：自訂的區塊。<br/>
+    &ltfooter>：網頁的頁尾。<br/>
+    &ltmark>：強調一小塊內容。<br />
+    &lttime>：顯示日期時間。
+</p>
+
+<h3><b>如何優化 SEO</b></h3>
+<p>
+    因為結構明確的關係，所以搜尋引擎在搜尋網站的同時，可以更精準。同時也因為架構明確，會被搜尋引擎判斷是個架構完整網頁，也會提升網站的排名。
+</p>
+
+<h3><b>PS: &ltimg> 的 alt 屬性</b></h3>
+<p>
+    Google 也會對alt來判斷這張照片資訊，同時也可以讓無法看到圖片的使用者來理解圖片，<br/>
+    所以 alt 盡量已簡短好理解的關鍵字來寫，留下正確的圖片資訊也是 SEO 優化很重要的要素。
+</p>
+<pre><code class="YAML">
+    &ltimg src="dog.jpg" alt="這是一隻狗">
+</code></pre>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "SEO 優化 - HTM5 語意標籤（Semantic Elements)";
+        seo.metaTitle = "SEO 優化 - HTM5 語意標籤（Semantic Elements)";
+        seo.metaDescription = @"SEO 優化 - HTM5 語意標籤（Semantic Elements)-HTM5 語意標籤（Semantic Elements）包括
+            <header>、<nav>、<main>、<footer>、<mark>、<time>";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
