@@ -34,13 +34,19 @@
         public string pageTitle = "";
         public string metaTitle = "";
         public string metaDescription = "";
+
+        public bool isDrawCode = true;
     }
 
     public Seo seo = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JSRT.InvokeVoidAsync("drawCode");
+        if (seo.isDrawCode)
+        {
+            await JSRT.InvokeVoidAsync("drawCode");
+        }
+     
         await base.OnAfterRenderAsync(firstRender);
     }
 }
