@@ -16,13 +16,13 @@
 
 <img src="images/csharp3_2.png" alt="Resource 內建程式碼" class="imgfmt" style="width: 70%">
 
-<p>目錄結構如下:</p>
+<p>目錄結構如下 :</p>
 <img src="images/csharp3_4.png" alt="Resource 目錄" class="imgfmt" style="width: 50%">
 
 <p>
     以 Blazor WebAssembly 為例:<br />
     接下來需要安裝 Microsoft.AspNetCore.Localization 這個套件 <br />
-    並在 Program.cs 中加入
+    並在 Program.cs 中加入 :
 </p>
 
 <pre><code class="CSharp">
@@ -35,7 +35,7 @@
 <p>
     除此之外專案設定檔(.csporj)必須加入這一行 <br />
     &ltBlazorWebAssemblyLoadAllGlobalizationData>true&lt/&ltBlazorWebAssemblyLoadAllGlobalizationData> <br />
-    如不加會發生以下錯誤
+    如不加會發生以下錯誤 :
 </p>
 
 <img src="images/csharp3_3.png" alt="culture that is not supported with the current project configuration" class="imgfmt">
@@ -56,7 +56,6 @@
 
     至於你的語系要儲存在 cookie (.AspNetCore.Culture 利用 CookieRequestCultureProvider.DefaultCookieName) 還是 localStorage 都可以。 <br />
     以下提供儲存在 cookie 的方式 :
-
 </p>
 
 <pre><code class="CSharp">

@@ -1,0 +1,70 @@
+﻿@page "/gomod"
+@inherits Blog.Base.Base
+
+<h2><b>go.mod 介紹</b></h2>
+<p>
+    go mod 是 Golang 1.11 版本引入的官方套件（package）管理工具，<br />
+    用於解決之前沒有地方記錄套件具體版本的問題，方便套件的管理。<br />
+    之前 Golang 主要依靠 vendor 和 $GOPATH 来管理套件，vendor相對主流，但现在官方更提倡 go mod。
+</p>
+
+<h3><b>How To Use GO MOD</b></h3>
+<pre><code class="go">
+    //在專案目錄底下
+    go mod init &lt;project name>
+</code></pre>
+<p>
+    go.mod 檔中的 module 名稱需與資料夾一致，否則會無法正常讀取 module<br />
+    此外 go.mod 的依赖文件都缓存在 $GOPATH/pkg/mod/下。
+</p>
+
+<h3><b>Download from go.mod</b></h3>
+<pre><code class="go">
+    go mod download
+</code></pre>
+<p>
+    將go.mod中所定義的所有library都給下載下來，但除了該指令外，在執行go build或是go test時，<br />
+    也會自動下載library並新增至go.mod當中，並產生出最新的 go.sum 以確保library有更新。
+</p>
+
+<h3><b>Update module to go.mod</b></h3>
+<pre><code class="go">
+    go get -u &lt;module url>
+</code></pre>
+<p>
+    透過該指令安裝並新增新的 module 至 go.mod 當中
+</p>
+
+<h3><b>Remove redundancy module from go.mod</b></h3>
+<pre><code class="go">
+    go mod tidy
+</code></pre>
+
+<h3><b>GO111MODULE 與 go.mod 之間的關係</b></h3>
+<p>
+    Golang 提供一個環境變量 GO111MODULE 來設置是否使用 go.mod，它有3個可選值，分別是off, on, auto（預設值），具體含義如下：<br /><br />
+
+    on：go 命令行會使用 modules，忽略 $GOPATH 目錄。<br />
+    off: go 命令行將不會支持 module 功能，尋找套件的方式將會沿用舊版本，通過 vendor 目錄或者 $GOPATH 目錄下找。<br />
+    auto：如果當前目錄不在 $GOPATH下且當前目錄（或者父目錄）下有 go.mod 文件，則使用 GO111MODULE=on， 否則 GO111MODULE=off。<br />
+</p>
+
+<h3><b>Edit GO111MODULE</b></h3>
+<pre><code class="go">
+    go env -w GO111MODULE=on
+</code></pre>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Go mod 介紹";
+        seo.metaTitle = "Go mod 介紹";
+        seo.metaDescription = @"Go mod 介紹 -  go.mod 是 Golang 1.11 版本引入的官方套件（package）依賴管理工具，
+            用於解決之前沒有地方記錄套件具體版本的問題，方便套件的管理。
+            之前 Golang 主要依靠 vendor 和 $GOPATH 来管理套件，vendor相对主流，但现在官方更提倡 go mod。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
