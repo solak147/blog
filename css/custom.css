@@ -65,6 +65,7 @@ p {
     fill: white;
 }
 
+
 /*loading*/
 .spinner {
     width: 60vh;
@@ -152,6 +153,19 @@ p {
 }
 
 @media (max-width: 641px) {
+    main {
+        position: absolute;
+    }
+
+    article {
+        width: 100vw;
+    }
+
+    .sidebar {
+        width: 70vw;
+        z-index: 1;
+    }
+ 
     .article {
         width: 100%;
     }
@@ -163,6 +177,7 @@ p {
     .indexbanner {
         max-height: 50vh;
     }
+
 }
 
 /*
