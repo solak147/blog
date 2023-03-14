@@ -11,7 +11,8 @@
 </HeadContent>
 
 <div class="page">
-    <div class="sidebar" style="background-image: url(images/nav.jpg);  background-repeat: no-repeat; background-size: cover;">
+    <div @onclick="toggle" class="sidebar" 
+        style="background-image: url(images/nav.jpg);  background-repeat: no-repeat; background-size: cover;">
         <NavMenu />
     </div>
 
@@ -46,7 +47,12 @@
         {
             await JSRT.InvokeVoidAsync("drawCode");
         }
-     
+
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async void toggle()
+    {
+        await JSRT.InvokeVoidAsync("navToggle");
     }
 }
