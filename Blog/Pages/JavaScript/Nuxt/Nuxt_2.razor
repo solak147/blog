@@ -1,0 +1,123 @@
+﻿@page "/nuxt2"
+@inherits Blog.Base.Base
+
+<h2><b>Nuxt.js 使用 axios、proxy 解決跨域請求 (CORS)</b></h2>
+<br />
+
+<h3><b>為什麼需要特別處理跨域請求？</b></h3>
+<p>
+    瀏覽器為了防止惡意網站竊取資料，採用同源政策，防止惡意網站 B 竊取你在 A 站的 Cookie，<br />
+    像是藉由你已登入 Amazon 的 Cookie，盜用身份買東西。<br />
+
+    「同源」定義很簡單，以下三個參數都相同<br />
+</p>
+<pre><code class="JAVASCRIPT">
+    [protocol]://[domain]:[port]
+</code></pre>
+
+<p>
+    nuxt 提供了 axios module 以及 proxy module，使用這兩個 module 搭配某些設定，讓我們可以透過 proxy 這個代理伺服器向後端伺服器發請求，<br />
+    由於請求是由代理 server 向後端 server 發起，而並非由瀏覽器，所以就不會有 CORS 問題了。<br /><br />
+
+    proxy module 的原理其實就是把 nuxt 的 web server 當成 proxy server，也就是在瀏覽器端向提供網頁的伺服器發出請求，<br />
+    讓網頁伺服器去和我們真正要打的後端伺服器要資料（簡單說就是把自己當做 proxy）。<br />
+
+    示意圖如下:
+</p>
+
+<img src="images/nuxt2_1.png" alt="Nuxt Proxy" class="imgfmt">
+
+<h3><b>Step.1 安裝 axios module 以及 proxy module</b></h3>
+<pre><code class="linux">
+    npm install @@nuxtjs/axios @@nuxtjs/proxy
+</code></pre>
+
+<h3><b>Step.2 在 nuxt.config.js 檔案中進行設定</b></h3>
+<pre><code class="JAVASCRIPT">
+  modules: [
+    '@@nuxtjs/axios',
+    '@@nuxtjs/proxy'
+  ],
+  axios: {
+    proxy: true,
+    prefix: '/api',
+    credentials: true,
+  },
+  proxy: {
+    '/api': {
+      target: 'https://example.com/', 
+      changeOrigin: true, 
+      pathRewrite: {
+        '^/api': '',
+      },
+    }
+  },
+</code></pre>
+
+<p>
+    proxy 配置意涵（本地 url 以 http://localhost:3000/ 為例）<br /><br />
+
+    <span class="imtdot">proxy 中的'/api：</span>表示 Client Request 以 /api 開頭會對應到的網址，例如：http://localhost:3000/api<br />
+    <span class="imtdot">prefix：</span>用來配置打向 API 的 baseUrl。以上面的程式碼為例，我們在這裡的 baseUrl 會是 https://example.com/api<br />
+    <span class="imtdot">target：</span>表示要代理請求的 API url ( server 地址）當請求 /api/users 時，從請求 http://localhost:3000/api/users 代理到 https://example.com/api/users<br />
+    <span class="imtdot">pathRewrite：</span>定義 url 中 path 的重寫規則。當請求/api/users時，其實是想對 https://example.com/users 發出請求，這時就必須把前綴 path api 刪除<br />
+</p>
+
+<h3><b>Step3. 新增 axios plugin</b></h3>
+<p>
+    在 plugin 資料夾新增一隻 axios.js 檔案：
+</p>
+<pre><code class="JAVASCRIPT">
+    export default function ({ $axios, redirect }) {
+        //Authorization
+      $axios.setHeader('Content-Type', 'application/json')
+    }
+</code></pre>
+
+<p>
+    然後在 nuxt.config.js 當中的 plugin 設定把這隻 plugin 引入：
+</p>
+<pre><code class="JAVASCRIPT">
+    plugins: [
+      '~/plugins/axios'
+    ],
+</code></pre>
+
+<p>
+    假設我只有一隻 request 需要 proxy 的情況該怎麼辦呢？若是這種情況，<br />
+    我們就不需要在 nuxt config 當中把 axios 的設定為 proxy: true ，<br />
+    而只要在 proxy 當中設定需要使用 proxy 的 url：<br />
+</p>
+<pre><code class="JAVASCRIPT">
+    proxy: {
+        '/users': {
+            target: 'https://example.com'
+            // 向 /users 發請求時，proxy 會再向 https://example.com/users 發請求
+        }
+    },
+</code></pre>
+<p>
+    並且在單獨需要用到 proxy 的地方，重新實例化一個 axios（不需要使用 nuxt 的 $axios moudule，
+    因為若 moudule 有設定 baseUrl 的話，會發生衝突）：
+</p>
+<pre><code class="JAVASCRIPT">
+    const axios = require('axios')
+    const { data } = await axios.post(`/seo_check`, {
+      url: check_url
+    })
+    // 若網址不包含 host ，預設會向本地的網頁伺服器發出請求
+</code></pre>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Nuxt.js 使用 axios、proxy 解決跨域請求 (CORS)";
+        seo.metaTitle = "Nuxt.js 使用 axios、proxy 解決跨域請求 (CORS)";
+        seo.metaDescription = @"proxy module 的原理其實就是把 nuxt 的 web server 當成 proxy server，也就是在瀏覽器端向提供網頁的伺服器發出請求，
+            讓網頁伺服器去和我們真正要打的後端伺服器要資料";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
