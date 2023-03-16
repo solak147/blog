@@ -11,7 +11,7 @@
 </HeadContent>
 
 <div class="page">
-    <div @onclick="toggle" class="sidebar" 
+    <div class="sidebar" 
         style="background-image: url(images/nav.jpg);  background-repeat: no-repeat; background-size: cover;">
         <NavMenu />
     </div>
@@ -28,8 +28,6 @@
 </div>
 
 @code {
-    [Inject] IJSRuntime JSRT { get; set; }
-
     public class Seo
     {
         public string pageTitle = "";
@@ -49,10 +47,5 @@
         }
 
         await base.OnAfterRenderAsync(firstRender);
-    }
-
-    public async void toggle()
-    {
-        await JSRT.InvokeVoidAsync("navToggle");
     }
 }

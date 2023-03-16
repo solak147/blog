@@ -4,16 +4,20 @@
     });
 }
 
-function navToggle() {
-
+function navToggle() { 
     let wd = $(".sidebar").width(); 
     if (wd > 0) {
         $(".sidebar").animate({
             width: 0
         });
+        
+        $('body').css('overflow-y', 'auto');
     } else {
         $(".sidebar").animate({
             width: '70vw'
         });
+   
+        $('body').css('overflow-y', 'hidden');
     }
+    $('.navbar-brand').toggle();
 }
