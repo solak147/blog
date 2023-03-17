@@ -2,6 +2,10 @@
     overflow-x: hidden;
 }
 
+h1 {
+    display: inline-block;
+}
+
 nav {
     height: 100vh;
 }
@@ -180,6 +184,40 @@ p {
 
     .indexbanner {
         max-height: 50vh;
+    }
+
+    .menu {
+        float: right;
+        padding: 5px 0;
+        width: 25px;
+        height: 17px;
+        background: black;
+        background-clip: content-box;
+        border-top: 3px solid black;
+        border-bottom: 3px solid black;
+    }
+
+    .close {
+        float: right;
+        position: relative;
+    }
+
+    .close::before,
+    .close::after {
+        position: absolute;
+        content: ' ';
+        background-color: black;
+        left: -20px;
+        width: 5px;
+        height: 25px;
+    }
+
+    .close::before {
+        transform: rotate(45deg);
+    }
+
+    .close::after {
+        transform: rotate(-45deg);
     }
 
 }
