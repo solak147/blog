@@ -18,6 +18,8 @@
 
     <main>
         <article class="content px-4">
+            <div @onclick="toggle" class="close"></div>
+
             <div>
                 <CascadingValue Value="@seo" Name="seo">
                     @Body
@@ -47,5 +49,10 @@
         }
 
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async void toggle()
+    {
+        await JSRT.InvokeVoidAsync("navToggle");
     }
 }

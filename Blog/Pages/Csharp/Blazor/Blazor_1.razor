@@ -1,26 +1,28 @@
 ﻿@page "/blazor1"
 @inherits Blog.Base.Base
 
-<div class="article">
-    <h2><b>StateHasChanged() vs InvokeAsync(StateHasChanged)</b></h2>
-    <br />
+<h2><b>StateHasChanged() vs InvokeAsync(StateHasChanged)</b></h2>
+<br />
 
-    <p>
-        blazor 渲染和調用 StateHasChanged 都必須發生在主（UI）執行緒上<br/><br/>
+<p>
+    blazor 渲染和調用 StateHasChanged 都必須發生在主（UI）執行緒上<br/><br/>
 
-        而主要的 Blazor 生命週期事件（OnInit、AfterRender、ButtonClick）都在該特殊執行緒上執行，<br/>
-        因此在極少數情況下 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br/>
-    </p>
+    而主要的 Blazor 生命週期事件（OnInit、AfterRender、ButtonClick）都在該特殊執行緒上執行，<br/>
+    因此在極少數情況下 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br/>
+</p>
 
-     <h3><b>Timer 內調用 StateHasChanged()</b></h3>
-     <p>
-        Timer 是一個“外部事件”，所以你不能確定它會在正確的線程上執行。<br/>
-        InvokeAsync() 將工作委託給 Blazor 的 SynchronizationContext，這將確保它確實在主線程上運行。<br/><br/>
+<h3><b>Timer 內調用 StateHasChanged()</b></h3>
+<p>
+Timer 是一個“外部事件”，所以你不能確定它會在正確的線程上執行。<br/>
+InvokeAsync() 將工作委託給 Blazor 的 SynchronizationContext，這將確保它確實在主線程上運行。<br/><br/>
 
-        但是 Blazor WebAssembly 只有 1 個線程，所以暫時外部事件也總是在主執行緒上運行。這意味著當你把這個 Invoke 模式弄錯時，<br/>
-        你並不會發現錯誤。<br/><br/>
-     </p>
-</div>
+但是 Blazor WebAssembly 只有 1 個線程，所以暫時外部事件也總是在主執行緒上運行。這意味著當你把這個 Invoke 模式弄錯時，<br/>
+你並不會發現錯誤。<br/><br/>
+</p>
+
+<p>
+    參考 :<a href="https://stackoverflow.com/questions/65230621/statehaschanged-vs-invokeasyncstatehaschanged-in-blazor">https://stackoverflow.com/questions/65230621/statehaschanged-vs-invokeasyncstatehaschanged-in-blazor</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)
