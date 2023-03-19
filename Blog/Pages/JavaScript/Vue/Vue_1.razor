@@ -1,6 +1,8 @@
 ﻿@page "/vue1"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - Vue 生命週期</h1>
+
 <h2><b>Vue 生命週期</b></h2>
 <br />
 
@@ -128,6 +130,10 @@
 <p>
     beforeUnmount：在Vue被摧毀前。<br />
     unmounted：所有綁定、事件監聽、Watch與渲染至目標的HTML DOM…等等皆移除。
+</p>
+
+<p>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10202949">https://ithelp.ithome.com.tw/articles/10202949</a>
 </p>
 
 @code {

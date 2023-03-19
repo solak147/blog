@@ -1,6 +1,8 @@
 ﻿@page "/nuxt1"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - Nuxt 生命週期</h1>
+
 <h2><b>Nuxt 生命週期</b></h2>
 <br />
 
@@ -104,6 +106,10 @@
 <p>
     asyncData → beforeCreate → created → fetch → beforeCreate → created → mounted<br/>
     將會發現 beforeCreate、created 會被執行兩次，原因是 Server 端和 Client 端都會有 beforeCreate、created，所以需要再做一些判斷或處理，不然有可能重複的東西會被執行兩次。
+</p>
+
+<p>
+    參考 :<a href="https://happy9990929.github.io/2021/09/10/vue-nuxt-lifecycle-hooks/">https://happy9990929.github.io/2021/09/10/vue-nuxt-lifecycle-hooks/</a>
 </p>
 
 @code {

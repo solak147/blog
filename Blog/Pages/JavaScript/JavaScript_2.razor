@@ -1,6 +1,8 @@
 ﻿@page "/javascript2"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title -使用 Promise 達到同步等待 js 資源載入</h1>
+
 <h2><b>使用 Promise 達到同步等待 js 資源載入</b></h2>
 <br />
 
@@ -61,6 +63,10 @@
         });
     }
 </code></pre>
+
+<p>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10216858">https://ithelp.ithome.com.tw/articles/10216858</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)
