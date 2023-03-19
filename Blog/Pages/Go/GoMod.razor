@@ -1,58 +1,107 @@
 ﻿@page "/gomod"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - go mod</h1>
+
 <h2><b>go.mod 介紹</b></h2>
 <p>
-    go mod 是 Golang 1.11 版本引入的官方套件（package）管理工具，<br />
-    用於解決之前沒有地方記錄套件具體版本的問題，方便套件的管理。<br />
-    之前 Golang 主要依靠 vendor 和 $GOPATH 来管理套件，vendor相對主流，但现在官方更提倡 go mod。
+    Go modules（模塊）是 Go 1.11 版本推出的一種新的官方依賴管理系統，用於管理 Go 代碼庫中的依賴關係和版本控制。Go 模塊可以幫助開發人員簡化項目的依賴管理，並提供更強大的版本控制能力。<br />
+
+    在使用 Go 模塊時，開發人員可以將代碼庫拆分成多個模塊，每個模塊都有自己的版本號，可以單獨更新。在項目中使用其他模塊時，可以使用 import 語句引入該模塊，並使用指定的版本號進行依賴管理。<br /><br />
 </p>
 
 <h3><b>How To Use GO MOD</b></h3>
+<p>
+    在代碼庫中初始化模塊<br />
+
+    1.首先，需要在代碼庫的根目錄中初始化模塊。可以使用以下命令初始化一個新的模塊：<br />
+</p>
 <pre><code class="go">
     //在專案目錄底下
-    go mod init &lt;project name>
+    go mod init module-name
 </code></pre>
 <p>
+    這條命令會在代碼庫根目錄中生成一個 go.mod 文件，用於存儲模塊的相關信息，例如模塊名稱、版本號等。<br />
     go.mod 檔中的 module 名稱需與資料夾一致，否則會無法正常讀取 module<br />
-    此外 go.mod 的依赖文件都缓存在 $GOPATH/pkg/mod/下。
+    此外 go.mod 的依赖文件都缓存在 $GOPATH/pkg/mod/下。<br /><br />
+
+    2.安裝依賴包<br />
+
+    接下來，可以使用 go get 命令安裝所需的依賴包。例如，以下命令可以安裝最新版本的 gin 框架：
+</p>
+<pre><code class="go">
+    go get github.com/gin-gonic/gin
+</code></pre>
+<p>
+    安裝完成後，go.mod 文件中會自動添加 gin 的相關信息，例如模塊名稱、版本號等。<br /><br />
+
+    3.使用依賴包<br />
+
+    在項目中使用依賴包時，可以使用 import 語句引入該包，例如：
+</p>
+<pre><code class="go">
+    import "github.com/gin-gonic/gin"
+</code></pre>
+<p>
+    當代碼需要使用依賴包中的函數或變量時，可以直接調用該函數或變量。<br /><br />
+
+    4.更新依賴包<br />
+
+    如果需要更新依賴包的版本，可以使用 go get 命令更新依賴包。例如，以下命令可以更新 gin 框架到最新版本：
+</p>
+<pre><code class="go">
+    go get -u github.com/gin-gonic/gin
+</code></pre>
+<p>
+    更新完成後，go.mod 文件中會自動更新 gin 的版本號信息。
+
+    Go 模塊還提供了其他一些常用的命令和功能，例如 go mod tidy 命令可以自動清理不需要的依賴包，go mod vendor 命令可以將依賴包的源代碼複製到本地，方便離線編譯等。<br />
 </p>
 
-<h3><b>Download from go.mod</b></h3>
+<h4><b>Download from go.mod</b></h4>
 <pre><code class="go">
     go mod download
 </code></pre>
 <p>
-    將go.mod中所定義的所有library都給下載下來，但除了該指令外，在執行go build或是go test時，<br />
-    也會自動下載library並新增至go.mod當中，並產生出最新的 go.sum 以確保library有更新。
+    將 go.mod 中所定義的所有 library 都給下載下來，但除了該指令外，在執行 go build 或是g o test 時，<br />
+    也會自動下載 library 並新增至go.mod當中，並產生出最新的 go.sum 以確保 library 有更新。
 </p>
 
-<h3><b>Update module to go.mod</b></h3>
-<pre><code class="go">
-    go get -u &lt;module url>
-</code></pre>
-<p>
-    透過該指令安裝並新增新的 module 至 go.mod 當中
-</p>
-
-<h3><b>Remove redundancy module from go.mod</b></h3>
+<h4><b>Remove redundancy module from go.mod</b></h4>
 <pre><code class="go">
     go mod tidy
 </code></pre>
+<br />
 
 <h3><b>GO111MODULE 與 go.mod 之間的關係</b></h3>
 <p>
-    Golang 提供一個環境變量 GO111MODULE 來設置是否使用 go.mod，它有3個可選值，分別是off, on, auto（預設值），具體含義如下：<br /><br />
+    GO111MODULE 是一個環境變數，它會影響到 Go 語言在編譯時是否使用模組化的方式管理依賴關係。當 GO111MODULE 設置為 "on" 時，Go 語言會使用模組化的方式管理依賴關係，而 go.mod 則是用來記錄相關依賴關係的文件。<br />
 
-    on：go 命令行會使用 modules，忽略 $GOPATH 目錄。<br />
-    off: go 命令行將不會支持 module 功能，尋找套件的方式將會沿用舊版本，通過 vendor 目錄或者 $GOPATH 目錄下找。<br />
-    auto：如果當前目錄不在 $GOPATH下且當前目錄（或者父目錄）下有 go.mod 文件，則使用 GO111MODULE=on， 否則 GO111MODULE=off。<br />
+    go.mod 是一個文本文件，它用來記錄一個模組的元信息，包括模組的名稱、版本和依賴關係等等。在使用模組化的方式管理依賴關係時，Go 語言會根據 go.mod 文件中的信息下載相應的依賴，進而確保項目的正確性和可重現性。<br />
+
+    總的來說，GO111MODULE 和 go.mod 是緊密相關的，前者影響後者的使用方式，而後者則是用來記錄項目的依賴關係信息的重要文件。<br /><br />
 </p>
 
-<h3><b>Edit GO111MODULE</b></h3>
+<p>
+    GO111MODULE 環境變數的不同設定會影響到 Go 語言編譯時如何找取套件（也就是依賴項）的方式，具體而言：<br /><br />
+
+    當 GO111MODULE 設置為 "off" 時，Go 語言會使用 GOPATH 和 vendor 目錄的方式管理依賴項，也就是從 GOPATH 和 vendor 目錄中尋找套件。這種方式是舊有的方式，不太推薦使用。<br /><br />
+
+    當 GO111MODULE 設置為 "on" 時，Go 語言會使用模組化的方式管理依賴項，也就是根據 go.mod 文件中的依賴項信息來下載套件。在這種方式下，Go 語言會自動下載和緩存相應的套件，並將它們放在 $GOPATH/pkg/mod 目錄中。在編譯時，Go 語言會優先從 $GOPATH/pkg/mod 中找取套件，如果找不到才會從網絡上下載相應的套件。<br /><br />
+
+    當 GO111MODULE 設置為 "auto" 時，Go 語言會根據當前目錄下是否存在 go.mod 文件來自動判斷是否使用模組化的方式管理依賴項。如果當前目錄下存在 go.mod 文件，則使用模組化的方式，否則使用 GOPATH 和 vendor 目錄的方式。<br /><br />
+
+    總的來說，GO111MODULE 的設置方式會影響到 Go 語言編譯時如何找取套件，而使用模組化的方式可以讓依賴項管理更加方便和可靠。
+</p>
+
+<h4><b>Edit GO111MODULE</b></h4>
 <pre><code class="go">
     go env -w GO111MODULE=on
 </code></pre>
+
+<p>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10274308">https://ithelp.ithome.com.tw/articles/10274308</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

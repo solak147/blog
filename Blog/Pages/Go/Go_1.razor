@@ -1,12 +1,31 @@
 ﻿@page "/go1"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - go channel</h1>
+
 <h2><b>通道 Channel</b></h2>
 <p>
-    Channel 可以想像成是一種資料結構，可以 push data 進去也可以 pull data 出來。<br /><br />
+    在 Go 語言中，Channel 是一種併發原語（concurrency primitive），它用於在不同的 Goroutine 之間傳遞數據。Channel 可以被看作是一個通道，它允許一個 Goroutine 向另一個 Goroutine 傳遞數據，這樣不同的 Goroutine 就可以協作完成一些任務。<br /><br />
 
-    因為Channel會等待另一端完成 Push/Pull 的動作才會繼續往下處理，<br />
-    而且特性使其可以在Goroutines間同步處理的資料，而不用使用 lock、unlock 等方式。
+    Channel 有以下特性：<br />
+
+    1.它是一個類型化的管道，只能傳遞定義好的類型。<br />
+
+    2.透過 channel 傳遞數據時，是在 Goroutine 之間進行的同步操作，這意味著發送 Goroutine 會等待接收 Goroutine 接收數據後才會繼續執行。<br />
+
+    3.Channel 可以用來控制 Goroutine 的執行順序和同步。<br />
+
+    4.Channel 有緩存和非緩存兩種類型，非緩存的 Channel 在接收前必須要有發送方發送數據，否則會被阻塞。<br /><br />
+
+    使用 Channel 的基本操作有三種：<br />
+
+    1.創建 Channel：使用 make 函数創建 Channel，例如 make(chan int) 創建一個傳遞 int 型數據的 Channel。<br />
+
+    2.發送數據到 Channel：使用 &lt- 運算符發送數據，例如 ch &lt- 123，其中 ch 是一個 int 型 Channel。<br />
+
+    3.從 Channel 接收數據：使用 &lt- 運算符從 Channel 接收數據，例如 x := &lt- ch，其中 ch 是一個 int 型 Channel，並且 x 是一個 int 型變量。<br /><br />
+
+    總的來說，Channel 是 Go 語言中一個非常強大的併發原語，可以幫助開發者更加方便地進行併發編程。<br /><br />
 </p>
 
 <h3><b>Create Channel</b></h3>
@@ -248,6 +267,10 @@
     # func1 got 8
     # func1 got 9
 </code></pre>
+
+<p>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10271621">https://ithelp.ithome.com.tw/articles/10271621</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)
