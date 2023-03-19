@@ -1,10 +1,20 @@
 ﻿@page "/csharp1"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - C# 中的 override 和 new 關鍵字有什麼區別</h1>
+
 <h2><b>C# 中的 override 和 new 關鍵字有什麼區別</b></h2>
 
 <p>
-    override 會「覆寫」父類別的 virtual 方法，new 則會「隱藏」父類別 virtual 方法
+    在 C# 中，override 和 new 都是用於實現方法重寫（method overriding）的關鍵字。但是，它們之間有著一些重要的區別，具體如下：<br /><br />
+
+    1.語義區別：override 關鍵字表示子類的方法會覆蓋（重寫）父類中同名方法的實現，而 new 關鍵字表示子類的方法是一個全新的方法，並不會覆蓋父類中同名方法的實現。<br />
+
+    2.虛擬方法的要求：如果要使用 override 關鍵字，必須先聲明父類方法為虛擬（virtual）方法；而使用 new 關鍵字不需要，因為 new 方法不是對父類方法的重寫，而是定義一個新的方法。<br />
+
+    3.多態行為：如果子類使用 override 關鍵字重寫父類方法，那麼父類的引用指向子類實例時，將會調用子類中的方法；而如果子類使用 new 關鍵字定義一個新方法，那麼父類的引用指向子類實例時，將會調用父類中的方法。<br /><br />
+
+    總的來說，override 和 new 關鍵字都可以用於實現方法重寫，但其語義和多態行為等方面有所區別。在使用時，開發者需要根據具體情況選擇合適的方式。<br />
 </p>
 
 <pre><code class="CSharp">
