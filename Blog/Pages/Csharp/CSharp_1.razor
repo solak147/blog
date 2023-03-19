@@ -33,22 +33,22 @@
 </code></pre>
 
 <pre><code class="CSharp">
-        A objectA;
-        B objectB = new B();
-        C objectC = new C();
+    A objectA;
+    B objectB = new B();
+    C objectC = new C();
 
-        Console.WriteLine(objectB.Hello()); // 2
-        Console.WriteLine(objectB.CallHello()); // 1  會執行class A的Hello
-        Console.WriteLine(objectC.Hello()); // 3
+    Console.WriteLine(objectB.Hello()); // 2
+    Console.WriteLine(objectB.CallHello()); // 1  會執行class A的Hello
+    Console.WriteLine(objectC.Hello()); // 3
 
-        objectA = objectB;
+    objectA = objectB;
 
-        Console.WriteLine(objectA.Hello()); // 1
+    Console.WriteLine(objectA.Hello()); // 1
 
-        objectA = objectC;
+    objectA = objectC;
 
-        Console.WriteLine(objectA.Hello()); // 3
-    </code></pre>
+    Console.WriteLine(objectA.Hello()); // 3
+</code></pre>
 
 <h3><b>多型</b></h3>
 <p>

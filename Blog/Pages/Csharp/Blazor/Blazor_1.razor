@@ -1,23 +1,122 @@
 ﻿@page "/blazor1"
 @inherits Blog.Base.Base
 
-<h2><b>StateHasChanged() vs InvokeAsync(StateHasChanged)</b></h2>
+<h1 style="display: none;"> @h1Title - Blazor StateHasChanged</h1>
+
+<h2><b>Blazor StateHasChanged</b></h2>
+<p>
+    Blazor 是一個使用 C# 和 .NET 構建交互式 Web 應用程序的 Web 框架。在 Blazor 中，UI 首先在服務器上渲染，然後傳輸到客戶端的瀏覽器，使用 JavaScript 更新頁面。<br />
+
+    當 Blazor 組件的狀態發生變化時，框架需要知道重新渲染 UI 並更新頁面。這就是 StateHasChanged 方法的作用。<br />
+
+    StateHasChanged 是在 ComponentBase 類中定義的方法，該類是所有 Blazor 組件的基類。當調用該方法時，它會通知框架組件的狀態已更改，需要重新渲染 UI。<br />
+
+    例如，假設有一個 Blazor 組件，顯示計數器。每次用戶單擊按鈕時，計數器值就會增加。單擊按鈕時，組件的狀態發生變化，並調用 StateHasChanged 方法以使用新的計數器值更新 UI。<br /><br />
+
+    以下是 StateHasChanged 在 Blazor 組件中的用法示例：
+</p>
+<pre><code class="csharp">
+    @@page "/counter"
+
+    &lth1>Counter&lt/h1>
+
+    &ltp>Current count: @@count&lt/p>
+
+    &ltbutton class="btn btn-primary" @@onclick="IncrementCount">Click me&lt/button>
+
+    @@code {
+        private int count = 0;
+
+        private void IncrementCount()
+        {
+            count++;
+            StateHasChanged(); // 通知框架狀態已更改
+        }
+    }
+</code></pre>
+<p>
+    在此示例中，單擊按鈕時會調用 IncrementCount 方法，並更新 count 變量。更新 count 變量後，調用 StateHasChanged 以通知框架使用新的計數器值更新 UI。<br /><br />
+</p>
+
+<h2><b>Blazor WebAssembly  StateHasChanged() vs InvokeAsync(StateHasChanged)</b></h2>
 <br />
 
 <p>
-    blazor 渲染和調用 StateHasChanged 都必須發生在主（UI）執行緒上<br/><br/>
+    在 Blazor WebAssembly 中，StateHasChanged() 和 InvokeAsync(StateHasChanged) 的用法和含義與 Blazor Server 基本相同。<br />
+    StateHasChanged() 方法用於在 Blazor WebAssembly 組件的代碼中直接通知框架重新渲染 UI。這種方法比較簡單，並且在大多數情況下都可以正確地更新 UI。<br />
+    例如：
+</p>
+<pre><code class="csharp">
+    private void IncrementCount()
+    {
+        count++;
+        StateHasChanged(); // 通知框架狀態已更改
+    }
+</code></pre>
 
-    而主要的 Blazor 生命週期事件（OnInit、AfterRender、ButtonClick）都在該特殊執行緒上執行，<br/>
-    因此在極少數情況下 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br/>
+<p>
+    InvokeAsync(StateHasChanged) 方法也是用於異步操作中通知框架重新渲染 UI 的方法。但是，在 Blazor WebAssembly 中，由於組件的代碼是在客戶端運行，因此這種方法的使用有一些限制。具體來說，它不能直接使用在 Blazor WebAssembly 組件的代碼中，因為它需要在 UI 线程上運行。<br /><br />
+
+    因此，通常在 Blazor WebAssembly 中使用 InvokeAsync(StateHasChanged) 方法時，需要將它放到運行在 UI 线程上的代碼中，例如使用 Dispatcher。<br /><br />
+
+    例如：
+</p>
+<pre><code class="csharp">
+    private async Task GetDataAsync()
+    {
+        // 異步操作獲取數據
+        var data = await SomeDataService.GetDataAsync();
+
+        // 設置數據到組件狀態中
+        this.data = data;
+
+        // 調用 Dispatcher 以在 UI 线程上調用 StateHasChanged
+        await Dispatcher.InvokeAsync(StateHasChanged);
+    }
+</code></pre>
+<p>
+    在這個例子中，GetDataAsync 方法異步獲取數據，然後將數據設置到組件的狀態中。最後，Dispatcher.InvokeAsync(StateHasChanged) 被調用以通知框架重新渲染 UI。<br /><br />
+
+    總的來說，StateHasChanged() 和 InvokeAsync(StateHasChanged) 在 Blazor WebAssembly 中的用法和含義與 Blazor Server 基本相同，但是使用 InvokeAsync(StateHasChanged) 時需要注意在 UI 线程上運行的限制。<br /><br />
 </p>
 
-<h3><b>Timer 內調用 StateHasChanged()</b></h3>
-<p>
-Timer 是一個“外部事件”，所以你不能確定它會在正確的線程上執行。<br/>
-InvokeAsync() 將工作委託給 Blazor 的 SynchronizationContext，這將確保它確實在主線程上運行。<br/><br/>
+@*<p>
+    blazor 渲染和調用 StateHasChanged 都必須發生在主（UI）執行緒上<br /><br />
 
-但是 Blazor WebAssembly 只有 1 個線程，所以暫時外部事件也總是在主執行緒上運行。這意味著當你把這個 Invoke 模式弄錯時，<br/>
-你並不會發現錯誤。<br/><br/>
+    而主要的 Blazor 生命週期事件（OnInit、AfterRender、ButtonClick）都在該特殊執行緒上執行，<br />
+    因此在極少數情況下 StateHasChanged() 可以在沒有 InvokeAsync() 的情況下調用它。<br />
+</p>*@
+
+<h3><b> Blazor WebAssembly Timer 內調用 StateHasChanged</b></h3>
+<p>
+    在 Blazor WebAssembly 中使用 Timer 計時器時，如果計時器回調函數內需要更新組件的狀態，就需要調用 StateHasChanged() 方法通知 Blazor 框架重新渲染 UI。<br /><br />
+
+    通常，在 Blazor WebAssembly 中使用計時器時，會通過 System.Threading.Timer 或 System.Timers.Timer 類創建計時器實例。接著，在計時器回調函數內部，可以更新組件的狀態並調用 StateHasChanged() 方法通知框架重新渲染 UI。<br /><br />
+
+    例如，使用 System.Threading.Timer 類創建計時器的代碼如下：
+</p>
+<pre><code class="csharp">
+    private Timer timer;
+
+    protected override void OnInitialized()
+    {
+        // 創建計時器實例，設置回調函數和計時器間隔時間
+        timer = new Timer(TimerCallback, null, 0, 1000);
+    }
+
+    private void TimerCallback(object state)
+    {
+        // 更新組件的狀態
+        count++;
+
+        // 調用 StateHasChanged 方法通知框架重新渲染 UI
+        InvokeAsync(StateHasChanged);
+    }
+</code></pre>
+<p>
+    在這個例子中，OnInitialized 方法在組件初始化時創建計時器實例，設置回調函數為 TimerCallback 方法，並設置計時器間隔時間為 1 秒。當計時器回調函數被觸發時，TimerCallback 方法會更新組件的狀態，然後通過 InvokeAsync(StateHasChanged) 方法調用 StateHasChanged() 方法以通知框架重新渲染 UI。<br /><br />
+
+    需要注意的是，計時器回調函數內的 StateHasChanged() 方法必須通過 InvokeAsync 方法調用，因為計時器回調函數並不運行在 UI 线程上。通過 InvokeAsync 方法調用 StateHasChanged() 方法可以將其排入 UI 线程的同步上下文中，以確保正確更新 UI。<br /><br />
 </p>
 
 <p>

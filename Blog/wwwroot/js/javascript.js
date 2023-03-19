@@ -5,6 +5,10 @@
 }
 
 function navToggle() { 
+    if (document.body.clientWidth > 640) {
+        return;
+    } 
+
     let wd = $(".sidebar").width(); 
     if (wd > 0) {
         $(".sidebar").animate({
