@@ -1,13 +1,19 @@
 ﻿@page "/flutter3"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - Flutter MaterialApp</h1>
+
 <h2><b>MaterialApp</b></h2>
 <br />
 
 <p>
-    MaterialApp 將多個經常使用的 Material Design 所需要的 Widget 包裝起來，在這邊定義主題色，及導航路由… 所有的 Ｗidget 都是由 MaterialApp 往下延伸的。<br />
+    MaterialApp是Flutter中的一個Widget，它是實現基於Material Design設計系統的應用程序的主要組件之一。Material Design是一種由Google推出的設計語言，用於創建具有一致性和美觀性的UI設計。<br />
 
-    下面介紹 MaterialApp class 的建構子參數：
+    MaterialApp提供了一個簡單的方式來設置應用程序的主題、路由、語言等。當您創建一個MaterialApp時，它將成為應用程序的根組件，並且會自動包含一些基本的組件，例如Scaffold、AppBar等，這些組件可用於構建您的應用程序的UI。<br />
+
+    MaterialApp還提供了一個Navigator，該Navigator可用於管理應用程序的路由和屏幕之間的轉換。您可以使用Navigator.push和Navigator.pop等方法來添加和刪除路由。路由是指應用程序中的屏幕，每個路由都有自己的Widget樹。<br />
+
+    下面介紹 MaterialApp class 的建構子參數：<br /><br />
 </p>
 
 <h2><b>Home</b></h2>
@@ -77,6 +83,10 @@
         }
     }
 </code></pre>
+
+<p>
+    參考 : <a href="https://medium.com/flutter-taipei/%E4%BE%86%E5%90%A7-flutter-5-materialapp-e27a4887c2fc">https://medium.com/flutter-taipei/%E4%BE%86%E5%90%A7-flutter-5-materialapp-e27a4887c2fc</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

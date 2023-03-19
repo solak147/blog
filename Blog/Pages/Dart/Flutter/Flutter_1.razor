@@ -1,6 +1,8 @@
 ﻿@page "/flutter1"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.</h1>
+
 <h2><b>In plugin 'FlutterPlugin' type 'FlutterTask' property 'assets' is missing an input or output annotation.</b></h2>
 <br />
 
@@ -71,6 +73,10 @@ Exception: Gradle task assembleDebug failed with exit code 1
     發生這種情況是因為您項目中的 gradle/wrapper/gradle-wrapper.properties 的 gdistributionUrl 版本為 gradle 7 以上 <br />
     1.降級你的 gradle 版本( 小於 7 )  <br />
     2.到flutter sdk 資料夾下，按照<MudLink Href="https://github.com/flutter/flutter/pull/79167/files" Underline="Underline.Always">此方式</MudLink>進行更改。  <br />
+</p>
+
+<p>
+    參考 :<a href="https://stackoverflow.com/questions/67137816/flutter-project-fails-to-build-when-gradle-gets-upgraded-error-type-flutterta">https://stackoverflow.com/questions/67137816/flutter-project-fails-to-build-when-gradle-gets-upgraded-error-type-flutterta</a>
 </p>
 
 @code {
