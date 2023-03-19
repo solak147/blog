@@ -1,26 +1,85 @@
 ﻿@page "/css3"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - display : flex</h1>
+
 <h2><b>display : flex</b></h2>
 <br />
+<p>
+    CSS 的 display 屬性用於定義元素的外觀和行為，其中 display: flex 是用於定義彈性容器 (flex container) 的屬性。將 display 屬性設置為 flex 可以啟用 CSS Flexbox 佈局，該佈局可以將元素排列為一行或一列，自動調整元素的寬度和高度，以實現自適應和響應式設計。<br />
 
-<h3><b> Flex 中分為外容器與內元件</b></h3>
+    使用 display: flex 會將元素設置為彈性容器，其中包含一個或多個彈性項目 (flex item)，這些項目按照輸入的順序自動排列。每個彈性項目可以具有不同的寬度、高度、對齊方式、排序方式等屬性，以實現更靈活的佈局效果。<br />
+
+    以下是一個簡單的使用 display: flex 屬性的示例：<br />
+</p>
+<pre><code class="html">
+    # html
+    &ltdiv class="container">
+    &ltdiv class="item">Item 1&lt/div>
+    &ltdiv class="item">Item 2&lt/div>
+    &ltdiv class="item">Item 3&lt/div>
+    &lt/div>
+</code></pre>
+
+<pre><code class="css">
+    # css
+   .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .item {
+      width: 100px;
+      height: 100px;
+      background-color: gray;
+      margin: 10px;
+    }
+</code></pre>
+<p>
+    在這個示例中，將 .container 元素設置為彈性容器，其內部包含三個 .item 彈性項目。設置 flex-direction 屬性為 row，表示將這些項目水平排列。設置 justify-content 屬性為 space-between，表示將項目之間的空間均勻地分配在它們之間。<br />
+
+    在 .item 元素中，設置了固定的寬度、高度和背景顏色。使用 display: flex 屬性後，.item 元素會自動調整其寬度和高度以填充容器中的空間，從而實現更靈活的佈局效果。<br />
+
+    總之，使用 display: flex 屬性可以實現更靈活、自適應和響應式的佈局效果，並可以通過組合其他 Flexbox 屬性來實現更多的設計需求。<br /><br />
+</p>
+
+<h3><b>Flex 主軸與交錯軸</b></h3>
+<p>
+    在 CSS 的 Flexbox 佈局中，彈性容器的軸分為主軸 (main axis) 和交錯軸 (cross axis)，它們分別用於定位和對齊彈性項目。<br /><br />
+
+    主軸是彈性容器的主要方向，通常是水平的 (row) 或垂直的 (column)，決定了彈性項目的排列方向和對齊方式。在使用 display: flex 屬性的元素上，主軸的方向可以通過 flex-direction 屬性進行設置。<br /><br />
+
+    如果設置為 row，則主軸是水平方向，彈性項目從左到右排列。<br />
+    如果設置為 row-reverse，則主軸是水平方向，彈性項目從右到左排列。<br />
+    如果設置為 column，則主軸是垂直方向，彈性項目從上到下排列。<br />
+    如果設置為 column-reverse，則主軸是垂直方向，彈性項目從下到上排列。<br />
+    交錯軸與主軸垂直，用於對齊和調整彈性項目在主軸上的尺寸。在使用 display: flex 屬性的元素上，交錯軸的方向可以通過 justify-content 屬性進行設置。<br /><br />
+
+    如果設置為 flex-start，則交錯軸的起點對齊彈性項目。<br />
+    如果設置為 flex-end，則交錯軸的終點對齊彈性項目。<br />
+    如果設置為 center，則彈性項目在交錯軸上居中對齊。<br />
+    如果設置為 space-between，則彈性項目之間均勻地分配交錯軸上的空間。<br />
+    如果設置為 space-around，則彈性項目周圍均勻地分配交錯軸上的空間。<br /><br />
+</p>
+
+<h3><b>Flex 中分為外容器與內元件</b></h3>
 <p>
     Flex 外容器屬性：<br />
-    ●display<br />
-    ●flex-flow<br />
-    &nbsp;&nbsp;&nbsp;●flex-direction<br />
-    &nbsp;&nbsp;&nbsp;●flex-wrap<br />
-    ●justify-content<br />
-    ●align-items<br /><br />
+    ● display<br />
+    ● flex-flow<br />
+    &nbsp;&nbsp;&nbsp;● flex-direction<br />
+    &nbsp;&nbsp;&nbsp;● flex-wrap<br />
+    ● justify-content<br />
+    ● align-items<br /><br />
 
     Flex 內元件屬性：<br />
-    ●flex<br />
-    &nbsp;&nbsp;&nbsp;●flex-grow<br />
-    &nbsp;&nbsp;&nbsp;●flex-shrink<br />
-    &nbsp;&nbsp;&nbsp;●flex-basis<br />
-    ●order<br />
-    ●align-self<br />
+    ● flex<br />
+    &nbsp;&nbsp;&nbsp;● flex-grow<br />
+    &nbsp;&nbsp;&nbsp;● flex-shrink<br />
+    &nbsp;&nbsp;&nbsp;● flex-basis<br />
+    ● order<br />
+    ● align-self<br />
 </p>
 
 <h3><b>外容器</b></h3>
@@ -76,6 +135,10 @@
 <p>
     <b>Order</b><br />
     可以重新定義元件的排列順序，順序會依據數值的大小排列。
+</p>
+
+<p>
+    參考 :<a href="https://www.casper.tw/css/2017/07/21/css-flex/">https://www.casper.tw/css/2017/07/21/css-flex/</a>
 </p>
 
 @code {
