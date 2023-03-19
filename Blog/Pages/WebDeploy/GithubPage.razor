@@ -1,6 +1,8 @@
 ﻿@page "/githubpage"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - Deploy To GitHub Pages</h1>
+
 <h2><b>Deploy To GitHub Pages</b></h2>
 <br />
 
@@ -106,6 +108,10 @@
 </p>
 
 <img src="images/githubpage_5.png" alt="githubpage_5" class="imgfmt">
+
+<p>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10253277?sc=rss.iron">https://ithelp.ithome.com.tw/articles/10253277?sc=rss.iron</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

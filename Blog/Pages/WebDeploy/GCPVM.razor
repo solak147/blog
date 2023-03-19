@@ -1,6 +1,8 @@
 ﻿@page "/gcpvm"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - 使用GCP (Google Cloud Platform) 創建免費虛擬主機 (VM) 來架設網站</h1>
+
 <h2><b>使用GCP (Google Cloud Platform) 創建免費虛擬主機 (VM) 來架設網站</b></h2>
 <br />
 
@@ -235,6 +237,13 @@
     systemctl start {服務設定檔案名稱}.service #可使用下列指令檢查服務狀態
     sudo systemctl stop animateapi.service #停止服務
 </code></pre>
+
+<p>
+    參考 :<a href="https://weblai.co/wordpress-gcp-tutorial/">https://weblai.co/wordpress-gcp-tutorial/</a>
+    <a href="https://vocus.cc/article/5fbc887ffd897800016cf83c">https://vocus.cc/article/5fbc887ffd897800016cf83c</a>
+    <a href="https://www.796t.com/article.php?id=446440">https://www.796t.com/article.php?id=446440</a>
+    <a href="https://blog.txstudio.tw/2017/02/set-aspnet-core-as-service-in-ubuntu.html">https://blog.txstudio.tw/2017/02/set-aspnet-core-as-service-in-ubuntu.html</a>
+</p>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)

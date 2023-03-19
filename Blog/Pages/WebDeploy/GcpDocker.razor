@@ -1,6 +1,8 @@
 ﻿@page "/gcpdocker"
 @inherits Blog.Base.Base
 
+<h1 style="display: none;"> @h1Title - 使用 Docker 建立 MySql</h1>
+
 <h2><b>使用 Docker 建立 MySql</b></h2>
 
 <h3><b>安裝 Docker</b></h3>
@@ -94,6 +96,10 @@
     設定完後重啟，如使用 GCP 的 VM，想讓外部能連到虛擬機內的 docker service
     需再設定 GCP 的防火牆規則，<br />
     可參考<a href="/gcpvm">GCP免費主機架設網站</a>
+</p>
+
+<p>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10190824">https://ithelp.ithome.com.tw/articles/10190824</a>
 </p>
 
 @code {
