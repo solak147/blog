@@ -27,5 +27,7 @@ function navToggle() {
         $('.menu').removeClass('menu');
         $('body').css('overflow-y', 'hidden');
     }
+
+    $('header').toggle();
     $('.navbar-brand').toggle();
 }

@@ -190,7 +190,7 @@ p {
         float: right;
         padding: 5px 0;
         width: 25px;
-        height: 17px;
+        height: 18px;
         background: black;
         background-clip: content-box;
         border-top: 3px solid black;
@@ -198,6 +198,8 @@ p {
     }
 
     .close {
+        width: 25px;
+        height: 18px;
         float: right;
         position: relative;
     }
@@ -207,7 +209,7 @@ p {
         position: absolute;
         content: ' ';
         background-color: black;
-        left: -20px;
+        left: 11px;
         width: 5px;
         height: 25px;
     }
