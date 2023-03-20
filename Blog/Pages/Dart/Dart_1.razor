@@ -42,12 +42,12 @@
         pi = "3.14159265359"; //不會出錯，型態為 dynamic，可以給予任何型態的值
     }
 </code></pre>
+<br />
 
 <h3><b>常數 const & final</b></h3>
 <p>
-    const比final更加嚴格，final只是要求資料在初始化後值不能變，所以final可以被指派為編譯後變數運算後得到的值，但const必須在編譯之前就是明確的資料值
+    const 比 final 更加嚴格，final 只是要求資料在初始化後值不能變，所以final可以被指派為編譯後變數運算後得到的值，但 const 必須在編譯之前就是明確的資料值
 </p>
-
 
 <h3><b>Dart 的內建的資料型態有數值型 (num)、布林型 (bool)、字串 (String)、Map、List(Dart中的 Array)、Runes、Symbols</b></h3>
 <p>
@@ -108,58 +108,7 @@
         print(#name); //印出 Symbol("name")
     }
 </code></pre>
-
-<h3><b>Named constructors(命名建構式)</b></h3>
-<p>
-    一個類別只能有一個主建構式 Unnamed constructors，不像在Java 擁有多載(Overloading) 的特性，<br />
-    是用引數來區分，但是Dart 用另一種方法來滿足這個要求，並且能更清楚表達程式，<br />
-    增加易讀性，即使用 Named constructors(命名建構式)<br />
-</p>
-<pre><code class="DART">
-    class Person {
-
-        String name = "匿名";
-        int age;
-
-        //主建構式 Unnamed constructors
-        //由於建構式引數賦值給物件屬性變數的情況太常見了，Dart提供了一個語法來簡化這個操作
-        Person(this.name, this.age);
-
-        //Named constructors
-        Person.secretAge(this.name);
-
-        //Named constructors
-        Person.anonymous(this.age);
-    }
-
-    void main() {
-        Person a = Person("Ryder",26); 
-        print("a.name = ${a.name}, a.age = ${a.age}");  //印出 a.name = Ryder, a.age = 26
-
-        Person b = Person.secretAge("Judy"); 
-        print("b.name = ${b.name}, b.age = ${b.age}");  //印出 b.name = Judy, b.age = null
-
-        Person c = Person.anonymous(65); 
-        print("c.name = ${c.name}, c.age = ${c.age}");  //印出 c.name = 匿名, c.age = 65
-    }
-</code></pre>
-
-<h3><b>Redirecting constructors(重定向建構式)</b></h3>
-<p>
-    有時候一個建構式會調動類別中的其他建構式，一個重定向建構式是沒有程式碼的，在建構式聲明後，使用冒號呼叫其他建構式
-</p>
-<pre><code class="DART">
-    vclass Point {
-        num x;
-        num y;
-
-        // 主建構式
-        Point(this.x, this.y);
-
-        // 呼叫主建構式
-        Point.alongXAxis(num x) : this(x, 0);
-    }
-</code></pre>
+<br />
 
 <h3><b>函數 - Optional Named parameters  & Optional positional parameters</b></h3>
 <pre><code class="DART">
@@ -171,6 +120,7 @@
     void enableFlags([bool bold, bool hidden]) {...}
     enableFlags(true, false);
 </code></pre>
+<br />
 
 <h3><b>匿名函數：有時候也被稱為lambda或者clourse閉包</b></h3>
     <pre><code class="DART">
@@ -186,6 +136,7 @@
     codeBlock;
     };
 </code></pre>
+<br />
 
 <h3><b>Lexical closures(詞法閉包)</b></h3>
 <p>
@@ -207,6 +158,7 @@
         print(add4(3)); //印出 7
     }
 </code></pre>
+<br />
 
 <h3><b>類別 : 多型</b></h3>
 <p>

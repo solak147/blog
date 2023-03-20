@@ -43,9 +43,9 @@
             <MudNavLink OnClick="() => toggle(css3)">Display Flex</MudNavLink>
         </MudNavGroup>
         <MudNavGroup Title="Dart" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(dart1)">Dart基礎 - 初入dart</MudNavLink>
-            <MudNavLink OnClick="() => toggle(dart2)">Dart基礎 - @@immutable</MudNavLink>
-            <MudNavLink OnClick="() => toggle(dart3)">Dart基礎 - 建構式</MudNavLink>
+            <MudNavLink OnClick="() => toggle(dart1)">Dart基礎 - 初入 Dart</MudNavLink>
+            <MudNavLink OnClick="() => toggle(dart2)">Dart基礎 - 建構式</MudNavLink>
+            <MudNavLink OnClick="() => toggle(dart3)">Dart基礎 - @@immutable</MudNavLink>
             <MudNavGroup Title="Flutter" Expanded="false" Icon="@Icons.Filled.Storage">
                 <MudNavLink OnClick="() => toggle(flutter1)">編譯錯誤 : missing an input or output annotation</MudNavLink>
                 <MudNavLink OnClick="() => toggle(flutter2)">什麼是 Bloc Design Pattern</MudNavLink>
@@ -118,7 +118,7 @@
         {
             Nav.NavigateTo(url);
         }
-   
+
         await JSRT.InvokeVoidAsync("navToggle");
     }
 }
