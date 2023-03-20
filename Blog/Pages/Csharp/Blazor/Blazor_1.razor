@@ -119,9 +119,9 @@
     需要注意的是，計時器回調函數內的 StateHasChanged() 方法必須通過 InvokeAsync 方法調用，因為計時器回調函數並不運行在 UI 线程上。通過 InvokeAsync 方法調用 StateHasChanged() 方法可以將其排入 UI 线程的同步上下文中，以確保正確更新 UI。<br /><br />
 </p>
 
-<p>
+<div>
     參考 :<a href="https://stackoverflow.com/questions/65230621/statehaschanged-vs-invokeasyncstatehaschanged-in-blazor">https://stackoverflow.com/questions/65230621/statehaschanged-vs-invokeasyncstatehaschanged-in-blazor</a>
-</p>
+</div>
 
 @code {
     public override async Task SetParametersAsync(ParameterView parameters)
