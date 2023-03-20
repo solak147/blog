@@ -1,0 +1,92 @@
+﻿@page "/gogin"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - go gin</h1>
+
+<h2><b>Go Gin 介紹</b></h2>
+<p>
+    Gin 是一個使用 Go 語言編寫的 Web 框架，它是一個輕量級且高效的框架，旨在提高 Web 應用程序的速度和性能。<br />
+
+    以下是 Gin 框架的一些主要特點：<br /><br />
+
+    1.快速和輕量級：Gin 是一個非常快速和輕量級的框架。它使用了 Go 語言的協程技術，可以處理大量的請求。<br />
+
+    2.簡單易用的路由：Gin 提供了簡單易用的路由，可以輕鬆地定義 URL 和處理程序之間的映射關係。<br />
+
+    3.中間件支持：Gin 支持中間件，可以在處理請求之前或之後執行操作，例如驗證請求、日誌記錄、緩存等。<br />
+
+    4.良好的性能：Gin 的設計旨在提高性能，可以處理高並發量的請求。<br />
+
+    5.支持 JSON、XML、YAML 等多種輸出格式：Gin 提供了多種輸出格式支持，可以方便地將數據以 JSON、XML 或其他格式輸出。<br />
+
+    6.支持 WebSocket：Gin 框架支持 WebSocket，可以方便地實現即時通信功能。<br /><br />
+
+    Gin 框架是一個輕量級且高效的 Web 框架，可以幫助開發人員快速構建 Web 應用程序。
+</p>
+
+<h2><b>比較 Gin 與其他 Golang 框架</b></h2>
+<p>
+    1.Echo：Echo 是另一個輕量級的 Go Web 框架，與 Gin 相比，它的路由速度更快。但是，Gin 支持中間件，WebSocket 和多種輸出格式等功能，而 Echo 的支持相對較少。<br /><br />
+
+    2.Beego：Beego 是一個完整的 MVC Web 框架，與 Gin 相比，它擁有更多的功能和內置的模塊。但是，這也意味著 Beego 較為笨重，且性能不如 Gin 那麼高效。<br /><br />
+
+    3.Revel：Revel 是另一個 MVC 框架，與 Beego 類似，Revel 提供了豐富的功能和模塊，但是性能不如 Gin 那麼高效，也相對較為複雜。<br /><br />
+
+    4.Iris：Iris 是一個高性能的 Web 框架，與 Gin 相比，Iris 支持更多的功能，例如依賴注入、分層架構等。但是，Iris 的學習曲線相對較陡峭，且相對較複雜。<br /><br />
+</p>
+
+<h2><b>Installation of Gin</b></h2>
+<pre><code class="go">
+    go get github.com/gin-gonic/gin
+</code></pre>
+<br />
+
+<h2><b>Start with Gin</b></h2>
+<p>
+    直接附上一段基本的 Gin 程式
+</p>
+<pre><code class="go">
+    package main
+
+    import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+    )
+
+    func main() {
+        // 創建一個 Gin 引擎實例
+        r := gin.Default()
+
+        // 定義一個路由
+        r.GET("/hello", func(c *gin.Context) {
+            c.String(http.StatusOK, "Hello, Gin!")
+        })
+
+        // 啟動服務器
+        r.Run(":8080")
+    }
+</code></pre>
+<p>
+    在此範例中，我們使用了 gin.Default() 方法創建了一個預設的 Gin 引擎實例。接著，我們定義了一個 GET 路由 /hello，當用戶訪問該路由時，處理器函式會返回一個 Hello, Gin! 字串。最後，我們使用 r.Run(":8080") 方法啟動服務器，並且設置監聽端口為 8080。<br /><br />
+
+    當您運行此應用程式時，您可以在瀏覽器中輸入 http://localhost:8080/hello，您將看到瀏覽器輸出 Hello, Gin! 的訊息。<br />
+</p>
+
+<div>
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10274308">https://ithelp.ithome.com.tw/articles/10274308</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Go Gin 介紹";
+        seo.metaTitle = "Go Gin 介紹";
+        seo.metaDescription = @" Gin 是一個使用 Go 語言編寫的 Web 框架，它是一個輕量級且高效的框架，旨在提高 Web 應用程序的速度和性能。
+            此文章中會介紹 Gin 與其他 Golang 框架的差別，並使用 Gin 實作一個簡單的 Web Sever";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
