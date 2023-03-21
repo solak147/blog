@@ -28,12 +28,13 @@ function navToggle() {
 
 }
 
+var isTouchMove = true;
 function removeTouchMove() {
-    if (document.body.clientWidth > 640) {
-        return;
-    } 
+    if (!isTouchMove) return;  
 
     document.getElementsByTagName("main")[0].addEventListener('touchmove', mo, { passive: false });
+
+    isTouchMove = false;
 }
 
 function mo(e) {
