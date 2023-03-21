@@ -197,7 +197,7 @@ p {
         float: right;
         padding: 5px 0;
         width: 25px;
-        height: 18px;
+        height: 19px;
         background: black;
         background-clip: content-box;
         border-top: 3px solid black;
@@ -206,7 +206,7 @@ p {
 
     .close {
         width: 25px;
-        height: 18px;
+        height: 19px;
         float: right;
         position: relative;
     }
