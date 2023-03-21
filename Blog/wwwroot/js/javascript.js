@@ -16,18 +16,18 @@ function navToggle() {
         $('.close').addClass('menu');
         $('.close').removeClass('close');
         $('body').css('overflow-y', 'auto');
-        document.removeEventListener('touchmove', function (e) {
+        document.getElementsByTagName("main")[0].removeEventListener('touchmove', function (e) {
             e.preventDefault();
-        }, false);
+        }, { passive: false });
     } else {
         $(".sidebar").animate({ "left": "0" }, "slow");
 
         $('.menu').addClass('close');
         $('.menu').removeClass('menu');
         $('body').css('overflow-y', 'hidden');
-        document.addEventListener('touchmove', function (e) {
+        document.getElementsByTagName("main")[0].addEventListener('touchmove', function (e) {
             e.preventDefault();
-        }, false);
+        }, { passive: false });
     }
 
 }
