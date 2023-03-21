@@ -42,8 +42,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {  
-        await JSRT.InvokeVoidAsync("removeTouchMove");  
-   
+        if (firstRender)
+        {
+            await JSRT.InvokeVoidAsync("removeTouchMove");
+        }
+ 
         if (seo.isDrawCode)
         {
             await JSRT.InvokeVoidAsync("drawCode");
