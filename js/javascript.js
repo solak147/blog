@@ -28,6 +28,6 @@ function navToggle() {
 
 }
 
-function mo() {
+function mo(e) {
     e.preventDefault();
 }
