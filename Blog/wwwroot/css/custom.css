@@ -69,6 +69,13 @@ p {
     fill: white;
 }
 
+.ref {
+    word-break: break-all;
+}
+
+.sidebar {
+    position: relative;
+}
 
 /*loading*/
 .spinner {
