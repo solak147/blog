@@ -28,6 +28,15 @@ function navToggle() {
 
 }
 
+function removeTouchMove() {
+    if (document.body.clientWidth > 640) {
+        return;
+    } 
+
+    document.getElementsByTagName("main")[0].addEventListener('touchmove', mo, { passive: false });
+}
+
 function mo(e) {
     e.preventDefault();
 }
+
