@@ -9,25 +9,25 @@ function navToggle() {
         return;
     } 
 
-    let wd = $(".sidebar").width(); 
-    if (wd > 0) {
-        $(".sidebar").animate({
-            width: 0
-        });
+    let wd = $(".sidebar").position().left; 
+    if (wd == 0) {
+        $(".sidebar").animate({"left":"-500"}, "slow");
 
         $('.close').addClass('menu');
         $('.close').removeClass('close');
         $('body').css('overflow-y', 'auto');
+        document.removeEventListener('touchmove', function (e) {
+            e.preventDefault();
+        }, false);
     } else {
-        $(".sidebar").animate({
-            width: '70vw'
-        });
+        $(".sidebar").animate({ "left": "0" }, "slow");
 
         $('.menu').addClass('close');
         $('.menu').removeClass('menu');
         $('body').css('overflow-y', 'hidden');
+        document.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+        }, false);
     }
 
-    $('header').toggle();
-    $('.navbar-brand').toggle();
 }
