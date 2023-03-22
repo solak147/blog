@@ -14,8 +14,15 @@
 
 <h3><b>Gin Router</b></h3>
 <p>
-    gin.Default()：使用 gin router 預設的 middleware，包含 logger 和 recover (crash-free) 的 middleware<br />
-    router.Run()：預設是 :8080 ，可以用字串修改，例如 router.Run(":3000")
+    Gin 的路由模塊提供了許多方便的功能，例如：<br /><br />
+
+    1.支持 HTTP 請求方法（GET、POST、PUT、DELETE 等）和參數的路由映射，可以根據請求 URL、查詢字符串、請求體等不同部分的內容進行匹配。<br /><br />
+
+    2.支持路徑參數，例如 /users/:id 這樣的路徑可以匹配 /users/1、/users/2 等任何以 /users/ 開頭並且後面跟著一個整數的路徑。<br /><br />
+
+    3.支持多個處理程序函數的鏈式處理，即將多個處理程序函數按照一定的順序組合在一起，形成一個處理鏈。每個處理程序函數都可以訪問上一個函數處理後的結果，從而實現一系列有序的操作。<br /><br />
+
+    4.支持路由組，即將具有相同前綴的路由進行分組管理，可以在組級別上添加中間件或共享上下文等信息，以實現更高級別的功能。
 </p>
 <pre><code class="go">
     func main() {
@@ -36,7 +43,11 @@
         // router.Run(":3000") for a hard coded port
     }
 </code></pre>
-<br />
+<p>
+    gin.Default()：使用 gin router 預設的 middleware，包含 logger 和 recover (crash-free) 的 middleware<br />
+    router.Run()：預設是 :8080 ，可以用字串修改，例如 router.Run(":3000")
+</p>
+
 
 <h3><b>Parameters in Path</b></h3>
 <p>
@@ -127,6 +138,24 @@
     參考 :<a href="https://ithelp.ithome.com.tw/articles/10275175">https://ithelp.ithome.com.tw/articles/10275175</a><br />
     <a href="https://pjchender.dev/golang/gin-routes/">https://pjchender.dev/golang/gin-routes/</a>
 </div>
-@code {
 
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Go Gin Router 介紹";
+        seo.metaTitle = "Go Gin Router 介紹";
+        seo.metaDescription = @"Gin 的路由模块提供了许多方便的功能，例如：
+
+            支持 HTTP 请求方法（GET、POST、PUT、DELETE 等）和参数的路由映射，可以根据请求 URL、查询字符串、请求体等不同部分的内容进行匹配。
+
+            支持路径参数，例如 /users/:id 这样的路径可以匹配 /users/1、/users/2 等任何以 /users/ 开头并且后面跟着一个整数的路径。
+
+            支持多个处理程序函数的链式处理，即将多个处理程序函数按照一定的顺序组合在一起，形成一个处理链。每个处理程序函数都可以访问上一个函数处理后的结果，从而实现一系列有序的操作。
+
+            支持路由组，即将具有相同前缀的路由进行分组管理，可以在组级别上添加中间件或共享上下文等信息，以实现更高级别的功能。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
 }
