@@ -1,0 +1,352 @@
+﻿@page "/gogorm"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - go gorm</h1>
+
+<h2><b>Gin with Gorm</b></h2>
+
+<h3><b>What is ORM</b></h3>
+<p>
+    ORM全名為 Object-Relational Mapping 物件關係對應，也就是透過物件導向的方式將關係資料庫的資料映射至物件的技術。<br <br />
+
+    那ORM有三大核心準則分別是<br />
+
+    ● 簡單性<br />
+    ● 傳達性<br />
+    ● 精確性<br /><br />
+
+    ORM 的使用也帶來了以下優點:<br />
+    隱藏了數據訪問的細節，封閉通用數據庫的交互訪問，並將其封裝成物件，使我們使用時完全不用寫 SQL Command。<br />
+    ORM 使我們構造固化數據結構變得簡單易行。<br />
+    ORM 可以防止 SQL-Injection<br />
+    ORM 使面對對象不需要編碼，能夠像使用物件一樣簡單的操作資料庫。<br />
+    ORM 可以自動對實體對象與資料庫中表進行字段與屬性的映射，不需要單獨的數據訪問層就可以數據進行增刪改查，並提高開發效率。<br />
+    方便 data migration，當資料庫發生改變時，不需要對模組進行修改，只需要修改映射關係即可。<br /><br />
+
+    同時 ORM 也隱含著以下缺點:<br />
+    自動化進行映射與關聯管理，必然的會犧牲效能。然而現今大部分的 ORM 框架都已經用各式各樣方法儘量地減少效能的犧牲了。<br />
+    操作 ORM 會隱藏了數據層面的業務邏輯，導致使用者對資料庫設計方面掌握度較低。<br />
+    更為複雜的 SQL Command，ORM 並無法執行，<br />
+</p>
+
+<h3><b>GORM</b></h3>
+<p>
+    GORM 是專門為 Gin 這個 Framework 所設計的 ORM Library，主要用於操作資料庫。
+    接下來我們會根據 MVC 架構的概念依功能分成 dao、model 以及 service 三層。
+</p>
+
+<h3><b>DAO</b></h3>
+<p>
+    dao/sql.go
+</p>
+
+<pre><code class="go">
+    package dao
+
+    import (
+        "gorm.io/driver/mysql"
+        "gorm.io/gorm"
+    )
+
+    var (
+        SqlSession *gorm.DB
+    )
+
+    func Initialize(dbConfig string) (*gorm.DB, error) {
+        var err error
+        SqlSession, err = gorm.Open(mysql.Open(dbConfig), &gorm.Config{})
+        return SqlSession, err
+    }
+</code></pre>
+<p>
+    這邊主要用來連結 database。
+</p>
+<br />
+
+<h3><b>Model</b></h3>
+<p>
+    model/user.go
+</p>
+<pre><code class="go">
+    package model
+
+    import (
+        "gorm.io/gorm"
+        "time"
+    )
+
+    type User struct {
+        gorm.Model
+        ID        int64    `gorm:"primary_key;auto_increment" json:"id"`
+        Account string `gorm:"size:100;not null;unique" json:"account"`
+        Password  string    `gorm:"size:100;not null;" json:"password"`
+        Email     string    `gorm:"size:100;not null;unique" json:"email"`
+        CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+        UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+    }
+</code></pre>
+<p>
+    gorm.Model 是 GORM 提供的一個結構體，除了上述那些欄位外，gorm.Model 內建包含了一些常用的字段，如 ID、CreatedAt、UpdatedAt、DeletedAt，方便使用者使用。<br />
+    這邊主要用來做程式物件與資料庫欄位的 mapping。
+</p>
+<br />
+
+<h3><b>Service</b></h3>
+<p>
+    service/user.go
+</p>
+<pre><code class="go">
+    package service
+
+    import (
+        "fmt"
+        "znews/app/dao"
+        "znews/app/model"
+    )
+
+    var UserFields = []string{"id", "account", "email"}
+
+    func SelectOneUsers(id int64) (*model.User, error) {
+        userOne:=&model.User{}
+        err := dao.SqlSession.Select(UserFields).Where("id=?", id).First(&userOne).Error
+        if err != nil {
+            return nil, err
+        } else {
+            return userOne, nil
+        }
+    }
+
+    func RegisterOneUser(account string, password string, email string) error {
+        if !CheckOneUser(account) {
+            return fmt.Errorf("User exists.")
+        }
+        user := model.User{
+            Account: account,
+            Password: password,
+            Email: email,
+        }
+        insertErr := dao.SqlSession.Model(&model.User{}).Create(&user).Error
+        return insertErr
+    }
+
+    func CheckOneUser(account string) bool {
+        result := false
+        var user model.User
+
+        dbResult := dao.SqlSession.Where("account = ?", account).Find(&user)
+        if dbResult.Error != nil {
+            fmt.Printf("Get User Info Failed:%v\n", dbResult.Error)
+        } else {
+            result = true
+        }
+        return result
+    }
+</code></pre>
+<p>
+    對資料庫進行資料 CRUD 的地方。
+</p>
+<br />
+
+<h3><b>Controller</b></h3>
+<p>
+    controller/user.go
+</p>
+<pre><code class="go">
+    package controller
+
+    import (
+        "github.com/gin-gonic/gin"
+        "znews/app/service"
+        "net/http"
+        "strconv"
+    )
+
+    type UsersController struct {}
+
+    func NewUsersController() UsersController {
+        return UsersController{}
+    }
+
+    func QueryUsersController() UsersController {
+        return UsersController{}
+    }
+
+    type Register struct {
+        Account string `json:"account" binding:"required" example:"account"`
+        Password string `json:"password" binding:"required" example:"password"`
+        Email string `json:"email" binding:"required" example:"test123@gmail.com"`
+    }
+
+    func (u UsersController) CreateUser (c *gin.Context){
+        var form Register
+        bindErr := c.BindJSON(&form)
+
+        if bindErr == nil {
+            err := service.RegisterOneUser(form.Account, form.Password, form.Email)
+            if err == nil {
+                c.JSON(http.StatusOK, gin.H{
+                    "status": 1,
+                    "msg": "success Register",
+                    "data": nil,
+                })
+            } else {
+                c.JSON(http.StatusInternalServerError, gin.H{
+                    "status": -1,
+                    "msg": "Register Failed" + err.Error(),
+                    "data": nil,
+                })
+            }
+        } else {
+            c.JSON(http.StatusBadRequest, gin.H{
+                "status": -1,
+                "msg": "Failed to parse register data" + bindErr.Error(),
+                "data": nil,
+            })
+        }
+    }
+
+    func (u UsersController) GetUser (c *gin.Context){
+        id := c.Params.ByName("id")
+
+        userId, err := strconv.ParseInt(id, 10, 64)
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{
+                "status": -1,
+                "msg": "Failed to parse params" + err.Error(),
+                "data": nil,
+            })
+        }
+
+        userOne, err := service.SelectOneUsers(userId)
+        if err != nil {
+            c.JSON(http.StatusNotFound, gin.H{
+                "status": -1,
+                "msg": "User not found" + err.Error(),
+                "data": nil,
+            })
+        } else {
+            c.JSON(http.StatusOK, gin.H{
+                "status": 0,
+                "msg":  "Successfully get user data",
+                "user": &userOne,
+            })
+        }
+    }
+</code></pre>
+<p>
+    主要是用來撰寫 API 邏輯的地方。
+</p>
+<br />
+
+<h3><b>主程式</b></h3>
+<p>
+    main.go
+</p>
+<pre><code class="go">
+    package main
+
+    import (
+        "github.com/gin-gonic/gin"
+        "github.com/joho/godotenv"
+        "znews/app/config"
+        "znews/app/dao"
+        "znews/app/model"
+        "os"
+    )
+
+    func main() {
+        envErr := godotenv.Load()
+        if envErr != nil {
+            panic(envErr)
+        }
+
+        port := os.Getenv("PORT")
+        dbConfig := os.Getenv("DB_CONFIG")
+        db, ormErr := dao.Initialize(dbConfig)
+        if ormErr != nil {
+            panic(ormErr)
+        }
+        migrateErr := db.AutoMigrate(&model.User{})
+        if migrateErr != nil {
+            return 
+        }
+
+        server := gin.Default()
+        server.GET("/hc", func(c *gin.Context) {
+            c.JSON(200, gin.H{
+                "message": "health check",
+            })
+        })
+        config.RouteUsers(server)
+        err := server.Run(":" + port)
+        if err != nil {
+            panic(err)
+        }
+    }
+</code></pre>
+<p>
+    首先，我們透過 godotenv 得到 .env 檔內的環境變數設回 DB_CONFIG<br />
+    最後則進行 migration，將 User 這張 table 給 create 出來<br />
+
+    ps : 其實有另一種寫法 godotenv.Load() 可以省略<br />
+</p>
+<pre><code class="go">
+    package main
+
+    import (
+        "os"
+         _ "github.com/joho/godotenv/autoload"
+    )
+
+    func main() {
+        dbConfig := os.Getenv("DB_CONFIG")
+        ....
+    }
+</code></pre>
+<p>
+    autolod 裡面實際已經幫我們做好 godotenv.Load()<br />
+    透過 _ import 就能讀取到 init 函式，此 init 會再進入 main 主程式前先讀取，源碼如下
+</p>
+<pre><code class="go">
+    package autoload
+
+    /*
+        You can just read the .env file on import just by doing
+            import _ "github.com/joho/godotenv/autoload"
+        And bob's your mother's brother
+    */
+
+    import "github.com/joho/godotenv"
+
+    func init() {
+        godotenv.Load()
+    }
+</code></pre>
+
+<p>
+    .env
+</p>
+<pre><code class="go">
+    PORT = 8080
+    DB_CONFIG = "root:123456@tcp(localhost:3306)/gorm?charset=utf8&parseTime=True"
+</code></pre>
+
+<div class="ref">
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10276711">https://ithelp.ithome.com.tw/articles/10276711</a><br/>
+    <a href="https://learnku.com/articles/27393">https://learnku.com/articles/27393</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Go Gin GORM 介紹";
+        seo.metaTitle = "Go Gin GORM 介紹";
+        seo.metaDescription = @" GORM 是專門為 Gin 這個 Framework 所設計的 ORM Library，它可以幫助你將對象映射到關係數據庫中的表，
+            從而簡化數據庫訪問的過程。它提供了一些簡單易用的API來執行數據庫操作，例如查詢、插入、更新和刪除等操作，
+            使數據庫操作變得更加容易和直觀。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
