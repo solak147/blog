@@ -11,7 +11,7 @@
 </HeadContent>
 
 <div class="page">
-    <div class="sidebar">
+    <div class="sidebar" @onmouseenter="sidebarFcs">
         <NavMenu />
     </div>
 
@@ -57,5 +57,10 @@
     public async void toggle()
     {
         await JSRT.InvokeVoidAsync("navToggle");
+    }
+
+    public async void sidebarFcs()
+    {
+        await JSRT.InvokeVoidAsync("sidebarFcs");
     }
 }
