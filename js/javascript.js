@@ -4,14 +4,14 @@
     });
 }
 
-function navToggle() {
+function navToggle() { 
     if (document.body.clientWidth > 640) {
         return;
-    }
+    } 
 
-    let wd = $(".sidebar").position().left;
+    let wd = $(".sidebar").position().left; 
     if (wd == 0) {
-        $(".sidebar").animate({ "left": "-500" }, "slow");
+        $(".sidebar").animate({"left":"-500"}, "slow");
 
         $('.close').addClass('menu');
         $('.close').removeClass('close');
@@ -30,7 +30,7 @@ function navToggle() {
 
 var isTouchMove = true;
 function removeTouchMove() {
-    if (!isTouchMove) return;
+    if (!isTouchMove) return;  
 
     document.getElementsByTagName("main")[0].addEventListener('touchmove', mo, { passive: false });
 
