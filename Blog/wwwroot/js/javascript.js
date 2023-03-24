@@ -40,10 +40,3 @@ function removeTouchMove() {
 function mo(e) {
     e.preventDefault();
 }
-
-<<<<<<< HEAD
-function sidebarFcs() {
-    $("nav").focus();
-}
-=======
->>>>>>> parent of 72c0692 (fix)
