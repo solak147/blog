@@ -40,7 +40,3 @@ function removeTouchMove() {
 function mo(e) {
     e.preventDefault();
 }
-
-function sidebarFcs() {
-    $("nav").focus();
-}

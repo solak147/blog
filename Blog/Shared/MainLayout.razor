@@ -15,7 +15,7 @@
         <NavMenu />
     </div>
 
-    <main @onfocus="sidebarFcs">
+    <main>
         <article class="content px-4">
             <div @onclick="toggle" class="close"></div>
 
@@ -57,10 +57,5 @@
     public async void toggle()
     {
         await JSRT.InvokeVoidAsync("navToggle");
-    }
-
-    public async void sidebarFcs()
-    {
-        await JSRT.InvokeVoidAsync("sidebarFcs");
     }
 }
