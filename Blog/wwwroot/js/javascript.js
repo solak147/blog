@@ -42,5 +42,5 @@ function mo(e) {
 }
 
 function sidebarFcs() {
-    $(".sidebar").focus();
+    $("main").blur();
 }

@@ -11,11 +11,11 @@
 </HeadContent>
 
 <div class="page">
-    <div class="sidebar" @onmouseenter="sidebarFcs">
+    <div class="sidebar">
         <NavMenu />
     </div>
 
-    <main>
+    <main @onclick="sidebarFcs">
         <article class="content px-4">
             <div @onclick="toggle" class="close"></div>
 
