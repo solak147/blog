@@ -28,8 +28,8 @@ jobs:
       run: dotnet publish Blog/Blog.csproj -c Release -o release --nologo
     
     # 修改index.html的base href -- 從"/"改為"/Blog/"
-    - name: Change base-tag in index.html from / to Blog
-      run: sed -i 's/<base href="\/" \/>/<base href="\/Blog\/" \/>/g' release/wwwroot/index.html
+    #- name: Change base-tag in index.html from / to Blog
+    #  run: sed -i 's/<base href="\/" \/>/<base href="\/Blog\/" \/>/g' release/wwwroot/index.html
     
     # 複製index.html內容到404.html
     - name: copy index.html to 404.html
