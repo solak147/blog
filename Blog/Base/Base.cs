@@ -8,6 +8,6 @@ namespace Blog.Base
         [CascadingParameter(Name = "seo")]
         public Seo seo { get; set; }
 
-        public string h1Title { get; set; } = "中二病也要寫程式";
+        public string h1Title = "中二病也要寫程式";
     }
 }
