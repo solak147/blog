@@ -1,0 +1,115 @@
+﻿@page "/goenv"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - go 開發環境建置</h1>
+
+<h2><b>Develop Environment For Go</b></h2>
+
+<h3><b>For Mac</b></h3>
+
+<p>
+    Homebrew（簡稱brew）是一款適用於macOS操作系統的開源軟件包管理器。它可以幫助用戶在命令行界面上快速、方便地安裝和管理各種開源軟件包和工具
+    ，我們先安裝它，等等安裝 go 時會用到。
+</p>
+
+<pre><code class="linux">
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew update
+</code></pre>
+
+<p>
+    安裝完成後，按照它的提示設置環境變數，照打即可。
+</p>
+
+<h3><b>Step1 Download and InstallGolang</b></h3>
+<pre><code class="linux">
+    brew install go
+</code></pre>
+<br />
+
+<h3><b>Step2 Set Up Enviroments</b></h3>
+<pre><code class="linux">
+    .
+    ├── bin
+    ├── pkg
+    └── src
+</code></pre>
+
+<p>
+    ● bin: 存放 Go 語言源代碼文件，包括我們自己編寫的源代碼和第三方開源庫的源代碼。每個項目都應該有一個獨立的目錄，
+    其中包含源代碼文件和相關的資源文件，如圖像、模板等。<br />
+    ● pkg: 存放編譯後的二進制包文件（.a文件）。當我們在程序中引入第三方庫時，Go 編譯器會在此目錄中查找相應的二進制包文件，
+    以便將其鏈接到我們的程序中。<br />
+    ● src: 放 Go 語言編譯後生成的可執行文件。在編譯 Go 語言源代碼時，編譯器會將生成的可執行文件放置到此目錄中，方便我們在命令行中直接執行程序。
+</p>
+<pre><code class="linux">
+    mkdir -p $HOME/go/{bin,pkg,src}
+</code></pre>
+
+<p>
+    配置 Go 相關的環境變數，可以先用 which go 指令查看 go 的安裝位置，假如是 /usr/local/go/bin，那 $GOROOT 就應該設定成 /usr/local/go
+</p>
+<pre><code class="linux">
+    vim ~/.bash_profile
+</code></pre>
+
+<pre><code class="linux">
+    # Add Go Path
+    export GOROOT=/usr/local/go
+    export GOPATH=&lt$HOME>/go
+    export PATH=$PATH:$GOROOT/bin
+</code></pre>
+
+<p>
+    接著重新載入設定
+</p>
+
+<pre><code class="linux">
+    source ~/.bash_profile
+</code></pre>
+<br />
+
+<h3><b>Step3 測試 Golang 是否安裝完成</b></h3>
+<pre><code class="linux">
+    go version
+</code></pre>
+<br />
+
+<h3><b>For Windows</b></h3>
+<p>
+    直接去<a href="https://go.dev/dl/">Golang 官網</a>下載 Golang 安裝完成後，到本機 -> 內容 -> 進階環境變數 內的系統變數點選 path 編輯，
+    在前面加入你的 Golang 安裝路徑 (ex C:\Program Files\Go\bin)，並在 User 的使用者變數新增 GOPATH ，值為你之後的 Golang 工作目錄 (ex D:\project\Go)，其餘資料夾建立方式同 Mac。
+</p>
+
+<h3><b>補充 GOPATH</b></h3>
+<p>
+    GoPath 是 Go 語言中一個非常重要的環境變量，用於指定Go語言項目的工作目錄。具體來說，GoPath 用於指定 Go 語言項目的源代碼文件的存放路徑，以及編譯後二進制文件的存放路徑。在 Go 語言中，使用 GoPath 可以輕松管理和組織多個 Go 語言項目。<br /><br />
+
+    通常情況下，我們會將所有的 Go 語言項目都存放在 GoPath 目錄下的 src 子目錄中，每個項目都應該有自己獨立的目錄。例如：
+</p>
+<pre><code class="linux">
+    $GOPATH/
+       src/
+          myproject1/
+             main.go
+          myproject2/
+             main.go
+</code></pre>
+<p>
+    在上面的例子中，我們可以看到，我們將所有的 Go 語言項目都放置在 GoPath 目錄下的 src 子目錄中，每個項目都有自己的目錄，包含源代碼文件和相關資源文件。<br /><br />
+
+    當我們使用 go build 命令編譯項目時，Go 語言編譯器會將編譯後的二進制文件存放在 GoPath 目錄下的 bin 子目錄中。當我們使用 go install 命令安裝項目時，編譯器會將編譯後的二進制文件和相關的庫文件存放在 GoPath 目錄下的 pkg 子目錄中。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Golang 開發環境建置";
+        seo.metaTitle = "Golang 開發環境建置";
+        seo.metaDescription = @"介紹如何在 Mac 及 Windows 底下從頭開始建置 Golang 開發環境，環境變數設置、資料夾如何建立及各自代表的意義等等。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}

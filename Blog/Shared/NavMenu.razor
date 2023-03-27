@@ -12,6 +12,7 @@
 <nav>
     <MudNavMenu Class="navlist" Style="color: #fff; overflow-y:auto;  height: 95%;">
         <MudNavGroup Title="Go" Expanded="true" Icon="@Icons.Filled.Storage">
+            <MudNavLink OnClick="() => toggle(go0)">開發環境建置</MudNavLink>
             <MudNavLink OnClick="() => toggle(go1)">go mod 介紹</MudNavLink>
             <MudNavLink OnClick="() => toggle(go2)">通道 Channel</MudNavLink>
             <MudNavLink OnClick="() => toggle(go3)">[Gin]</MudNavLink>
@@ -77,6 +78,7 @@
 }*@
 
 @code {
+    public string go0 = "./goenv";
     public string go1 = "./gomod";
     public string go2 = "./go1";
     public string go3 = "./gogin";
