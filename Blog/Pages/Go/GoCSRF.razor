@@ -1,0 +1,105 @@
+﻿@page "/gocsrf"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - go csrf</h1>
+
+<h3><b>CSRF 是甚麼 ?</b></h3>
+<p>
+    CSRF 是 Cross-Site Request Forgery（跨站請求偽造）的縮寫。它是一種網路攻擊，攻擊者利用受害者在訪問另一個網站時的驗證憑證，向目標網站發送未經授權的請求，從而偽造受害者的身份，完成一些不當的操作。<br /><br/>
+
+    例如，如果一個受害者在登錄銀行網站後，不小心點擊了一封欺騙性的電子郵件中的鏈接，該鏈接可能會發送一個未經授權的請求，將受害者的資金轉移給攻擊者。<br /><br/>
+
+    為了防止 CSRF 攻擊，開發人員通常會在每個表單上添加隨機的 CSRF token（一種類似於密碼的隨機字串），以驗證提交表單的用戶是否為合法用戶。此外，使用 HTTP Only cookie 也可以有效地減少 CSRF 攻擊的風險。
+</p>
+
+<h3><b>以下是一個 CSRF 攻擊的示範</b></h3>
+<p>
+    假設有一個網站，該網站允許用戶通過 POST 請求更改他們的密碼，並且沒有檢查請求是否來自網站內部。
+    攻擊者可以利用這一點，將下面的惡意代碼插入到一個網頁中：
+</p>
+<pre><code class="html">
+    &ltform action="http://victim-site.com/change-password" method="POST">
+      &ltinput type="hidden" name="password" value="new-password">
+      &ltinput type="submit" value="Update Password">
+    &ltform>
+    &ltscript>
+      document.forms[0].submit();
+    &lt/script>
+</code></pre>
+<p>
+    當受害者訪問這個頁面時，瀏覽器將自動提交這個表單，發送一個 POST 請求到 http://victim-site.com/change-password 並更改受害者的密碼。由於攻擊者在表單中包含了一個偽造的 CSRF token，該請求看起來像是受害者自己發出的，因此網站不會懷疑這個請求的合法性。<br /><br/>
+
+    這就是一個簡單的 CSRF 攻擊的示範。攻擊者可以通過其他方式獲得受害者的驗證憑證，例如偽造欺詐性電子郵件、社交工程等，從而實現 CSRF 攻擊。
+</p>
+
+<h3><b>Golang 實作 CSRF</b></h3>
+<p>
+    在 Golang 中實作 CSRF 防護通常需要以下步驟：<br/>
+    1.生成 CSRF token：在 Golang 中可以使用 crypto/rand 和 encoding/base64 模塊生成一個隨機的 CSRF token，例如：
+</p>
+<pre><code class="golang">
+    import (
+        "crypto/rand"
+        "encoding/base64"
+    )
+
+    func generateCSRFToken() string {
+        b := make([]byte, 32)
+        rand.Read(b)
+        return base64.StdEncoding.EncodeToString(b)
+    }
+</code></pre>
+<p>
+   2.在表單中添加 CSRF token：在每個表單中添加一個隱藏的欄位 ，用來儲存 CSRF token。在提交表單時，將 CSRF token 一同提交到後端進行驗證。
+</p>
+<pre><code class="html">
+    &ltform action="/submit-form" method="POST">
+      &ltinput type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+      <!-- 其他表單欄位 -->
+      &ltinput type="submit" value="Submit">
+    &lt/form>
+</code></pre>
+<p>
+    3.驗證 CSRF token：在後端接收到表單提交請求時，從表單中提取 CSRF token，並與後端儲存的正確 CSRF token 進行比較。如果比較結果不一致，則表明可能存在 CSRF 攻擊，應該拒絕此次請求。
+</p>
+<pre><code class="golang">
+    import (
+        "net/http"
+    )
+
+    func submitFormHandler(w http.ResponseWriter, r *http.Request) {
+        // 從表單中提取 CSRF token
+        csrfToken := r.FormValue("csrf_token")
+        // 從後端儲存中獲取正確的 CSRF token
+        storedCSRFToken := getStoredCSRFToken()
+
+        // 比較兩個 CSRF token 是否一致
+        if csrfToken != storedCSRFToken {
+            http.Error(w, "Invalid CSRF token", http.StatusForbidden)
+            return
+        }
+
+        // 如果 CSRF token 驗證通過，繼續處理表單請求
+        // ...
+    }
+</code></pre>
+<p>
+    需要注意的是，使用 CSRF token 可以在一定程度上防止 CSRF 攻擊，但並不能完全消除風險。攻擊者仍然可以通過其他方式獲取到 CSRF token，例如通過 XSS 攻擊等方式，因此開發人員需要綜合考慮多種攻擊場景，並採取多層次的安全防護措施。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Golang CSRF";
+        seo.metaTitle = "Golang CSRF";
+        seo.metaDescription = @"CSRF 是 Cross-Site Request Forgery（跨站請求偽造）的縮寫。它是一種網路攻擊，攻擊者利用受害者在訪問另一個網站時的驗證憑證，向目標網站發送未經授權的請求，從而偽造受害者的身份，完成一些不當的操作。
+
+            例如，如果一個受害者在登錄銀行網站後，不小心點擊了一封欺騙性的電子郵件中的鏈接，該鏈接可能會發送一個未經授權的請求，將受害者的資金轉移給攻擊者。
+
+            為了防止 CSRF 攻擊，開發人員通常會在每個表單上添加隨機的 CSRF token（一種類似於密碼的隨機字串），以驗證提交表單的用戶是否為合法用戶。此外，使用 HTTP Only cookie 也可以有效地減少 CSRF 攻擊的風險。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}

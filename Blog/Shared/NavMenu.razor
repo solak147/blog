@@ -12,56 +12,57 @@
 <nav>
     <MudNavMenu Class="navlist" Style="color: #fff; overflow-y:auto;  height: 95%;">
         <MudNavGroup Title="Go" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(go0)">開發環境建置</MudNavLink>
-            <MudNavLink OnClick="() => toggle(go1)">go mod 介紹</MudNavLink>
-            <MudNavLink OnClick="() => toggle(go2)">通道 Channel</MudNavLink>
-            <MudNavLink OnClick="() => toggle(go3)">[Gin]</MudNavLink>
-            <MudNavLink OnClick="() => toggle(go4)">[Gin] Router</MudNavLink>
-            <MudNavLink OnClick="() => toggle(go5)">[Gin] GORM</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./goenv")'>開發環境建置</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gomod")'>go mod 介紹</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./go1")'>通道 Channel</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gocsrf")'>CSRF - Cross-Site Request Forgery（跨站請求偽造）</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gogin")'>[Gin]</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gorouter")'>[Gin] Router</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gogorm")'>[Gin] GORM</MudNavLink>
         </MudNavGroup>
         <MudNavGroup Title="C#" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(csharp1)">C#基礎 - new vs overrvide</MudNavLink>
-            <MudNavLink OnClick="() => toggle(csharp2)">ASP.NET Core Web API 訊息處理器</MudNavLink>
-            <MudNavLink OnClick="() => toggle(csharp3)">多國語系</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./csharp1")'>C#基礎 - new vs overrvide</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./csharp2")'>ASP.NET Core Web API 訊息處理器</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./csharp3")'>多國語系</MudNavLink>
             <MudNavGroup Title="Blazor" Expanded="true" Icon="@Icons.Filled.Storage">
-                <MudNavLink OnClick="() => toggle(blazor1)">StateHasChanged</MudNavLink>
-                <MudNavLink OnClick="() => toggle(blazor2)">Service Lifetime</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./blazor1")'>StateHasChanged</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./blazor2")'>Service Lifetime</MudNavLink>
             </MudNavGroup>
         </MudNavGroup>
         <MudNavGroup Title="JavaScript" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(javascript1)">Promise 簡介</MudNavLink>
-            <MudNavLink OnClick="() => toggle(javascript2)">使用 Promise 達到同步等待js資源載入</MudNavLink>
-            <MudNavLink OnClick="() => toggle(javascript3)">傳統函式 VS 箭頭函式</MudNavLink>
-            <MudNavLink OnClick="() => toggle(javascript4)">Cookie、LocalStorage、SessionStorage 差異</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./javascript1")'>Promise 簡介</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./javascript2")'>使用 Promise 達到同步等待js資源載入</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./javascript3")'>傳統函式 VS 箭頭函式</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./javascript4")'>Cookie、LocalStorage、SessionStorage 差異</MudNavLink>
             <MudNavGroup Title="Vue" Expanded="false" Icon="@Icons.Filled.Storage">
-                <MudNavLink OnClick="() => toggle(vue1)">Vue 生命週期</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./vue1")'>Vue 生命週期</MudNavLink>
             </MudNavGroup>
             <MudNavGroup Title="Nuxt" Expanded="false" Icon="@Icons.Filled.Storage">
-                <MudNavLink OnClick="() => toggle(nuxt1)">Nuxt 生命週期</MudNavLink>
-                <MudNavLink OnClick="() => toggle(nuxt2)">Nuxt 使用 axios、proxy 解決跨域請求 (CORS)</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./nuxt1")'>Nuxt 生命週期</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./nuxt2")'>Nuxt 使用 axios、proxy 解決跨域請求 (CORS)</MudNavLink>
             </MudNavGroup>
         </MudNavGroup>
         <MudNavGroup Title="Css" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(css1)">EM 與 REM 的差異</MudNavLink>
-            <MudNavLink OnClick="() => toggle(css2)">VH、VW、VMIN、VMAX</MudNavLink>
-            <MudNavLink OnClick="() => toggle(css3)">Display Flex</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./css1")'>EM 與 REM 的差異</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./css2")'>VH、VW、VMIN、VMAX</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./css3")'>Display Flex</MudNavLink>
         </MudNavGroup>
         <MudNavGroup Title="Dart" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(dart1)">Dart基礎 - 初入 Dart</MudNavLink>
-            <MudNavLink OnClick="() => toggle(dart2)">Dart基礎 - 建構式</MudNavLink>
-            <MudNavLink OnClick="() => toggle(dart3)">Dart基礎 - @@immutable</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./dart1")'>Dart基礎 - 初入 Dart</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./dart2")'>Dart基礎 - 建構式</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./dart3")'>Dart基礎 - @@immutable</MudNavLink>
             <MudNavGroup Title="Flutter" Expanded="false" Icon="@Icons.Filled.Storage">
-                <MudNavLink OnClick="() => toggle(flutter1)">編譯錯誤 : missing an input or output annotation</MudNavLink>
-                <MudNavLink OnClick="() => toggle(flutter2)">什麼是 Bloc Design Pattern</MudNavLink>
-                <MudNavLink OnClick="() => toggle(flutter3)">MaterialApp</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./flutter1")'>編譯錯誤 : missing an input or output annotation</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./flutter2")'>什麼是 Bloc Design Pattern</MudNavLink>
+                <MudNavLink OnClick='() => toggle("./flutter3")'>MaterialApp</MudNavLink>
             </MudNavGroup>
         </MudNavGroup>
         <MudNavGroup Title="Web Deploy" Expanded="true" Icon="@Icons.Filled.Storage">
-            <MudNavLink OnClick="() => toggle(deploy1)">Blazor WebAssembly 使用 Github Pages 進行部屬</MudNavLink>
-            <MudNavLink OnClick="() => toggle(deploy2)">Google Cloud Platform 創建虛擬主機 (VM) 來架設網站</MudNavLink>
-            <MudNavLink OnClick="() => toggle(deploy3)">使用 Docker 建立 MySQL</MudNavLink>
-            <MudNavLink OnClick="() => toggle(deploy4)">SEO 優化 - SPA react-snap 預渲染</MudNavLink>
-            <MudNavLink OnClick="() => toggle(deploy5)">SEO 優化 - HTM5 語意標籤（Semantic Elements)</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./githubpage")'>Blazor WebAssembly 使用 Github Pages 進行部屬</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gcpvm")'>Google Cloud Platform 創建虛擬主機 (VM) 來架設網站</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./gcpdocker")'>使用 Docker 建立 MySQL</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./reactsnap")'>SEO 優化 - SPA react-snap 預渲染</MudNavLink>
+            <MudNavLink OnClick='() => toggle("./h5seo")'>SEO 優化 - HTM5 語意標籤（Semantic Elements)</MudNavLink>
         </MudNavGroup>
     </MudNavMenu>
 </nav>
@@ -78,48 +79,6 @@
 }*@
 
 @code {
-    public string go0 = "./goenv";
-    public string go1 = "./gomod";
-    public string go2 = "./go1";
-    public string go3 = "./gogin";
-    public string go4 = "./gorouter";
-    public string go5 = "./gogorm";
-
-    public string csharp1 = "./csharp1";
-    public string csharp2 = "./csharp2";
-    public string csharp3 = "./csharp3";
-
-    public string blazor1 = "./blazor1";
-    public string blazor2 = "./blazor2";
-
-    public string javascript1 = "./javascript1";
-    public string javascript2 = "./javascript2";
-    public string javascript3 = "./javascript3";
-    public string javascript4 = "./javascript4";
-
-    public string vue1 = "./vue1";
-
-    public string nuxt1 = "./nuxt1";
-    public string nuxt2 = "./nuxt2";
-
-    public string css1 = "./css1";
-    public string css2 = "./css2";
-    public string css3 = "./css3";
-
-    public string dart1 = "./dart1";
-    public string dart2 = "./dart2";
-    public string dart3 = "./dart3";
-
-    public string flutter1 = "./flutter1";
-    public string flutter2 = "./flutter2";
-    public string flutter3 = "./flutter3";
-
-    public string deploy1 = "./githubpage";
-    public string deploy2 = "./gcpvm";
-    public string deploy3 = "./gcpdocker";
-    public string deploy4 = "./reactsnap";
-    public string deploy5 = "./h5seo";
-
     public async void toggle(string url = "")
     {
         if (!String.IsNullOrEmpty(url))
