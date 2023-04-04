@@ -164,7 +164,7 @@ p {
 }
 
 @media (max-width: 641px) {
-    body {
+    html,body {
         overflow-y: hidden;
     }
 
