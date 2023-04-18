@@ -1,0 +1,121 @@
+﻿@page "/gosyncme"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - go 同步 MySql ElasticSearch</h1>
+
+<h3><b>同步 MySql ElasticSearch</b></h3>
+<p>
+    在 Golang 中，可以使用以下方式將 MySQL 中的數據同步到 Elasticsearch：
+    <br /> <br />
+    1.使用 Elasticsearch 官方提供的 Go 客戶端庫，如 github.com/elastic/go-elasticsearch，通過編寫程序將 MySQL 中的數據讀取出來，再使用 Elasticsearch 客戶端庫將數據寫入 Elasticsearch。
+    <br /> <br />
+    2.使用第三方庫，如 github.com/siddontang/go-mysql-elasticsearch，該庫可以直接將 MySQL binlog 中的數據同步到 Elasticsearch 中。
+    <br /> <br />
+    3.使用 Logstash，將 MySQL 數據導入 Logstash，再由 Logstash 將數據同步到 Elasticsearch 中。在 Golang 中，可以使用 os/exec 包執行 Logstash 命令。
+    <br /> <br />
+    4.使用第三方數據同步工具，如 Canal，該工具可以將 MySQL binlog 中的數據轉換成 JSON 格式，再將 JSON 數據同步到 Elasticsearch 中。在 Golang 中，可以使用 os/exec 包執行 Canal 命令。
+    <br />
+    以上方式均可實現 MySQL 到 Elasticsearch 的同步，選擇哪種方式取決於具體的業務需求和技術架構。
+</p>
+
+<h3><b>在此介紹使用 Logstash</b></h3>
+<p>
+    1.首先需要在服務器上安裝 Logstash。在此使用 docker-compose 來創建Logstash Server
+</p>
+<pre><code class="linux">
+ elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./es-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+     - backend-bridge
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.12.0
+    container_name: logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./mysql-connector-java-8.0.30.jar:/usr/share/logstash/logstash-core/lib/jars/mysql-connector-java-8.0.30.jar
+    environment:
+      - "XPACK_MONITORING_ENABLED=false"
+    ports:
+      - 5000:5000
+      - 9600:9600
+    networks:
+      - backend-bridge
+</code></pre>
+
+<p>
+    2.在安裝 Logstash 後，需要創建一個配置文件來定義數據源、目<br />
+    以下是一個示例配置文件：
+</p>
+
+<pre><code class="linux">
+input {
+  jdbc {
+    jdbc_connection_string => "jdbc:mysql://db:3306/gorm"
+    jdbc_user => "root"
+    jdbc_password => "123456"
+    jdbc_driver_library => "/usr/share/logstash/logstash-core/lib/jars/mysql-connector-java-8.0.30.jar"
+    jdbc_driver_class => "com.mysql.jdbc.Driver"
+    statement => "SELECT * FROM users"
+    schedule => "* * * * *"
+    jdbc_paging_enabled => "true"
+    jdbc_page_size => "50000"
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["elasticsearch:9200"]
+    index => "myIndex"
+    document_id => "%{id}"
+  }
+}
+</code></pre>
+
+<p>
+    在上面的配置文件中，使用 JDBC input 插件從 MySQL 數據庫中讀取數據，然後使用 Elasticsearch output 插件將數據寫入 Elasticsearch。需要將 jdbc_connection_string、jdbc_user、jdbc_password、jdbc_driver_library 和 jdbc_driver_class 替換成 MySQL 數據庫的連接信息和驅動程序信息。statement 定義了要執行的 SQL 查詢語句。hosts 定義了 Elasticsearch 的主機和端口號，index 定義了要寫入的 Elasticsearch 索引名，document_id 定義了 Elasticsearch 文檔 ID，這裏使用 %{id} 表示將 MySQL 中的 id 字段作為文檔 ID。
+</p>
+
+<p>
+    啟動 Logstash 後，它會自動開始從 MySQL 中讀取數據，並將數據寫入 Elasticsearch。可以在 Elasticsearch 中驗證同步結果。例如，在 postman 中執行以下查詢：
+</p>
+<pre><code class="linux">
+GET /myindex/_search
+</code></pre>
+
+<p>
+    可以查看到從 MySQL 中讀取的數據已經寫入到 Elasticsearch 中。
+    <br /> <br />
+    以上是使用 Logstash 將 MySQL 數據同步到 Elasticsearch 的基本步驟。可以根據具體的業務需求和技術架構進行調整和優化。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Go 同步 MySql ElasticSearch";
+        seo.metaTitle = "Go 同步 MySql ElasticSearch";
+        seo.metaDescription = @"  在 Golang 中，可以使用以下方式將 MySQL 中的數據同步到 Elasticsearch：
+            1.使用 Elasticsearch 官方提供的 Go 客戶端庫，如 github.com/elastic/go-elasticsearch，通過編寫程序將 MySQL 中的數據讀取出來，再使用 Elasticsearch 客戶端庫將數據寫入 Elasticsearch。
+            2.使用第三方庫，如 github.com/siddontang/go-mysql-elasticsearch，該庫可以直接將 MySQL binlog 中的數據同步到 Elasticsearch 中。
+            3.使用 Logstash，將 MySQL 數據導入 Logstash，再由 Logstash 將數據同步到 Elasticsearch 中。在 Golang 中，可以使用 os/exec 包執行 Logstash 命令。
+            4.使用第三方數據同步工具，如 Canal，該工具可以將 MySQL binlog 中的數據轉換成 JSON 格式，再將 JSON 數據同步到 Elasticsearch 中。在 Golang 中，可以使用 os/exec 包執行 Canal 命令。
+            以上方式均可實現 MySQL 到 Elasticsearch 的同步，選擇哪種方式取決於具體的業務需求和技術架構。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
