@@ -1,9 +1,32 @@
 ﻿@page "/gosyncme"
 @inherits Blog.Base.Base
 
-<h1 style="display: none;"> @h1Title - go 同步 MySql ElasticSearch</h1>
+<h1 style="display: none;"> @h1Title - Go 讀寫分離 | 同步 MySql ElasticSearch</h1>
 
-<h3><b>同步 MySql ElasticSearch</b></h3>
+<h3><b>淺談 讀寫分離 </b></h3>
+<p>
+    讀寫分離（Read/Write Splitting）是一種常見的資料庫優化技術，它可以提高系統的性能和可擴展性。該技術基於一個簡單的原理：將讀和寫操作分開處理，並將它們分發到不同的資料庫實例。
+    <br /> <br />
+    在一個典型的應用場景中，讀操作通常比寫操作更頻繁。因此，當所有操作都被發送到同一個資料庫實例時，該實例可能會成為性能瓶頸，限制了整個系統的可擴展性。通過將讀操作分發到多個資料庫實例，系統可以更好地應對高流量的情況。
+    <br /> <br />
+    讀寫分離的實現通常基於主從複製（Master-Slave Replication）技術。在主從複製中，所有寫操作都被發送到主資料庫實例，然後通過複製機制將更改應用到所有的從資料庫實例上。讀操作可以在從資料庫實例上執行，因為它們只需要最新的資料快照，而不需要即時的更新。
+    <br /> <br />
+    實際上，讀寫分離可以更進一步地擴展，例如：引入多個主資料庫實例或多個從資料庫實例，並將它們進一步分配到不同的區域或機房中，以實現更高的可用性和更好的性能。
+    <br /> <br />
+    需要注意的是，讀寫分離可能會帶來一些一致性的問題。因為從資料庫實例可能不總是與主資料庫實例完全同步，這可能導致某些操作返回不一致的結果。因此，需要在應用程序和資料庫之間進行適當的一致性設計，以確保系統的正常運行。
+</p>
+
+<p>
+    以下是一個示意圖:
+</p>
+
+<img src="images/gosyncme_1.png" alt="ASP.NET Web API 訊息處理器" class="imgfmt" style="width:50%">
+
+<p>
+    接下來介紹使用 MySql 作為主資料庫，ElasticSearch 作為從資料庫來達到讀寫分離
+</p>
+
+<h3><b>同步 MySql ElasticSearch </b></h3>
 <p>
     在 Golang 中，可以使用以下方式將 MySQL 中的數據同步到 Elasticsearch：
     <br /> <br />
@@ -20,7 +43,7 @@
 
 <h3><b>在此介紹使用 Logstash</b></h3>
 <p>
-    1.首先需要在服務器上安裝 Logstash。在此使用 docker-compose 來創建Logstash Server
+    1.首先需要在服務器上安裝 Logstash。在此使用 docker-compose 來創建 Logstash Server
 </p>
 <pre><code class="linux">
  elasticsearch:
@@ -57,7 +80,7 @@
 </code></pre>
 
 <p>
-    2.在安裝 Logstash 後，需要創建一個配置文件來定義數據源、目<br />
+    2.在安裝 Logstash 後，需要創建一個配置文件來定義數據源<br />
     以下是一個示例配置文件：
 </p>
 
