@@ -101,6 +101,24 @@
     當我們使用 go build 命令編譯項目時，Go 語言編譯器會將編譯後的二進制文件存放在 GoPath 目錄下的 bin 子目錄中。當我們使用 go install 命令安裝項目時，編譯器會將編譯後的二進制文件和相關的庫文件存放在 GoPath 目錄下的 pkg 子目錄中。
 </p>
 
+<h3><b>使用 VsCode 偵錯遇到的問題</b></h3>
+<pre><code class="linux">
+    gopls requires a module at the root of your workspace.
+    You can work with multiple modules by opening each one as a workspace folder.
+    Improvements to this workflow will be coming soon (https://github.com/golang/go/issues/32394),
+    and you can learn more here: https://github.com/golang/go/issues/36899.
+</code></pre>
+<p>
+    請至 VsCode 安裝套件的地方，找到 Go 點選齒輪 -> Extension Settings，然後搜索 gopls 並更改 settings.json 如下
+</p>
+
+<pre><code class="linux">
+    "gopls": {
+        "experimentalWorkspaceModule": true,
+    }
+</code></pre>
+
+
 <div class="ref">
     參考 :<a href="https://ithelp.ithome.com.tw/articles/10266035">https://ithelp.ithome.com.tw/articles/10266035</a>
 </div>
