@@ -1,0 +1,615 @@
+﻿@page "/gostruct"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Go Struct</h1>
+
+<h3><b>Struct 介紹</b></h3>
+
+<p>
+    在 Golang 建立 Struct 方式如下:
+</p>
+
+<pre><code class="go">
+    type Person struct {
+        firstName string
+    }
+
+    foo := struct {
+      Hello string
+    }{
+      Hello: "World",
+    }
+</code></pre>
+
+<p>
+    三種宣告 Person struct 的方式: <br />
+    第二種和第三種寫法是一樣的
+</p>
+
+<pre><code class="go">
+    var user1 *Person       // nil
+    user2 := &Person{}      // {}，user2.firstName 會是 ""
+    user3 := new(Person)    // {}，user3.firstName 會是 ""
+</code></pre>
+<br />
+
+<h3><b>定義與使用基本的 struct</b></h3>
+<p>
+    建立一個 person 型別，它本質上是 struct：
+</p>
+<pre><code class="go">
+    // STEP 1：建立一個 person 型別，它本質上是 struct
+    type Person struct {
+        firstName string
+        lastName  string
+    }
+
+    // 等同於
+    type Person struct {
+      firstName, lastName string
+    }
+</code></pre>
+
+<p>
+    有幾種不同的方式可以根據 struct 來建立變數的：
+</p>
+<pre><code class="go">
+    func main() {
+        // 方法一：根據資料輸入的順序決定誰是 firstName 和 lastName
+      alex := Person{"Alex", "Anderson"}
+
+      // 直接取得 struct 的 pointer
+      alex := &Person{"Alex", "Anderson"}
+
+        // 方法二（建議）
+        alex := Person{
+            firstName: "Alex",
+            lastName:  "Anderson",
+        }
+
+      // 方法三：先宣告再賦值
+      var alex Person
+        alex.firstName = "Alex"
+        alex.lastName = "Anderson"
+    }
+</code></pre>
+
+<p>
+    輸出建立好的 struct：
+</p>
+<pre><code class="go">
+    fmt.Printf("%v+", alex)   // {firstName:Alex lastName:Anderson}
+    fmt.Println(alex)         // {Alex Anderson}
+</code></pre>
+<br />
+
+<h3><b>定義匿名的 struct（anonymous struct）</b></h3>
+<p>
+    也可以不先宣告 struct 直接建立個 struct：
+</p>
+<pre><code class="go">
+    foo := struct {
+        Hello string
+    }{
+        Hello: "World",
+    }
+</code></pre>
+<br />
+
+<h3><b>當 pointer 指向 struct 時</b></h3>
+<p>
+    當 pointer 指向 struct 時，可以直接使用這個 pointer 來對該 struct 進行設值和取值。在 golang 中可以直接使用 pointer 來修改 struct 中的欄位。<br />
+    一般來說，若想要透過 struct pointer（&v）來修改該 struct 中的屬性，需要先解出其值（*p）後使用 (*p).X = 10，<br />
+    但這樣做太麻煩了，因此在 golang 中允許開發者直接使用 p.X 的方式來修改：<br />
+</p>
+<pre><code class="go">
+   type Person struct {
+        name string
+        age  int32
+    }
+
+    func main() {
+        p := &Person{
+            name: "Aaron",
+        }
+
+      // golang 中允許開發者直接使用 `p.age` 的方式來設值與取值
+        p.age = 10  // 原本應該要寫 (*p).X = 10
+        fmt.Printf("%+v", p) // {name:Aaron age:10}
+    }
+</code></pre>
+<p>
+    另外，使用 struct pointer 時才可以修改到原本的物件，否則會複製一個新的：
+</p>
+<pre><code class="go">
+    func main() {
+        r1 := rectangle{"Green"}
+
+        // 複製新的，指稱到不同位置
+        r2 := r1
+        r2.color = "Pink"
+        fmt.Println(r2) // Pink
+        fmt.Println(r1) // Green
+
+        // 指稱到相同位置
+        r3 := &r1
+        r3.color = "Red"
+        fmt.Println(r3) // Red
+        fmt.Println(r1) // Red
+    }
+</code></pre>
+<br />
+
+<h3><b>在 struct 內關聯另一個 struct（nested struct）</b></h3>
+<pre><code class="go">
+    // STEP 1：定義外層 struct
+    type person struct {
+        firstName string
+        lastName  string
+        contact   contactInfo
+    }
+
+    // STEP 2：定義內層 struct
+    type contactInfo struct {
+        email   string
+        zipCode int
+    }
+
+    func main() {
+        // STEP 3：建立變數
+        jim := person{
+            firstName: "Jim",
+            lastName:  "Party",
+            contact: contactInfo{
+                email:   "jim@gmail.com",
+                zipCode: 94000,
+            },
+        }
+
+        alex := person{
+            firstName: "Alex",
+            lastName:  "Anderson",
+        }
+
+        // STEP 4：印出變數
+        fmt.Printf("%+v\n", jim) // {firstName:Jim lastName:Party contact:{email:jim@gmail.com zipCode:94000}}
+        fmt.Println(jim)         // {Jim Party {jim@gmail.com 94000}}
+
+        fmt.Printf("%+v\n", alex) // {firstName:Alex lastName:Anderson contact:{email: zipCode:0}}
+        fmt.Println(alex)         // {Alex Anderson { 0}}
+    }
+</code></pre>
+<br />
+
+<h3><b>Struct field Tag(meta-data)</b></h3>
+<p>
+    struct field tag 會在 struct 的 value 後面使用 backtick 來表示，例如 json:"name"：
+</p>
+<pre><code class="go">
+    type User struct {
+        Name          string    `json:"name"`
+        Password      string    `json:"-"`
+        PreferredFish []string  `json:"preferredFish,omitempty"`
+        CreatedAt     time.Time `json:"createdAt"`
+    }
+</code></pre>
+<p>
+    在 field tag 中還能帶入其他關鍵字，舉例來說：<br /><br />
+
+    omitempty：指的是該欄位沒值的話，就不要顯示欄位名稱<br />
+    -：表示忽略掉該欄位，Marshal 時該欄位不會出現在 JSON 中，Unmarshal 時該欄位也不會被處理<br />
+</p>
+
+<h3><b>Anonymous fields</b></h3>
+<p>
+    在 struct 中不一定要替欄位建立名稱，而是可以直接使用 data types，而 Go 會使用這個 data type 當作欄位名稱：
+</p>
+<pre><code class="go">
+    type AnonymousField struct {
+        string // 相似於 string string
+        bool   // 相似於 bool bool
+        int    // 相似於 int int
+    }
+
+    func main() {
+        anonymousField := AnonymousField{
+            "person", true, 30,
+        }
+
+        fmt.Printf("%+v", anonymousField)  // {string:person bool:true int:30}
+    }
+</code></pre>
+<br />
+
+<h3><b>Function Fields</b></h3>
+<p>
+    struct 中的 field 也可以是 function
+</p>
+<pre><code class="go">
+    type GetDisplayNameType func(string, string) string
+
+    type Person struct {
+        FirstName, LastName string
+        GetDisplayName      GetDisplayNameType
+    }
+
+    func main() {
+        p := Person{
+            FirstName: "Aaron",
+            LastName:  "Chen",
+            GetDisplayName: func(firstName, lastName string) string {
+
+                return firstName + " " + lastName
+            },
+        }
+
+        displayName := p.GetDisplayName(p.FirstName, p.LastName)
+        fmt.Println(displayName) // Aaron Chen
+    }
+</code></pre>
+<br />
+
+<h3><b>定義 Promoted fields 的 struct</b></h3>
+<p>
+    在 Golang 中 struct 的 fields name 可以省略，沒有 field name 的 name 被稱作 anonymous 或 embedded。在這種情況下，會直接使用 「Type 的名稱」來當作 field name：
+</p>
+<pre><code class="go">
+    type Person struct {
+        name string
+        age  int32
+    }
+
+    func (p Person) IsAdult() bool {
+        return p.age >= 18
+    }
+
+    type Employee struct {
+        position string
+    }
+
+    func (e Employee) IsManager() bool {
+        return e.position == "manager"
+    }
+
+    type Record struct {
+        Person
+        Employee
+    }
+
+    func main() {
+
+        fmt.Printf("%+v", record)
+    }
+</code></pre>
+<p>
+    如果 nested anonymous struct 中的欄位和其 parent struct 的欄位名稱有衝突時，則該欄位不會被 promoted。
+</p>
+
+<h3><b>在 Promoted fields 中設值</b></h3>
+<p>
+    對於 Promoted fields 來說，可以直接使用 . 來設值：
+</p>
+<pre><code class="go">
+    // 正確：可以直接使用 . 來對 promoted fields 設值
+    func main() {
+        record := Record{}
+        record.name = "record"
+        record.age = 29
+        record.position = "software engineer"
+
+        fmt.Printf("%+v", record)
+    }
+</code></pre>
+<p>
+    對於 anonymous (embedded) fields 的欄位（field）或方法（method）稱作 prompted，它們就像一般的欄位一樣，但是不能跳過 Type 的名稱直接用 struct literals 的方式來賦值：
+</p>
+<pre><code class="go">
+    // 錯誤用法：不能在未明確定義 promoted fields 名稱的情況下，使用 struct literals 設值
+    func main() {
+        record := Record{
+            name:     "record",
+            age:      29,
+            position: "software engineer",
+        }
+
+        fmt.Printf("%+v", record)
+    }
+</code></pre>
+<p>
+    如此會出現錯誤訊息：
+</p>
+<pre><code class="go">
+    cannot use promoted field Person.name in struct literal of type Record
+    cannot use promoted field Person.age in struct literal of type Record
+    cannot use promoted field Employee.position in struct literal of type Record
+</code></pre>
+<p>
+    但如果你是明確的定義 embedded 的結構的話，是可以的：
+</p>
+<pre><code class="go">
+    // 正確：明確定義要設值的 promoted fields 名稱為何
+    func main() {
+        record := Record{
+            Person: Person{
+                name: "record",
+                age:  29,
+            },
+            Employee: Employee{
+                position: "software engineer",
+            },
+        }
+
+        fmt.Printf("%+v", record)
+    }
+</code></pre>
+<br />
+
+<h3><b>在 Promoted fields 中取值</b></h3>
+<p>
+    不論有沒有使用明確的 promoted fields 名稱，都可以取值：
+</p>
+<pre><code class="go">
+    func main() {
+        record := Record{
+            Person: Person{
+                name: "record",
+                age:  29,
+            },
+            Employee: Employee{
+                position: "software engineer",
+            },
+        }
+
+      // 不論有沒有使用明確的 promoted fields 名稱，都可以取值
+        fmt.Println("name", record.name)             // 29
+        fmt.Println("Person.age", record.Person.age) // 29
+
+        fmt.Println("position", record.position)                   // software engineer
+        fmt.Println("Employee.position", record.Employee.position) // software engineer
+    }
+</code></pre>
+<br />
+
+<h3><b>範例程式碼</b></h3>
+<p>
+    Person 有 Name 且可以 Introduce，而 Saiyan 是 Person，因此它也有 Name 且可以 Introduce：
+</p>
+<pre><code class="go">
+    // STEP 1：建立 Person struct 與其 Method
+    type Person struct {
+        Name string
+    }
+
+    func (p *Person) Introduce() {
+        fmt.Printf("Hi, I'm %s\n", p.Name)
+    }
+
+    // STEP 2：建立 Saiyan struct，並將 Person embed 在內
+    // 意思是 Saiyan 是 Person，而不是 Saiyan「有一個」Person
+    type Saiyan struct {
+        *Person
+        Power int
+    }
+
+    func main() {
+        // STEP 3：建立 goku
+        goku := &Saiyan{
+            Person: &Person{"Goku"},
+            Power:  9001,
+        }
+
+        // STEP 4：可以直接使用 goku.Name，也可以使用 goku.Person.Name
+        fmt.Println(goku.Name)        // Goku
+        fmt.Println(goku.Person.Name) // Goku
+
+        // STEP 5：方法在使用時也一樣
+        goku.Introduce()        // Hi, I'm Goku
+        goku.Person.Introduce() // Hi, I'm Goku
+    }
+</code></pre>
+<br />
+
+<h3><b>Interface Fields (Nested interface)</b></h3>
+<p>
+    struct 中的欄位也可以是 interface，以 Employee 這個 struct 來說，其中的 salary 欄位其型別是 Salaried 這個 interface，也就是是說 salary 這個欄位的值，一定要有實作出 Salaried 的方法，如此 salary 才會符合該 interface 的 type：<br />
+
+    ● struct 中的 { salary Salaried } 表示 salary 要符合 Salaried interface type
+    ● 要符合該 interface type，表示 salary 要實作 Salaried interface 中所定義的 method signatures
+    ● 在定義 ross 變數時，因為 Salary 這個 struct 已經實作了 Salaried，因此可以放到 salary 這個欄位中
+</p>
+<pre><code class="go">
+   type Salaried interface {
+        getSalary() int
+    }
+
+    type Salary struct {
+        basic, insurance, allowance int
+    }
+
+    func (s Salary) getSalary() int {
+        return s.basic + s.insurance + s.allowance
+    }
+
+    type Employee struct {
+        firstName, lastName string
+        salary              Salaried // 只要 salary 實作了 Salaried，就可以 Salaried interface type
+    }
+
+    func main() {
+        ross := Employee{
+            firstName: "Ross",
+            lastName:  "Geller",
+        // 因為 Salary struct 已經實作了 Salaried，因此可以當作 salary 的欄位值
+            salary: Salary{
+                1100, 50, 50,
+            },
+        }
+
+        fmt.Println("Ross's salary is", ross.salary.getSalary())
+    }
+</code></pre>
+<br/>
+
+<h3><b>anonymously nested interface</b></h3>
+<p>
+    同樣的，當該 struct 的欄位沒有填寫時（anonymous fields），interface 中所定義的方法也可以被 promoted：
+
+    ● 在定義 Employee struct 時使用了 Salaried 作為 anonymous field
+    ● 在對 Employee 時，因為 Salary struct 有實作 Salaried，因此可以當作 Employee struct 中 Salaried 的值
+    ● 由於 promoted 這作用，可以直接使用 ross.getSalary() 方法，而不需要使用 ross.Salaried.getSalary()
+</p>
+<pre><code class="go">
+    type Salaried interface {
+        getSalary() int
+    }
+
+    // Salary 實作了 getSalary() 的方法，因此可以算是 Salaried type（polymorphism）
+    type Salary struct {
+        basic, insurance, allowance int
+    }
+
+    func (s Salary) getSalary() int {
+        return s.basic + s.insurance + s.allowance
+    }
+
+    //
+    type Employee struct {
+        firstName, lastName string
+        Salaried
+    }
+
+    func main() {
+        ross := Employee{
+            firstName: "Ross",
+            lastName:  "Geller",
+            // 因為 Salary 實作了 Salaried，因此可以作為 Salaried 的欄位值
+            Salaried: Salary{
+                1000, 50, 50,
+            },
+        }
+
+        // 由於 method 會被 promoted，因此可以直接呼叫 ross.getSalary() 的方法
+        // 而不需要使用 ross.Salaried.getSalary()
+        fmt.Println("Ross's salary is", ross.getSalary())
+    }
+</code></pre>
+<br />
+
+<h3><b>匯出的欄位（Exported fields）</b></h3>
+<p>
+    如同 package 中的變數一樣，struct 中的欄位只有在欄位名稱以大寫命名時才會 export 出去，其他 package 中才能取用得到：
+</p>
+<pre><code class="go">
+    // ./car/car.go
+    package car
+
+    type Car struct {
+        Name  string
+        price float32
+    }
+</code></pre>
+<p>
+    因為 car package 中的 Car struct 中的 price 並沒有 export 出來，因此在 main package 中不能使用：
+</p>
+<pre><code class="go">
+    // ./main.go
+    package main
+    import "sandbox/go-sandbox/car"
+
+    // 錯誤發生！price 並沒有 export 出來被使用
+    // unknown field 'Price' in struct literal of type Car (but does have price)
+    func main() {
+        c := car.Car{
+            Name:  "Toyota",
+            price: 1000,
+        }
+
+        fmt.Println(c)
+    }
+</code></pre>
+<p>
+    如果想要使用 car package 中的 Car Type 時，主要沒有想要對 unexported field 做事，則不會報錯，在沒有 exported 出來的 fields 則會取得 zero value：
+</p>
+<pre><code class="go">
+    func main() {
+        c := car.Car{
+            Name: "Toyota",
+        }
+
+        fmt.Println(c)
+    }
+</code></pre>
+<br/>
+
+
+<h3><b>struct 的比較（Struct comparison）</b></h3>
+<p>
+    當兩個 struct 的 type 和 field value 都相同時，兩個 struct 可以被視為相同：
+</p>
+<pre><code class="go">
+   func main() {
+        p := Person{
+            FirstName: "Aaron",
+            LastName:  "Chen",
+        }
+
+        a := Person{
+            FirstName: "Aaron",
+            LastName:  "Chen",
+        }
+
+        fmt.Println(p == a)  // true
+    }
+</code></pre>
+<p>
+    但若在 struct 中有 field 的 type 是無法比較的話（例如，map），那麼這兩個 struct 將無法進行比較：
+</p>
+<pre><code class="go">
+   type Person struct {
+        FirstName, LastName string
+        leaves              map[string]int
+    }
+</code></pre>
+<p>
+    會跳出錯誤訊息：<br/>
+    invalid operation: p == a (struct containing map[string]int cannot be compared)
+</p>
+
+<h3><b>辨認 Struct Type 的名稱</b></h3>
+<p>
+    使用 reflect.TypeOf 和 reflect.ValueOf().Kind() 可以用來判斷該 struct 的 struct type 名稱，以及變數的實際 type：
+</p>
+<pre><code class="go">
+   func main() {
+        u := User{
+            Name:     "Sammy the Shark",
+            Password: "fisharegreat",
+        }
+
+        fmt.Println(reflect.TypeOf(u))         // main.User
+        fmt.Println(reflect.ValueOf(u).Kind()) // struct
+
+        up := &User{
+            Name:      "Sammy the Shark",
+            Password:  "fisharegreat",
+            CreatedAt: time.Now(),
+        }
+
+        fmt.Println(reflect.TypeOf(up))         // *main.User
+        fmt.Println(reflect.ValueOf(up).Kind()) // ptr
+    }
+</code></pre>
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Golang Struct";
+        seo.metaTitle = "Golang Struct";
+        seo.metaDescription = @"在Go語言中，結構體（struct）是一種用戶自定義的覆合數據類型，它允許你將不同類型的字段組合在一起，形成一個新的數據結構。
+            結構體在Go語言中被廣泛用於組織和表示覆雜的數據。它可以包含各種類型的字段，例如整數、浮點數、字符串、布爾值、指針、切片、映射和其他結構體等。
+            struct 宣告方式如下: var user1 *Person // nil，user2 := &Person{} // {}，user2.firstName 會是 ""，user3 := new(Person)    // {}，user3.firstName 會是 """;
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
