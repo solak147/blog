@@ -1,0 +1,143 @@
+﻿@page "/vueswiper"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue Swiper</h1>
+
+<h2><b>Vue Swiper 簡介</b></h2>
+<br />
+
+<p>
+    Vue Swiper 是一個基於 Vue.js 的輪播組件，它利用了 Swiper 庫的功能來創建觸摸友好的輪播圖和幻燈片。它提供了一種簡單而靈活的方式來在 Vue.js 應用程序中添加幻燈片和輪播功能。
+    <br /> <br />
+    以下是 Vue Swiper 的一些主要特點和功能：
+    <br /> <br />
+    響應式布局：Vue Swiper 可以根據容器的大小和設備的屏幕尺寸自動調整幻燈片的布局和顯示。
+    <br /> <br />
+    觸摸滑動：它支持觸摸滑動手勢，可以通過滑動手勢在幻燈片之間切換。
+    <br /> <br />
+    循環輪播：可以設置為循環模式，使幻燈片在到達最後一個之後循環回到第一個，實現無限循環的輪播效果。
+    <br /> <br />
+    自定義樣式：你可以通過自定義 CSS 類名或內聯樣式來定制幻燈片的外觀和布局，以適應你的設計需求。
+    <br /> <br />
+    分頁器和導航按鈕：Vue Swiper 提供了分頁器和導航按鈕等導航控件，可以讓用戶快速導航到指定的幻燈片。
+    <br /> <br />
+    自動播放：可以設置自動播放功能，使幻燈片自動切換，並可以設置切換的時間間隔。
+    <br /> <br />
+    事件和鉤子函數：Vue Swiper 提供了多個事件和鉤子函數，以便在特定情況下執行自定義邏輯，如在幻燈片切換之前或之後執行特定操作。
+    <br /> <br />
+    使用 Vue Swiper，你可以輕松地創建漂亮的輪播圖和幻燈片，為你的 Vue.js 應用程序增添互動和吸引力。它具有豐富的選項和功能，可根據你的需求進行定制和擴展。
+</p>
+
+<h2><b>如何使用 Vue Swiper</b></h2>
+<p>
+    要使用 Vue Swiper，你需要按照以下步驟進行設置： <br />
+
+    1.安装 Vue Swiper：你可以使用 npm 或 yarn 安装 Vue Swiper。
+</p>
+<pre><code class="linux">
+    npm install vue-awesome-swiper
+</code></pre>
+<p>
+    或者
+</p>
+<pre><code class="linux">
+    yarn add vue-awesome-swiper
+</code></pre>
+<p>
+    2.導入和注冊組件：在你的 Vue.js 應用程序的入口文件或組件中，導入並注冊 Vue Swiper 組件。
+</p>
+<pre><code class="javascript">
+    import Vue from 'vue';
+    import VueAwesomeSwiper from 'vue-awesome-swiper';
+    import 'swiper/css/swiper.css';
+
+    Vue.use(VueAwesomeSwiper);
+</code></pre>
+<p>
+    3.導入和注冊組件：在你的 Vue.js 應用程序的入口文件或組件中，導入並注冊 Vue Swiper 組件。
+</p>
+<pre><code class="html">
+    &lt;template>
+      &lt;div>
+        &lt;swiper :options="swiperOptions">
+          &lt;swiper-slide>Slide 1&lt;/swiper-slide>
+          &lt;swiper-slide>Slide 2&lt;/swiper-slide>
+          &lt;swiper-slide>Slide 3&lt;/swiper-slide>
+        &lt;/swiper>
+      &lt;/div>
+    &lt;/template>
+
+    &lt;script>
+    export default {
+      data() {
+        return {
+          swiperOptions: {
+            // 在这里设置 Swiper 选项
+            // 例如: slidesPerView: 'auto', loopedSlides: 3, 等等
+          },
+        };
+      },
+    };
+    &lt;/script>
+</code></pre>
+<p>
+    在上面的示例中，我們在模板中使用了 &lt;swiper> 組件，並在其中定義了幻燈片的內容。可以根據需要添加任意數量的 &lt;swiper-slide> 組件作為幻燈片的內容。
+    <br/><br/>
+    4.配置 Swiper 選項：在組件的數據中，你可以定義 swiperOptions 對象來配置 Swiper 的選項。你可以根據需要設置各種選項，如 slidesPerView、loopedSlides、pagination、navigation 等。可以參考 Swiper 文檔了解更多選項和配置。
+    這就是使用 Vue Swiper 的基本步驟。根據你的需求，你可以自定義樣式、添加導航控件、設置自動播放等。請確保在設置 Swiper 選項之前正確引入 Swiper 的 CSS 文件，以確保樣式正確加載。
+</p>
+
+<h2><b>Example</b></h2>
+<pre><code class="html">
+    &lt;swiper ref="cardSwiper" :options="swiperOptions" @@slide-change="onCardChange">
+        &lt;swiper-slide v-for="(item,index) in arr" :key="index">
+            &lt;!--你的程式碼-->
+        &lt;/swiper-slide>
+    &lt;/swiper>
+
+    &lt;script>
+    export default {
+        data(){
+            return{
+                swiperOptions:{
+                    loop:true,
+                    slidesPerView:'auto',
+                    loopedSlides:3,
+                    centeredSlides:true,
+                    spaceBetween:30,
+                },
+            }
+        },
+        methods:{
+            onCardChange(){
+               const ref = this.$refs.cardSwiper
+               if(ref&&ref.$swiper){
+                    const activeIndex = ref.$swiper.realIndex
+                    this.selectCardIndex = activeIndex
+                }
+            },
+        }
+     }
+     &lt;/script>
+</code></pre>
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue Swiper";
+        seo.metaTitle = "Vue Swiper";
+        seo.metaDescription = @" Vue Swiper 是一個基於 Vue.js 的輪播組件，它利用了 Swiper 庫的功能來創建觸摸友好的輪播圖和幻燈片。它提供了一種簡單而靈活的方式來在 Vue.js 應用程序中添加幻燈片和輪播功能。
+            以下是 Vue Swiper 的一些主要特點和功能：
+            響應式布局：Vue Swiper 可以根據容器的大小和設備的屏幕尺寸自動調整幻燈片的布局和顯示。
+            觸摸滑動：它支持觸摸滑動手勢，可以通過滑動手勢在幻燈片之間切換。
+            循環輪播：可以設置為循環模式，使幻燈片在到達最後一個之後循環回到第一個，實現無限循環的輪播效果。
+            自定義樣式：你可以通過自定義 CSS 類名或內聯樣式來定制幻燈片的外觀和布局，以適應你的設計需求。
+            分頁器和導航按鈕：Vue Swiper 提供了分頁器和導航按鈕等導航控件，可以讓用戶快速導航到指定的幻燈片。
+            自動播放：可以設置自動播放功能，使幻燈片自動切換，並可以設置切換的時間間隔。
+            事件和鉤子函數：Vue Swiper 提供了多個事件和鉤子函數，以便在特定情況下執行自定義邏輯，如在幻燈片切換之前或之後執行特定操作。
+            使用 Vue Swiper，你可以輕松地創建漂亮的輪播圖和幻燈片，為你的 Vue.js 應用程序增添互動和吸引力。它具有豐富的選項和功能，可根據你的需求進行定制和擴展。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
