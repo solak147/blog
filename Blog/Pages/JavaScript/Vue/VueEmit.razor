@@ -1,0 +1,100 @@
+﻿@page "/vueemit"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue emit</h1>
+
+<h2><b>Vue 元件與元件之間的溝通方式主要有以下幾種：</b></h2>
+<br />
+
+<p>
+    <span class="imtdot">Props in, Emit out：</span><br />
+    這是Vue.js中最常用的元件溝通方式。父組件可以通過props將數據傳遞給子組件，子組件可以通過emit觸發自定義事件並將數據傳遞回父組件。這種方式適合用於父組件向子組件傳遞數據，並且子組件可以通過觸發事件來通知父組件。
+    <br /><br />
+    <span class="imtdot">Event Bus：</span><br />
+    事件總線（Event Bus）是一個Vue實例，用於在不同的組件之間進行通信。通過事件總線，組件可以發布事件（emit）和訂閱事件（on），從而實現組件之間的解耦。任何一個組件都可以訂閱事件，並在需要的時候發布事件，其他訂閱了相同事件的組件將會接收到事件並做出相應的響應。
+    <br /><br/>
+    <span class="imtdot">$parent、$children：</span><br />
+    Vue實例中的$parent和$children屬性可以用於獲取父組件和子組件的實例，從而實現組件之間的直接通信。通過$parent可以獲取父組件的實例，而$children則返回子組件的數組。使用$parent和$children可以直接調用父組件和子組件的方法，訪問數據等。
+    <br /><br />
+    <span class="imtdot">Vuex：</span><br />
+    Vuex是Vue.js的狀態管理庫，用於管理應用程序的狀態。它提供了一個集中式的存儲容器（store），在其中保存著所有組件共享的狀態。組件可以通過派發（dispatch）和觸發（commit）mutations來改變狀態，並可以通過getters獲取狀態。Vuex適用於大型的應用程序，或者當多個組件之間需要共享狀態時使用。
+    <br /><br />
+    以上是常見的元件溝通方式。使用props和emit是Vue.js中最常用和推薦的方式，尤其適合父子組件之間的通信。其他方式如事件總線、$parent和$children以及Vuex則可以在特定情況下使用，根據應用程序的規模和需求來選擇適合的方式。
+</p>
+
+<h3><b>Vue emit 介紹</b></h3>
+<p>
+    在Vue.js中，emit是一個用於父組件與子組件之間進行通信的機制。它允許子組件向父組件觸發自定義事件並傳遞數據。
+    <br /><br />
+    當子組件需要向父組件發送消息時，可以使用$emit方法。該方法接受兩個參數：要觸發的事件名稱和要傳遞的數據。父組件可以在模板中使用v-on指令監聽子組件觸發的事件，並在相應的方法中處理數據。
+    <br /><br />
+    下面是一個使用emit進行通信的簡單示例：
+</p>
+
+<pre><code class="javascript">
+    &lt;!-- 子组件 -->
+    &lt;template>
+    &lt;button @@click="sendMessage">发送消息&lt;/button>
+    &lt;/template>
+
+    &lt;script>
+    export default {
+      methods: {
+        sendMessage() {
+          this.$emit('message', 'Hello, Parent Component!');
+        }
+      }
+    }
+    &lt;/script>
+
+    &lt;!-- 父组件 -->
+    &lt;template>
+      &lt;div>
+        &lt;child-component @@message="handleMessage">&lt;/child-component>
+        &lt;p>收到的消息：{{ receivedMessage }}&lt;/p>
+      &lt;/div>
+    &lt;/template>
+
+    &lt;script>
+    import ChildComponent from './ChildComponent.vue';
+
+    export default {
+      components: {
+        ChildComponent
+      },
+      data() {
+        return {
+          receivedMessage: ''
+        };
+      },
+      methods: {
+        handleMessage(message) {
+          this.receivedMessage = message;
+        }
+      }
+    }
+    &lt;/script>
+</code></pre>
+
+<p>
+    在上面的示例中，子組件中的sendMessage方法通過$emit觸發了名為message的自定義事件，並傳遞了一條消息。父組件中使用v-on指令監聽message事件，並在handleMessage方法中接收消息並將其存儲在receivedMessage數據中。最後，在父組件的模板中展示了收到的消息。
+    <br /><br />
+    這就是使用Vue.js中的emit進行組件間通信的基本方法。通過emit，子組件可以向父組件發送消息，並傳遞數據，從而實現組件間的數據交互。
+</p>
+
+<h3><b>Vue emit 圖解說明</b></h3>
+<img src="images/vueemit_1.png" alt="Vue emit" class="imgfmt">
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue emit";
+        seo.metaTitle = "Vue emit";
+        seo.metaDescription = @"  在Vue.js中，emit是一個用於父組件與子組件之間進行通信的機制。它允許子組件向父組件觸發自定義事件並傳遞數據。
+            當子組件需要向父組件發送消息時，可以使用$emit方法。該方法接受兩個參數：要觸發的事件名稱和要傳遞的數據。父組件可以在模板中使用v-on指令監聽子組件觸發的事件，並在相應的方法中處理數據。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
