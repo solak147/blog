@@ -20,6 +20,8 @@
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         parameters.SetParameterProperties(this);
+        
+        seo.isDrawCode = false;
 
         seo.pageTitle = "中二病也要寫程式 - Blog";
         seo.metaTitle = "中二病也要寫程式 - Blog";
