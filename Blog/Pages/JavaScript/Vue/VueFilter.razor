@@ -1,0 +1,144 @@
+﻿@page "/vuefilter"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue Filter</h1>
+
+<h2><b>Vue Filter</b></h2>
+<br />
+
+<p>
+    Vue 的過濾器（Filter）是一個用於格式化或處理數據的機制。過濾器可以在模板中使用，通過管道符號（|）將數據傳遞給過濾器函數，然後根據函數的邏輯對數據進行處理，最終返回處理後的結果。
+    <br/><br/>
+    過濾器在 Vue 中的定義方式如下：
+</p>
+<pre><code class="javascript">
+    Vue.filter('filterName', function(value) {
+      // 過濾器邏輯
+      return processedValue;
+    })
+</code></pre>
+
+<p>
+    這裡的 'filterName' 是過濾器的名稱，function(value) 是過濾器函數，它接受一個或多個參數，並在函數體內進行處理。處理完成後，過濾器函數需要返回處理後的結果。
+    <br /><br />
+    過濾器可以在 Vue 的模板中使用，方式是在數據上使用管道符號 | 將數據傳遞給過濾器。例如：
+</p>
+<pre><code class="javascript">
+    &lt;p>{{ dataValue | filterName }}&lt;/p>
+</code></pre>
+
+<p>
+    上述代碼中的 dataValue 是要處理的數據，filterName 是過濾器的名稱。當模板渲染時，數據會被傳遞給過濾器函數進行處理，然後在模板中顯示處理後的結果。
+    <br/><br/>
+    過濾器在 Vue 的模板中具有廣泛的應用，比如日期格式化、文字轉換、數字處理等。你可以自定義過濾器來滿足你的需求，也可以使用內建的一些常用過濾器，如 uppercase、lowercase、currency 等。
+    <br /><br />
+    需要注意的是，過濾器只能用於單向數據綁定，也就是只能在模板中對數據進行格式化，而無法在 JavaScript 中直接使用。如果你需要在 JavaScript 中處理數據，可以使用計算屬性（Computed Properties）或方法（Methods）來實現。
+</p>
+
+<h3><b>Vue Filter Example</b></h3>
+<pre><code class="javascript">
+    Vue.filter('gender',(val)=>{
+        if (val === "1") {
+            return "女";
+        } else if (val === "2") {
+            return "男";
+        } else {
+            return "未知";
+        }
+    }) 
+</code></pre>
+
+<h3><b>Vue Filter 其他應用</b></h3>
+<p>
+    除了基本的數據格式化和處理外，Vue 的過濾器還可以進行其他進階的應用。以下是一些可能的進階過濾器應用：
+    <br /><br />
+    <span class="imtdot">1.參數化過濾器（Parameterized Filters）：</span>過濾器可以接受參數，讓你能夠在模板中動態地配置過濾器的行為。你可以在定義過濾器函數時傳遞參數，然後在模板中使用冒號（:）指定參數的值。例如：
+</p>
+<pre><code class="javascript">
+    Vue.filter('prefix', function(value, prefix) {
+      return prefix + value;
+    })
+</code></pre>
+
+<pre><code class="javascript">
+    &lt;p>{{ dataValue | prefix('Pre-') }} &lt;/p>
+</code></pre>
+<p>
+    上述例子中的過濾器 prefix 接受一個參數 prefix，用於在數據前添加指定的前綴。在模板中使用時，可以通過冒號指定參數的值。
+</p>
+
+<p>
+    <span class="imtdot">2.全局過濾器（Global Filters）：</span>通常情況下，過濾器是在 Vue 實例內部定義並使用的，僅對該實例的模板生效。但你也可以將過濾器定義為全局過濾器，使其對所有 Vue 實例和模板都可用。這可以在創建 Vue 實例之前通過 Vue.filter 方法來定義過濾器，讓其成為全局可用的過濾器。
+</p>
+
+<p>
+    <span class="imtdot">3.鏈式過濾器（Chained Filters）：</span>你可以將多個過濾器連鎖在一起，將一個過濾器的輸出作為下一個過濾器的輸入。這可以通過在模板中多次使用管道符號 | 來實現。例如：
+</p>
+<pre><code class="javascript">
+    &lt;p>{{ dataValue | filter1 | filter2 | filter3 }}&lt;/p>
+</code></pre>
+<p>
+    上述例子中，dataValue 會先經過 filter1 處理，然後將處理結果傳遞給 filter2，再將 filter2 的輸出傳遞給 filter3，最終得到最終的處理結果。
+</p>
+
+<p>
+    <span class="imtdot">4.自定義過濾器庫（Custom Filter Libraries）：</span>如果你的項目中有很多自定義過濾器，你可以將它們組織成過濾器庫，以方便管理和重用。你可以創建一個獨立的 JavaScript 檔案，例如 filters.js，將所有的自定義過濾器定義在其中，然後在需要使用過濾器的地方引入這個檔案。這樣可以使你的過濾器代碼更組織化和可維護。
+    <br /><br />
+    filters.js 檔案中的內容可能如下所示：
+</p>
+<pre><code class="javascript">
+    // filters.js
+
+    // 自定義過濾器1
+    Vue.filter('filter1', function(value) {
+      // 過濾器1的邏輯處理
+      return processedValue;
+    });
+
+    // 自定義過濾器2
+    Vue.filter('filter2', function(value) {
+      // 過濾器2的邏輯處理
+      return processedValue;
+    });
+
+    // 自定義過濾器3
+    Vue.filter('filter3', function(value) {
+      // 過濾器3的邏輯處理
+      return processedValue;
+    });
+</code></pre>
+
+<p>
+    然後，在你的 Vue 應用程式中引入這個 filters.js 檔案：
+</p>
+<pre><code class="javascript">
+    // main.js
+
+    import Vue from 'vue';
+    import './filters.js';
+
+    new Vue({
+      // Vue 實例的配置
+      // ...
+    }).$mount('#app');
+</code></pre>
+
+<p>
+    這樣，你就可以在整個 Vue 應用程式中使用這些自定義過濾器了。
+    <br /><br />
+    另外，如果你想要使用其他人寫的過濾器庫，可以使用第三方的 Vue 過濾器庫，例如 vue-filter 或 vue2-filters。這些庫提供了許多常用的過濾器，同時也支援自定義過濾器。你可以通過 npm 或 yarn 安裝這些庫，然後在你的 Vue 應用程式中按照庫的文檔使用它們提供的過濾器功能。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue Filter";
+        seo.metaTitle = "Vue Filter";
+        seo.metaDescription = @"Vue 的過濾器（Filter）是一個用於格式化或處理數據的機制。過濾器可以在模板中使用，通過管道符號（|）將數據傳遞給過濾器函數，然後根據函數的邏輯對數據進行處理，最終返回處理後的結果。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
+
