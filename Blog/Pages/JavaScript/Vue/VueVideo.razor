@@ -1,0 +1,180 @@
+﻿@page "/vuevideo"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue Vidio.js</h1>
+
+<h2><b>Vue Vidio.js</b></h2>
+<br />
+
+<p>
+    video.js 是一個用於在網頁上嵌入和管理視頻播放器的開源JavaScript庫。它提供了一個靈活且易於使用的界面，可以用於在網頁中播放各種視頻內容。video.js 支持 HTML5 視頻播放器，並且在不同的瀏覽器和設備上具有良好的兼容性。
+
+    以下是 video.js 的一些主要特點和功能：
+
+    1.響應式設計：video.js 提供了響應式設計，可以根據不同的屏幕尺寸和設備類型自動調整播放器的大小和布局。
+    <br /><br />
+    2.自定義皮膚和樣式：您可以輕松地通過自定義 CSS 樣式來創建和修改播放器的外觀。video.js 提供了一些內置的皮膚和主題，也支持自定義皮膚來滿足您的設計需求。
+    <br /><br />
+    3.廣泛的瀏覽器和設備兼容性：video.js 可以在各種現代瀏覽器和設備上播放視頻，包括桌面瀏覽器（如 Chrome、Firefox、Safari、Edge）以及移動設備（如 iOS 和 Android）。
+    <br /><br />
+    4.強大的插件系統：video.js 提供了一個靈活的插件系統，可以通過插件擴展播放器的功能。您可以使用現有的插件，如廣告插件、字幕插件、全屏插件等，也可以根據自己的需求開發自定義插件。
+    <br /><br />
+    5.豐富的 API 和事件：video.js 提供了豐富的 API 方法和事件，使您可以通過JavaScript與播放器進行交互和控制。您可以使用 API 方法來控制播放、暫停、音量調節等操作，還可以監聽事件來獲取播放器狀態的變化。
+    <br /><br />
+    6.廣告支持：video.js 提供了內置的廣告插件，可以輕松地在視頻中顯示廣告，並提供了靈活的廣告管理功能。
+    <br /><br />
+    7.多種媒體格式支持：video.js 支持多種常見的媒體格式，包括 MP4、WebM、Ogg 等。它還可以根據瀏覽器和設備的支持情況自動選擇適合的媒體格式進行播放。
+    <br /><br />
+    總體而言，video.js 是一個功能強大、易於定制和高度可擴展的視頻播放器庫，適用於在網頁上實現各種視頻播放需求。無論是在簡單的網頁中嵌入視頻，還是在覆雜的視頻應用中實現交互和控制，video.js 都提供了豐富的功能和靈活的選項來滿足您的需求。
+</p>
+
+<p>
+    要在Vue項目中使用video.js，您需要執行以下步驟：
+</p>
+
+<p>
+    1.安裝video.js：在項目根目錄中打開終端，並運行以下命令來安裝video.js和其相關的依賴庫：
+</p>
+<pre><code class="linux">
+    npm install video.js --save
+</code></pre>
+
+<p>
+    2.引入video.js樣式：在Vue項目的入口文件（通常是main.js）中，添加以下代碼來引入video.js的樣式文件：
+</p>
+<pre><code class="javascript">
+    import 'video.js/dist/video-js.css';
+</code></pre>
+
+<p>
+    3.創建Vue組件：在需要使用video.js的Vue組件中，可以創建一個自定義組件來承載視頻播放器。例如，創建一個名為VideoPlayer.vue的組件文件，並添加以下代碼：
+</p>
+<pre><code class="javascript">
+    &lt;emplate>
+       &lt;div>
+        &lt;video ref="videoPlayer" class="video-js vjs-default-skin"> &lt;/video>
+       &lt;/div>
+     &lt;/>
+
+     &lt;script>
+    import videojs from 'video.js';
+    import 'video.js/dist/video.js';
+
+    export default {
+      mounted() {
+        // 在组件挂载后初始化video.js
+        this.player = videojs(this.$refs.videoPlayer, this.videoOptions, this.onPlayerReady);
+      },
+      compute() {
+          videoOptions() {
+            return {
+            aspectRatio: "9:16",
+            autoplay: true,
+            fluid: true,
+            preload: "auto",
+            controlBar: {
+                volumePanel: false,
+                pictureInPictureToggle: false,
+                fullscreenToggle: false,
+            },
+            liveui: true,
+            controls: true,
+            sources: [
+                {
+                type: "application/x-mpegURL",
+                src: '影片 url',
+                },
+            ],
+            userActions: {
+                doubleClick: false,
+            },
+            };
+        },
+      },
+      method() {
+        onPlayerReady() {
+            this.on("error", function () {
+              const error = this.error_;
+              //1.用户终止 2.网络错误 3.解码错误 4.URL无效
+              if (error.code === 4) {
+                this.errorDisplay.contentEl_.innerText =
+                  "当前线路异常，请尝试切换线路，若无法解决，请联系客服";
+              }
+              if (error.code === 2) {
+                this.errorDisplay.contentEl_.innerText = "网络错误，请稍后重试";
+              }
+              if (error.code === 3) {
+                this.errorDisplay.contentEl_.innerText =
+                  "视频资源解析错误，请尝试切换线路，若无法解决，或联系客服";
+              }
+            });
+            this.on("play", () => {
+              vm.$emit("play");
+            });
+            this.on("ended", () => {
+              vm.$emit("ended");
+            });
+          }
+      },
+      beforeDestroy() {
+        // 在组件销毁前销毁video.js实例
+        if (this.player) {
+          this.player.dispose();
+        }
+      }
+    }
+     &lt;/script>
+
+     &lt;style>
+    /* 可以添加一些自定义样式来控制播放器的外观 */
+     &lt;/style>
+</code></pre>
+
+<p>
+    4.在需要使用視頻播放器的父組件中，引入並使用VideoPlayer組件：
+</p>
+<pre><code class="javascript">
+     &lt;template>
+       &lt;div>
+         &lt;!-- 其他组件内容 -->
+         &lt;VideoPlayer />
+       &lt;/div>
+     &lt;/template>
+
+     &lt;script>
+    import VideoPlayer from './VideoPlayer.vue';
+
+    export default {
+      components: {
+        VideoPlayer
+      },
+      // 其他组件代码
+    }
+     &lt;/script>
+</code></pre>
+
+<p>
+    通過以上步驟，您就可以在Vue項目中使用video.js來實現視頻播放功能了。您可以進一步閱讀<a href="https://videojs.com/guides/options/">video.js的 文檔</a>，
+    了解其更多功能和配置選項，並根據需求進行定制。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue Vidio.js";
+        seo.metaTitle = "Vue Vidio.js";
+        seo.metaDescription = @"video.js 是一個用於在網頁上嵌入和管理視頻播放器的開源JavaScript庫。它提供了一個靈活且易於使用的界面，可以用於在網頁中播放各種視頻內容。video.js 支持 HTML5 視頻播放器，並且在不同的瀏覽器和設備上具有良好的兼容性。
+            以下是 video.js 的一些主要特點和功能：
+            響應式設計：video.js 提供了響應式設計，可以根據不同的屏幕尺寸和設備類型自動調整播放器的大小和布局。
+            自定義皮膚和樣式：您可以輕松地通過自定義 CSS 樣式來創建和修改播放器的外觀。video.js 提供了一些內置的皮膚和主題，也支持自定義皮膚來滿足您的設計需求。
+            廣泛的瀏覽器和設備兼容性：video.js 可以在各種現代瀏覽器和設備上播放視頻，包括桌面瀏覽器（如 Chrome、Firefox、Safari、Edge）以及移動設備（如 iOS 和 Android）。
+            強大的插件系統：video.js 提供了一個靈活的插件系統，可以通過插件擴展播放器的功能。您可以使用現有的插件，如廣告插件、字幕插件、全屏插件等，也可以根據自己的需求開發自定義插件。
+            豐富的 API 和事件：video.js 提供了豐富的 API 方法和事件，使您可以通過JavaScript與播放器進行交互和控制。您可以使用 API 方法來控制播放、暫停、音量調節等操作，還可以監聽事件來獲取播放器狀態的變化。
+            廣告支持：video.js 提供了內置的廣告插件，可以輕松地在視頻中顯示廣告，並提供了靈活的廣告管理功能。
+            多種媒體格式支持：video.js 支持多種常見的媒體格式，包括 MP4、WebM、Ogg 等。它還可以根據瀏覽器和設備的支持情況自動選擇適合的媒體格式進行播放。
+            總體而言，video.js 是一個功能強大、易於定制和高度可擴展的視頻播放器庫，適用於在網頁上實現各種視頻播放需求。無論是在簡單的網頁中嵌入視頻，還是在覆雜的視頻應用中實現交互和控制，video.js 都提供了豐富的功能和靈活的選項來滿足您的需求。";
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
