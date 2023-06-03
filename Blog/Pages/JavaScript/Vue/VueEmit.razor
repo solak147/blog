@@ -1,7 +1,7 @@
 ﻿@page "/vueemit"
 @inherits Blog.Base.Base
 
-<h1 style="display: none;"> @h1Title - Vue emit</h1>
+<h1 style="display: none;"> @h1Title - Vue Props in Emit out</h1>
 
 <h2><b>Vue 元件與元件之間的溝通方式主要有以下幾種：</b></h2>
 <br />
@@ -20,6 +20,111 @@
     Vuex是Vue.js的狀態管理庫，用於管理應用程序的狀態。它提供了一個集中式的存儲容器（store），在其中保存著所有組件共享的狀態。組件可以通過派發（dispatch）和觸發（commit）mutations來改變狀態，並可以通過getters獲取狀態。Vuex適用於大型的應用程序，或者當多個組件之間需要共享狀態時使用。
     <br /><br />
     以上是常見的元件溝通方式。使用props和emit是Vue.js中最常用和推薦的方式，尤其適合父子組件之間的通信。其他方式如事件總線、$parent和$children以及Vuex則可以在特定情況下使用，根據應用程序的規模和需求來選擇適合的方式。
+</p
+
+<h3><b>Vue props 介紹</b></h3>
+<p>
+    在 Vue 中，props 是一種用於從父組件向子組件傳遞數據的機制。通過 props，父組件可以將數據傳遞給子組件，使得子組件可以接收和使用這些數據。
+    <br /><br />
+    以下是 props 的一些特點和用法：
+    <br /><br />
+    1.定義 props：在子組件中，可以通過在組件的 props 選項中定義 props。props 可以是字符串、數組、對象或自定義類型。例如：
+</p>
+<pre><code class="javascript">
+    props: {
+      // 字符串类型的 prop
+      title: String,
+      // 数组类型的 prop
+      items: Array,
+      // 对象类型的 prop
+      user: {
+        type: Object,
+        default: () => ({})
+      },
+      // 自定义类型的 prop
+      customProp: {
+        validator: value => {
+          // 验证 prop 的值是否有效
+          return value > 0;
+        }
+      }
+    }
+</code></pre>
+
+<p>
+    2.傳遞 props：在父組件中，可以使用子組件的標簽屬性來傳遞 props。例如：
+</p>
+<pre><code class="javascript">
+    &lt;template>
+      &lt;child-component :title="parentTitle" :items="parentItems" :user="parentUser" :custom-prop="parentProp" />
+    &lt;/&lt;template>
+
+    &lt;script>
+    import ChildComponent from './ChildComponent.vue';
+
+    export default {
+      components: {
+        ChildComponent
+      },
+      data() {
+        return {
+          parentTitle: 'Parent Title',
+          parentItems: ['Item 1', 'Item 2', 'Item 3'],
+          parentUser: { name: 'John', age: 30 },
+          parentProp: 5
+        };
+      }
+    }
+    &lt;/script>
+</code></pre>
+
+<p>
+    3.接收 props：在子組件中，可以使用 props 對象來接收父組件傳遞的 props 數據。例如：
+</p>
+<pre><code class="javascript">
+    &lt;template>
+      &lt;div>
+        &lt;h2>{{ title }}&lt;/h2>
+        &lt;ul>
+          &lt;li v-for="item in items" :key="item">{{ item }}&lt;/li>
+        &lt;/ul>
+        &lt;p>{{ user.name }} ({{ user.age }} years old)&lt;/p>
+        &lt;p>{{ customProp }}&lt;/p>
+      &lt;/div>
+    &lt;/template>
+
+    &lt;script>
+    export default {
+      props: {
+        title: String,
+        items: Array,
+        user: Object,
+        customProp: Number
+      }
+    }
+    &lt;/script>
+</code></pre>
+<p>
+    4.prop 驗證：通過在子組件的 props 定義中添加驗證函數，可以驗證傳遞給子組件的 prop 值是否符合要求。驗證函數應返回一個布爾值，指示 prop 值的有效性。
+    <br /><br />
+    5.默認值：在子組件的 props 定義中，可以為 props 指定默認值，以防止未傳遞該 prop 時出現 undefined。可以通過 default 選項設置默認值。
+    <br /><br />
+    通過使用 props，可以實現父子組件之間的數據通信，使得組件可以更加靈活和可重用。父組件可以向子組件傳遞不同的數據，子組件可以根據接收到的 props 進行相應的操作和渲染。
+</p>
+
+<h3><b>props 相關的進階用法和技巧：</b></h3>
+<p>
+    <span class="imtdot">1.Prop 類型驗證：</span><br />除了基本的類型驗證（如 String、Number、Boolean 等），props 還支持驗證為自定義類型、數組或對象等覆雜數據類型。您可以通過設置 type 選項來指定期望的類型，或通過 validator 選項自定義驗證函數。
+    <br /><br />
+    <span class="imtdot">2.Prop 單向綁定：</span><br />默認情況下，props 是單向綁定的，即父組件的變化會反映到子組件中，但子組件對 prop 的修改不會影響父組件。這有助於確保數據流向的清晰性和可維護性。如果需要在子組件中修改 prop 數據，可以通過在子組件中使用 data 屬性將其轉換為本地數據進行操作。
+    <br /><br />
+    <span class="imtdot">3.Prop 大小寫轉換：</span><br />在 HTML 中，prop 名稱是大小寫不敏感的。但在組件中定義 prop 時，名稱是大小寫敏感的。為了確保一致性，建議在父組件中使用 kebab-case（短橫線分隔命名）的形式傳遞 prop，並在子組件中使用 camelCase（駝峰命名）的形式接收 prop。Vue 會自動進行大小寫轉換。
+    <br /><br />
+    <span class="imtdot">4.Prop 的即時更新：</span><br />當父組件傳遞給子組件的 prop 數據發生變化時，子組件不會立即更新。Vue 使用了響應式系統來進行異步更新。如果您需要在 prop 變化時立即做出反應，可以使用 watch 監聽 prop 的變化，或者在子組件中使用計算屬性。
+    <br /><br />
+    <span class="imtdot">5.動態 Props：</span><br />父組件可以動態地綁定 prop 數據，即根據父組件中的屬性或計算屬性來決定傳遞給子組件的 prop 值。您可以使用 v-bind 或簡寫的冒號語法來實現動態綁定。
+    <br /><br />
+    以上是有關 Vue 中 props 的一些介紹和進階用法。通過合理使用 props，您可以構建出更靈活、可重用和可維護的組件，實現組件之間的數據傳遞和交互。
 </p>
 
 <h3><b>Vue emit 介紹</b></h3>
@@ -90,10 +195,10 @@
     {
         parameters.SetParameterProperties(this);
 
-        seo.pageTitle = "Vue Emit";
-        seo.metaTitle = "Vue Emit";
-        seo.metaDescription = @"在Vue.js中，emit是一個用於父組件與子組件之間進行通信的機制。它允許子組件向父組件觸發自定義事件並傳遞數據。
-            當子組件需要向父組件發送消息時，可以使用$emit方法。該方法接受兩個參數：要觸發的事件名稱和要傳遞的數據。父組件可以在模板中使用v-on指令監聽子組件觸發的事件，並在相應的方法中處理數據。";
+        seo.pageTitle = "Vue Props in Emit out";
+        seo.metaTitle = "Vue Props in Emit out";
+        seo.metaDescription = @"Props in Emit out：
+            這是Vue.js中最常用的元件溝通方式。父組件可以通過props將數據傳遞給子組件，子組件可以通過emit觸發自定義事件並將數據傳遞回父組件。這種方式適合用於父組件向子組件傳遞數據，並且子組件可以通過觸發事件來通知父組件。";
 
         await base.SetParametersAsync(ParameterView.Empty);
     }
