@@ -1,0 +1,121 @@
+﻿@page "/cssboxsize"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Css Box-sizing</h1>
+
+<h2><b>Box-sizing</b></h2>
+<br />
+
+<p>
+    <span class="imtdot">Box-sizing</span> 這個屬性是一個新時代的屬性，也是目前這時代網頁入門必備的一項常識，box-sizing 的作用是控制 width 與 height 作用的對象空間，換另一個說法，則是設定物件尺寸的計算方式，目前僅有兩種模式擇一使用，撰寫方式如同下面這樣
+</p>
+
+<pre><code class="html">
+    box-sizing: content-box;
+</code></pre>
+
+<p>
+    <span class="imtdot">box-sizing</span> 可以使用的值不多，基本上就兩個
+    <br /><br />
+    Content-box (寬高設定作用在內容範圍)<br />
+    Border-box （寬高設定作用在邊框外緣的範圍內）<br />
+    在預設的情況下， box-sizing 的預設值是 content-box。
+</p>
+
+<h3><b>content-box 其實不設定時就是預設</b></h3>
+<p>
+    從一開始的敘述得知， box-sizing 的作用其實就是設定 width / height 的作用對象是哪個盒子(box) ，在不更改 box-sizing 的情況下，其實 width / height 的作用就是設定內容資料的範圍空間，我們就稱為 content-box，一個物件的範圍，其實就是四個層層包裹的矩形所構成，由內而外分別是「content-box(藍色)、padding-box(綠色)、border-box(橙黃)、margin-box(橙色)」，如下圖所示(圖片取自 Chrome DevTools)
+</p>
+<img src="images/cssboxsize_1.png" alt="Css box-sizeing" class="imgfmt" style="width:50%;">
+
+<p>
+    倘若我們對一個物件設定 width: 200px; 那就表示我的物件內資料的可運用空間就是 200px，超過 200px 就會折到下一行，如同下方原始碼這般
+</p>
+<pre><code class="html">
+    &lt;div class="fish">金魚都能懂一二三四五金魚都能懂六七八九十&lt;div>
+</code></pre>
+
+<pre><code class="css">
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .fish{
+        width: 200px;
+        height: 200px;
+        font-size: 20px;
+        background-color: #CCC;
+    }
+</code></pre>
+<img src="images/cssboxsize_2.png" alt="Css box-sizeing" class="imgfmt" style="width:50%;">
+
+<p>
+    可以看到單行文字並沒有減少，依舊是 10 個字，也就表示 padding 是額外增加出來的空間，把剛剛的容器概念疊上去的話就可以很明顯的看出來 content-box 的範圍了
+</p>
+<img src="images/cssboxsize_3.png" alt="Css box-sizeing" class="imgfmt" style="width:50%;">
+<p>
+    所以此時你所看到的物件寬度，實際是 width 的 200px 加上左右 padding 相加的 40px，最終呈現的就是 240px。
+</p>
+
+<h3><b>border-box 不用計算超方便</b></h3>
+<p>
+    將 box-sizing 設定成 border-box 後， width / height 的作用範圍就是指到 border 這個 box 的範圍了，我們就稱為 border-box，從前面所寫的可以了解一個物件的範圍，是由四個層層包裹的矩形所構成，此時 width 所作用的 box 就是 border 這個範圍了，如下圖所示(圖片取自 Chrome DevTools)
+</p>
+<img src="images/cssboxsize_4.png" alt="Css box-sizeing" class="imgfmt" style="width:50%;">
+
+<p>
+    所以我們如果設定了以下這樣的 CSS 原始碼的話，你所看到的物件寬度將會是 200px ，而不是之前所看到的 240px
+</p>
+
+<pre><code class="css">
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .fish{
+        width: 200px;
+        height: 200px;
+        padding: 20px;
+        font-size: 20px;
+        background-color: #CCC;
+        box-sizing: border-box;
+    }
+</code></pre>
+<img src="images/cssboxsize_5.png" alt="Css box-sizeing" class="imgfmt" style="width:50%;">
+<p>
+    由上圖可以看到單行文字的數量變少了，只剩下 8 個字就折行了，從 1 個字寬 20px 來計算，8 * 20 = 160px，加上 padding 左右各 20px，就能得到目前顯示的結果是 200px，但因為目前沒有設定 border，所以無法看到添加 border 之後的尺寸，所以我們來添加一下 20px 的 border 看看會是怎樣的結果，原始碼如下
+</p>
+
+<pre><code class="css">
+    .fish{
+        width: 200px;
+        height: 200px;
+        padding: 20px;
+        border: 20px solid red;
+        font-size: 20px;
+        background-color: #CCC;
+        box-sizing: border-box;
+    }
+</code></pre>
+<img src="images/cssboxsize_6.png" alt="Css box-sizeing" class="imgfmt" style="width:50%;">
+
+<p>
+    可以看到一行文字變的更少了，直接計算看看 20 * 6 + 20 * 2 + 20 * 2 = 200px，結論依舊相同，正如 Amos 在 border-box 一開始寫的觀念一樣， width 直接作用在 border-box 上，而非 content-box 上，所以你的 padding 與 border-width 都直接內推了
+</p>
+
+<div class="ref">
+    參考 :<a href="https://ithelp.ithome.com.tw/articles/10252827">https://ithelp.ithome.com.tw/articles/10252827</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "CSS - Box-sizing";
+        seo.metaTitle = "CSS - Box-sizing";
+        seo.metaDescription = @"Box-sizing 這個屬性是一個新時代的屬性，也是目前這時代網頁入門必備的一項常識，box-sizing 的作用是控制 width 與 height 作用的對象空間，換另一個說法，則是設定物件尺寸的計算方式，目前僅有兩種模式擇一使用，撰寫方式如同下面這樣 box-sizing: content-box;";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
