@@ -1,0 +1,384 @@
+﻿@page "/vuevuex"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue Vuex</h1>
+
+<h2><b>Vuex 簡介</b></h2>
+<br />
+
+<p>
+    在 Vue.js 中，Vuex 是一個狀態管理模式和程式庫，用於在應用程序中管理狀態。狀態是指應用程序中的所有數據，例如用戶信息、設置選項或任何其他需要在不同組件之間共享的數據。Vuex 通過提供一個集中式的存儲來管理這些狀態，以便於狀態的讀取和修改。
+    <br /><br />
+    Vuex 的核心概念包括：
+    <br /><br />
+    1.State（狀態）：存儲應用程序的狀態數據，例如用戶名稱、設置選項等。狀態是响應式的，當狀態改變時，相關的組件也會自動更新。
+    <br /><br />
+    2.Getters（獲取器）：用於從狀態中獲取數據，類似於 Vue.js 中的計算屬性。它們可以根據狀態計算衍生數據，並且在組件中可以像普通數據屬性一樣使用。
+    <br /><br />
+    3.Mutations（突變）：用於修改狀態的方法，但必須是同步的。突變是唯一能夠修改狀態的地方，這樣做是為了更好地追蹤狀態的變化。
+    <br /><br />
+    4.Actions（動作）：用於執行異步操作和提交突變。它們可以包含任意異步操作，例如從後端獲取數據或執行異步任務。
+    <br /> <br />
+    5.Modules（模組）：允許將大型的 Vuex 應用程序拆分為多個模組。每個模組擁有自己的狀態、獲取器、突變和動作，使代碼結構更加組織化和可維護。
+    <br /><br />
+    使用 Vuex 可以讓開發者更好地組織和管理應用程序的狀態，特別是在應用程序變得複雜且需要多個組件之間共享數據時。以下是一個簡單的示例，演示了如何使用 Vuex：
+    <br /><br />
+    1.安裝 Vuex：首先，你需要將 Vuex 安裝到你的 Vue.js 應用程序中。你可以使用 npm 或 yarn 命令進行安裝：npm install vuex 或 yarn add vuex。
+    <br /><br />
+    2.創建 Vuex Store：在你的應用程序中，創建一個 Vuex store，它將包含狀態、獲取器、突變和動作。可以在一個單獨的 JavaScript 文件中創建 store，例如 store.js。
+</p>
+
+<pre><code class="javascript">
+    import Vuex from 'vuex';
+    import Vue from 'vue';
+
+    Vue.use(Vuex);
+
+    const store = new Vuex.Store({
+      state: {
+        count: 0,
+      },
+      mutations: {
+        increment(state) {
+          state.count++;
+        },
+      },
+      actions: {
+        incrementAsync(context) {
+          setTimeout(() => {
+            context.commit('increment');
+          }, 1000);
+        },
+      },
+      getters: {
+        getCount(state) {
+          return state.count;
+        },
+      },
+    });
+
+    export default store;
+</code></pre>
+
+<p>
+    3.在主 Vue 實例中使用 Vuex Store：在你的主 Vue 實例中，將 Vuex store 引入並加入到 store 選項中。
+</p>
+
+<pre><code class="javascript">
+    import Vue from 'vue';
+    import App from './App.vue';
+    import store from './store';
+
+    new Vue({
+      store,
+      render: (h) => h(App),
+    }).$mount('#app');
+</code></pre>
+
+<p>
+    4.在組件中使用 Vuex：現在，你可以在任何組件中使用 Vuex store 中的狀態、獲取器、突變和動作。例如，在一個組件中，你可以通過 this.$store.state.count 獲取狀態，通過 this.$store.commit('increment') 執行突變。
+</p>
+<pre><code class="javascript">
+    &lt;emplate>
+      &lt;div>
+        &lt;p>Count: {{ count }}&lt;/p>
+        &lt;button @@click="increment">Increment&lt;/button>
+        &lt;button @@click="incrementAsync">Increment Async&lt;/button>
+      &lt;/div>
+    &lt;/emplate>
+
+    &lt;script>
+    export default {
+      computed: {
+        count() {
+          return this.$store.getters.getCount;
+        },
+      },
+      methods: {
+        increment() {
+          this.$store.commit('increment');
+        },
+        incrementAsync() {
+          this.$store.dispatch('incrementAsync');
+        },
+      },
+    };
+    &lt;/script>
+</code></pre>
+
+<h3><b>Vuex Modules</b></h3>
+<p>
+    在 Vuex 中使用模組（Modules）可以幫助你將大型的狀態管理代碼拆分為多個模塊，每個模塊都有自己的狀態、獲取器、突變和動作。這樣可以提高代碼的組織性和可維護性，特別是當你的應用程序變得複雜時。下面是使用 Vuex 模組的步驟：
+    <br/><br/>
+    1.在你的 Vuex store 文件中，創建一個模組。你可以在 store.js 文件中定義多個模組，每個模組都有自己的狀態、獲取器、突變和動作。
+</p>
+
+<pre><code class="javascript">
+    const moduleA = {
+      state: {
+        // 狀態
+      },
+      mutations: {
+        // 突變
+      },
+      actions: {
+        // 動作
+      },
+      getters: {
+        // 獲取器
+      },
+    };
+
+    const moduleB = {
+      state: {
+        // 狀態
+      },
+      mutations: {
+        // 突變
+      },
+      actions: {
+        // 動作
+      },
+      getters: {
+        // 獲取器
+      },
+    };
+
+    const store = new Vuex.Store({
+      modules: {
+        moduleA,
+        moduleB,
+      },
+      // 其他設定
+    });
+
+    export default store;
+</code></pre>
+
+<p>
+    2.在組件中使用模組的狀態、獲取器、突變和動作。在組件中，你可以使用 $store 對象訪問模組中的狀態和方法。
+</p>
+<pre><code class="javascript">
+    // 在模組 A 的突變中修改狀態
+    this.$store.commit('moduleA/mutationName');
+
+    // 在模組 B 的獲取器中獲取狀態
+    this.$store.getters['moduleB/getterName'];
+
+    // 在模組 A 的動作中執行異步操作
+    this.$store.dispatch('moduleA/actionName');
+</code></pre>
+
+<p>
+    3.在模組中訪問全局狀態。如果你需要在模組中訪問全局狀態，可以使用 rootState 參數。
+</p>
+<pre><code class="javascript">
+    const moduleA = {
+      state: {
+        // 狀態
+      },
+      mutations: {
+        mutationName(state, rootState) {
+          // 使用 rootState 訪問全局狀態
+          console.log(rootState.globalState);
+        },
+      },
+      // 其他設定
+    };
+</code></pre>
+
+<p>
+    使用 Vuex 模組可以更好地組織你的狀態管理代碼，將其拆分為可重用的模塊。這有助於提高代碼的可讀性和可維護性，並使代碼庫更具擴展性和彈性。
+</p>
+
+
+<h3><b>Vuex rootState 如何使用</b></h3>
+<p>
+    在 Vuex 的模組中，rootState 是一個參數，用於訪問全局狀態。它提供了在模組內部訪問和操作根 Vuex store 的狀態的能力。以下是一個關於如何使用 rootState 的示例：
+</p>
+<pre><code class="javascript">
+    const moduleA = {
+      state: {
+        moduleAState: 'Module A state',
+      },
+      mutations: {
+        mutateGlobalState(state, rootState) {
+          // 使用 rootState 訪問全局狀態
+          console.log(rootState.globalState);
+        },
+      },
+    };
+
+    const store = new Vuex.Store({
+      state: {
+        globalState: 'Global state',
+      },
+      modules: {
+        moduleA,
+      },
+    });
+</code></pre>
+
+<p>
+    在這個示例中，我們有一個根 Vuex store，其中有一個 globalState 的狀態。同時，我們還有一個名為 moduleA 的模組，其中有一個自己的 moduleAState 狀態。
+    <br /><br />
+    在 moduleA 的突變中，我們定義了 mutateGlobalState 突變，並接受了兩個參數：state 和 rootState。state 是模組自身的狀態，而 rootState 則是根 Vuex store 的狀態。
+     <br/><br/>
+    在 mutateGlobalState 突變中，我們使用 rootState.globalState 訪問了根 Vuex store 的 globalState 狀態。這樣，我們就可以在模組中訪問並操作全局狀態。
+     <br/><br/>
+    需要注意的是，rootState 只能在模組的突變（mutations）、動作（actions）或獲取器（getters）中訪問，並且只有在根 Vuex store 啟用了該模組時才能使用。
+    <br /><br />
+    透過 rootState，我們可以在模組中方便地訪問全局狀態，這對於需要在模組內部使用根 Vuex store 的數據或狀態時非常有用。
+</p>
+
+<h3><b>Vuex 持久化</b></h3>
+<p>
+    在 Vuex 中實現狀態持久化通常需要使用額外的庫或插件。有一些常見的庫可以幫助你在 Vuex 中實現狀態持久化，其中最受歡迎的庫之一是 vuex-persistedstate。
+    <br /><br />
+    以下是使用 vuex-persistedstate 實現 Vuex 狀態持久化的步驟：
+    <br /><br />
+    1.安裝 vuex-persistedstate：使用 npm 或 yarn 命令進行安裝。
+</p>
+<pre><code class="javascript">
+    npm install vuex-persistedstate
+</code></pre>
+
+<p>
+    2.在 Vuex store 中導入 vuex-persistedstate 插件並使用它。
+</p>
+<pre><code class="javascript">
+    import Vue from 'vue';
+    import Vuex from 'vuex';
+    import createPersistedState from 'vuex-persistedstate';
+
+    Vue.use(Vuex);
+
+    const store = new Vuex.Store({
+      // 狀態、突變、動作等設定
+
+      plugins: [createPersistedState()],
+    });
+
+    export default store;
+</code></pre>
+
+<p>
+    在上述代碼中，我們導入 createPersistedState 函數，並將其作為插件添加到 Vuex store 的 plugins 屬性中。
+    <br /><br />
+    3.配置 vuex-persistedstate：你可以通過向 createPersistedState 函數傳遞配置選項來自定義狀態持久化的行為。
+</p>
+<pre><code class="javascript">
+    import createPersistedState from 'vuex-persistedstate';
+
+    const store = new Vuex.Store({
+      // 狀態、突變、動作等設定
+
+      plugins: [
+        createPersistedState({
+          key: 'myApp',
+          paths: ['auth'],
+        }),
+      ],
+    });
+</code></pre>
+<p>
+    在上述示例中，我們指定了 key 屬性，用於存儲狀態的鍵名（在本例中為 'myApp'）。還使用了 paths 屬性，用於指定要持久化的特定模塊或狀態的路徑（在本例中只持久化了名為 'auth' 的模塊）。
+    <br /><br />
+    你可以根據你的需求配置其他選項，例如 storage 屬性指定要使用的存儲機制（默認使用 localStorage）。
+    <br /><br />
+    通過上述步驟，你就可以使用 vuex-persistedstate 在 Vuex 中實現狀態持久化。每次應用程序重新加載時，將從持久化存儲中還原狀態到 Vuex store 中，以便在頁面刷新或重啟後保持之前的狀態。
+</p>
+
+
+<h3><b>Vuex 持久化進階設置</b></h3>
+<p>
+    1.在 Vuex store 中導入 vuex-persistedstate 和 lodash 庫（用於操作對象）。
+</p>
+<pre><code class="javascript">
+    import createPersistedState from 'vuex-persistedstate';
+    import { cloneDeep } from 'lodash';
+
+    const store = new Vuex.Store({
+      // Vuex store 的配置项
+      plugins: [
+        createPersistedState({
+          key: 'myApp',
+          paths: ['moduleA.field1', 'moduleB.field2'],
+          getState: (key) => JSON.parse(localStorage.getItem(key)),
+          setState: (key, state) => localStorage.setItem(key, JSON.stringify(state)),
+          filter: (mutation) => mutation.type === 'moduleA/updateField1',
+          subscriber: (store) => {
+            return (handler) => store.subscribe(handler);
+          },
+          rehydrated: (store) => store.commit('moduleA/rehydrate'),
+        }),
+      ],
+    });
+</code></pre>
+
+<p>
+    2.在 paths 選項中指定要持久化的字段路徑。你可以使用點表示法指定模塊中的特定字段。
+</p>
+<pre><code class="javascript">
+    paths: ['moduleA.field1', 'moduleB.field2'],
+</code></pre>
+
+<p>
+    在上面的示例中，moduleA 模塊的 field1 和 moduleB 模塊的 field2 將會被持久化。
+    <br /><br />
+    3.使用 filter 選項過濾要持久化的突變（mutation）。你可以指定只有滿足特定條件的突變才會被持久化。
+</p>
+<pre><code class="javascript">
+    filter: (mutation) => mutation.type === 'moduleA/updateField1',
+</code></pre>
+
+<p>
+    在上面的示例中，只有類型為 'moduleA/updateField1' 的突變才會被持久化。
+    <br /><br />
+    4.使用 getState 和 setState 選項來自定義持久化的存儲和獲取行為。你可以使用自定義的存儲機制來代替默認的 localStorage。
+</p>
+<pre><code class="javascript">
+   getState: (key) => JSON.parse(localStorage.getItem(key)),
+   setState: (key, state) => localStorage.setItem(key, JSON.stringify(state)),
+</code></pre
+
+<p>
+    在上面的示例中，我們使用 localStorage 存儲和獲取持久化狀態。
+    <br /><br />
+    5.使用 subscriber 選項訂閱狀態變化。你可以在狀態重新加載時執行特定的邏輯。
+</p>
+<pre><code class="javascript">
+    subscriber: (store) => {
+        return (handler) => store.subscribe(handler);
+    },
+</code></pre>
+
+<p>
+    在上面的示例中，我們將訂閱函數傳遞給 store.subscribe，以便在狀態重新加載時執行自定義的邏輯。
+    <br /><br />
+    6.使用 rehydrated 選項在狀態重新加載時執行特定的操作。你可以在此處提交一個特定的突變。
+</p>
+<pre><code class="javascript">
+   rehydrated: (store) => store.commit('moduleA/rehydrate'),
+</code></pre>
+<p>
+    在上面的示例中，我們在狀態重新加載後提交了一個 'moduleA/rehydrate' 突變。
+    <br /><br />
+    通過以上配置，你可以指定或忽略模塊中特定字段的持久化。在示例中，moduleA 模塊的 field1 和 moduleB 模塊的 field2 被指定為需要持久化的字段。只有滿足特定條件的突變（mutation）類型為 'moduleA/updateField1' 的突變才會被持久化。
+    <br /><br />
+    其他選項如 getState、setState、subscriber 和 rehydrated 可以根據需要進行定制。你可以使用自定義的存儲機制、執行特定的邏輯和操作，以滿足你的持久化需求。
+    <br /><br />
+    使用 vuex-persistedstate 庫可以方便地在 Vuex 中實現對特定模塊字段的持久化，以確保在頁面刷新或重新加載後保持狀態。這對於需要保留用戶設置或其他重要數據的應用程序非常有用。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue Vuex";
+        seo.metaTitle = "Vue Vuex";
+        seo.metaDescription = @"在 Vue.js 中，Vuex 是一個狀態管理模式和程式庫，用於在應用程序中管理狀態。狀態是指應用程序中的所有數據，例如用戶信息、設置選項或任何其他需要在不同組件之間共享的數據。Vuex 通過提供一個集中式的存儲來管理這些狀態，以便於狀態的讀取和修改。";
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
