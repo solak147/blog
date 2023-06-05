@@ -1,0 +1,108 @@
+﻿@page "/vueaxios"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue Axios</h1>
+
+<h2><b>Vue Axios 介紹</b></h2>
+<br />
+
+<p>
+    Vue.js 是一個流行的前端 JavaScript 框架，而 Axios 是一個基於 Promise 的 HTTP 請求庫，常用於在 Vue.js 中進行數據的獲取和提交。Axios 提供了簡潔而強大的 API，可以在瀏覽器和 Node.js 中執行 HTTP 請求。
+    <br /> <br/>
+    以下是一些 Vue.js 中使用 Axios 的常見用法和特點：
+    <br /> <br />
+    1.安裝 Axios：你可以使用 npm 或 yarn 來安裝 Axios。在專案目錄中運行以下命令：
+</p>
+
+<pre><code class="javascript">
+    npm install axios
+</code></pre>
+
+<p>
+    2.引入 Axios：在需要使用 Axios 的 Vue 組件中，通常會在 &lt;script> 區塊的頂部引入 Axios：
+</p>
+<pre><code class="javascript">
+    import axios from 'axios';
+</code></pre>
+
+<p>
+    3.發送 GET 請求：可以使用 Axios 發送 GET 請求來從服務器獲取數據。以下是一個簡單的例子：
+</p>
+<pre><code class="javascript">
+    axios.get('/api/data')
+      .then(response => {
+        // 在這裡處理獲取的數據
+      })
+      .catch(error => {
+        // 在這裡處理錯誤
+      });
+</code></pre>
+
+<p>
+    4.發送 POST 請求：如果需要向服務器提交數據，可以使用 Axios 的 POST 方法：
+</p>
+<pre><code class="javascript">
+    axios.post('/api/data', { data: 'example' })
+      .then(response => {
+        // 在這裡處理請求成功的回應
+      })
+      .catch(error => {
+        // 在這裡處理錯誤
+      });
+</code></pre>
+
+<p>
+    5.全局配置：你可以在 Vue.js 的入口文件（通常是 main.js）中對 Axios 進行全局配置，例如設置預設的請求 URL 或添加請求攔截器：
+</p>
+<pre><code class="javascript">
+    // main.js
+
+    axios.defaults.baseURL = 'https://api.example.com';
+
+    axios.create({
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        timeout: 15000, // 逾時毫秒數,
+        withCredentials: true,
+    });
+
+    axios.interceptors.request.use(config => {
+        // 在請求發送之前對請求進行處理
+        // 让每个请求携带自定义 token 请根据实际情况自行修改
+        const token = getToken()
+        if (token && config.headers)
+            config.headers['Authorization'] = 'Bearer ' + token
+        return config;
+    }, error => {
+        // 在請求發生錯誤時處理錯誤
+        return Promise.reject(error);
+    });
+
+    //response interceptor
+    axios.interceptors.response.use(null, error => { 
+        let path = ''; 
+        switch (error.response.status) { 
+          case 500: path = '/error/500'; break; 
+          case 543: path = '/error/503'; break;
+        } 
+        router.push(path); 
+        return Promise.reject(error); 
+    });
+</code></pre>
+
+<p>
+    這些只是 Axios 的一些基本用法和特點，它還提供了許多其他功能，例如請求取消、請求攔截、請求並行等。你可以參考 Axios 的官方文檔（<a href="https://axios-http.com/">https://axios-http.com/</a>）獲取更多詳細的信息和使用方法。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue Axios - Http 請求 API";
+        seo.metaTitle = "Vue Axios - Http 請求 API";
+        seo.metaDescription = @"Vue.js 是一個流行的前端 JavaScript 框架，而 Axios 是一個基於 Promise 的 HTTP 請求庫，常用於在 Vue.js 中進行數據的獲取和提交。Axios 提供了簡潔而強大的 API，可以在瀏覽器和 Node.js 中執行 HTTP 請求。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
+
