@@ -1,0 +1,346 @@
+﻿@page "/vuerender"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue2 響應式原理</h1>
+
+<h2><b>Vue2 響應式原理 : 在 Vue 2 為何無法直接修改物件型別資料裏的值？ </b></h2>
+<br />
+
+<p>
+    在 Vue 2，我們需要使用 .set() 等 Vue 語法來修改在 data 裏的物件或陣列資料裏的值。這是因為 Vue 2 是使用 Object.defineProperty() 實現響應式（reactivity）。在此機制下，Vue 只會為 data 裏最外層的屬性加上 getter 和 setter，因此只會偵測到最外層資料的變動，無法偵測到下一層的資料，並作出更新。
+    <br/><br/>
+    以下會再詳細解說當中原理。
+</p>
+
+
+<h3><b>無法實現響應式更新資料的情況</b></h3>
+<p>
+    當我們在寫 Options API 時，我們會把頁面用到的資料通通放在data裏，當資料有變動，並一併更新有用到該資料的畫面。這是因為 Vue 2 和 Vue 3 分別使用了JavaScript 的 Object.defineProperty() 和 Proxy 方法來完成。
+    <br/><br/>
+    在 Vue 2 裏，之所以無法實現響應式來更新資料，原因通常有這兩個：
+    <br/><br/>
+    資料沒有建立在 Vue 的 data 屬性裏<br/>
+    更改物件或陣列時，使用.、[]來改變物件的屬性，以及用 .length改變陣列的長度、用[]指定陣列的索引來改變陣列中的某個值<br />
+    第一種情況很易理解，就是建立 Vue 實體時，沒有把資料寫在data 屬性裏。詳情見官方文件就很快能理解。<br/>
+    第二種情況，就是新手剛剛寫 Vue 時所犯的錯。而 Vue 官方文件也有說明，Vue 不能偵測陣列或物件的變化。
+    <br /><br />
+    以下面的資料作例子，示範一些錯誤的寫法：
+</p>
+<pre><code class="javascript">
+    data() {
+        return {
+              obj: {
+                a: 1,
+              },
+              arr: [1, 2, 3],
+        };
+    },
+</code></pre>
+
+<p>
+    修改物件：
+</p>
+<pre><code class="javascript">
+    this.obj.b = 2 // 新增 b 屬性，但畫面不會選染
+    delete this.obj.a; // a 屬性被刪除，但畫面不會選染
+</code></pre>
+
+<p>
+    修改陣列：
+</p>
+<pre><code class="javascript">
+    this.arr[0] = 100 //  畫面上 arr[0] 仍然是 1
+    this.arr.length = 1 //  畫面上 arr 仍然是 [1,2,3]
+</code></pre>
+
+<p>
+    對於以上情況，Vue官方提供了 Vue.set() 、 this.$set() 等方法來解決。以下是正確的寫法：<br />
+    修改物件：
+</p>
+<pre><code class="javascript">
+    Vue.set(this.obj, 'b', 2) 
+    Vue.delete(this.obj, 'a')
+</code></pre>
+
+<p>
+    修改陣列：
+</p>
+<pre><code class="javascript">
+    // 修改陣列中某個值
+    Vue.set(this.arr, 0, 100)
+    // 或
+    this.arr.splice(0, 1, 100);
+</code></pre>
+<pre><code class="javascript">
+    // 截短陣列
+    this.arr.splice(1);
+</code></pre>
+
+<h3><b>為什麼 Vue 無法監控物件或陣列的更動？</b></h3>
+<p>
+    當我們平常在 data 物件裏寫上需要實現響應式的資料時，Vue 就會把 data 裏的所有屬性都跑一遍，透過Object.defineProperty()，在 data 裏為這些屬性逐一加上getter和setter。
+    <br /><br />
+    簡單說明如下，例如有一件 T-shirt 商品的資料：
+</p>
+<pre><code class="javascript">
+    // 想像為 Vue 裏面的 data 屬性
+    let data = {
+    price: 100,
+    quantity: 2,
+    sizes: ["XS", "S", "M", "L", "XL"],
+    info: {
+        title: "純色T-shirt",
+        color: "白色",
+    },
+    };
+
+    // 為每個屬性加上getter、setter
+    Object.keys(data).forEach((key) => {
+    let internalValue = data[key];
+    Object.defineProperty(data, key, {
+        get() {
+        console.log(`Get ${key}: ${internalValue}`);
+        return internalValue;
+        },
+
+        set(newValue) {
+        console.log(`Set ${key} from ${internalValue} to ${newValue}`);
+        internalValue = newValue;
+        },
+    });
+    });
+    data.price = 200; 
+    // Set price from 100 to 200
+
+    console.log(data.price); 
+    // Get price: 200
+    // 200
+</code></pre>
+
+<p>
+    以上只是一個簡化版本，說明官方文件所指的「Vue 将遍历此对象所有的 property，并使用 Object.defineProperty 把这些 property 全部转为 getter/setter。」是什麼意思。
+    <br /><br />
+    雖然以上例子還不完整，因為在 getter 和 setter 裏，其實 Vue 還會執行其他函式來更新資料。雖然在這裏還沒作解釋，但我們現在至少可以知道，Vue 只會為data 最外層的屬性逐一加上getter和setter。當該值是一個陣列或物件，它們裏面的值是不會被加上getter和setter。
+    <br /><br />
+    以下示範用之前錯誤的寫法，就會發現這樣寫法只會觸發getter，沒有setter：
+</p>
+
+<pre><code class="javascript">
+    // Get sizes: XS,S,M,L,XL
+    // 沒觸發 set 函式來更新 sizes
+    data.sizes[0] = 'XXS'
+
+    // Get info: [object Object]
+    // 沒觸發 set 函式來更新 info
+    data.info.color = '黑色'
+</code></pre>
+
+<p>
+    以下寫法才會觸發set，原因剛才已提過，因為只有最外層的屬性才會有set函式：
+</p>
+<pre><code class="javascript">
+    data.sizes = ['XSS', 'S', 'M', 'L', 'XL']
+    data.info = {
+        title: '純色T-shirt',
+        color: '黑色',
+    }
+</code></pre>
+
+<p>
+    為什麼一定要執行set才行？因為 Vue 是不只是依賴getter，還有在setter 裏的其他程式來實現更新資料，實現響應式。所以如果沒有正確透過 setter 來寫入資料，就沒法達成響應式。從下圖可以見到setter的作用。
+</p>
+
+<h3><b>實現響應式的概念圖</b></h3>
+<img src="images/vueRender_1.png" alt="gcpvm_11" class="imgfmt" style="width:50%;">
+
+<h3><b>深入了解概念圖</b></h3>
+<p>
+    Vue 的官方影片有很詳細示範如何用程式碼實現上圖的概念。以下會以官方例子稍作簡化。
+    當我們談及響應式時，我們需要完成兩項功能，才能真正達成響應式。舉例說，我修改了price 這個值後，我就要做以下兩件事：
+    <br /><br />
+    1.更新在 data 裏的 price 這個屬性的值<br />
+    2.重新渲染所有有涉及到 price 值的元件<br /><br />
+    第一點很簡單，當我寫data.price = 200時，我就會期望 data 裏的 price 屬性的值會由 100 改為 200。<br />
+    第二點，舉例說，我的元件某部分，以const total = data.price * data.quantity 來計算總額。這段程式碼涉及了 price 這個值。因此total也照理需要被更新，換言之，total 需要被重新計算。
+</p>
+
+
+<h3><b>第一點：更新在 data 裏的 price 值</b></h3>
+<p>
+    要更新在 data 裏的值，就是用上文提到的 setter 去處理。
+</p>
+
+<h3><b>第二點：重新渲染所有有涉及到 price 值的元件</b></h3>
+<p>
+    在重新渲染所有有涉及到 price 值的元件前，我們需要知道哪些元件有用到 price 這個值。Vue 的做法就用 Watcher 函式記錄下來。Vue 在建立元件的時候，會為這元件建立相應的 Watcher 函式，把此元件所有「依賴」(dependency) 的程式碼都紀錄下來。在我們的例子中，就是為根元件新增Watcher函式，並在裏面記錄此元件使用了total = data.price * data.quantity 這段程式碼。
+</p>
+<pre><code class="javascript">
+    let total, target
+
+    // 先不用理解這個 watcher 函式的內容
+    function watcher(myFunc) {
+        target = myFunc;
+        target();
+        target = null;
+    }
+
+    watcher(() => {
+      total = data.price * data.quantity;
+    });
+</code></pre>
+
+<p>
+    先不用理解這個 watcher 函式的內容，我們先知道 Vue 會為此元件建立 watcher 來記錄依賴即可。<br/>
+    當我們執行最後那一段 watcher 函式時，裏面的data.price 以及 data.quantity 就會分別觸發 price 和 quantity 裏的 getter 函式。因為上文提及過，每個 data 屬性的值，都會有 getter 這個函式。
+    <br /><br/>
+    而在 getter 裏，Vue 就會把那些依賴的程式碼儲存起來，示範如下：
+</p>
+
+<pre><code class="javascript">
+    let target, total;
+
+    // Dep 實體
+    class Dep {
+        constructor() {
+              this.subscribers = [];
+        }
+
+        // 4. 當觸發 getter 時，就會執行 depend()
+        depend() {
+          if (target && !this.subscribers.includes(target)) {
+            // 5. 把依賴的程式碼儲存起來
+            this.subscribers.push(target);
+          }
+        }
+
+    }
+
+    Object.keys(data).forEach((key) => {
+        let internalValue = data[key];
+
+        const dep = new Dep();
+        // 1. 使用 Object.definProperty 為 data 的每個值加上 get 和 set
+        Object.defineProperty(data, key, {
+          get() {
+            // 3. 把依賴收集起來
+            dep.depend();
+            return internalValue;
+          },
+
+          set(newValue) {
+            internalValue = newValue;
+          },
+        });
+    });
+
+    function watcher(myFunc) {
+        target = myFunc;
+        target();
+        target = null;
+    }
+
+    watcher(() => {
+        // 2. 觸發 price 和 quantity 裏的 getter
+        total = data.price * data.quantity;
+    });
+</code></pre>
+
+<p>
+    以上程式碼中，加上了 Dep 這個實體。在這實體裏，我們把傳進來的依賴儲存在 subscribers 裏。為什麼我們要儲存這個依賴？因為我們的初衷是，當 price 有變動時，total 就要被重新計算。做法就是把所有用到 price 的依賴都儲存起來，當偵測到 price 有變動時，我們就會跑一次此值所用到的所有依賴，也就是概念圖中提到的 "Notify" 步驟，示範如下：
+</p>
+
+<pre><code class="javascript">
+     let data = {
+      ...
+      };
+
+      let target, total;
+
+      // Dep 實體
+      class Dep {
+        constructor() {
+          this.subscribers = [];
+        }
+
+        // 4. 當觸發 getter 時，就會執行 depend()
+        depend() {
+          if (target && !this.subscribers.includes(target)) {
+            // 3. 把依賴收集起來
+            this.subscribers.push(target);
+          }
+        }
+
+        notify() {
+          // 7. 跑一次之前儲存在 subscribers 裏的依賴，更新資料
+          this.subscribers.forEach((sub) => sub());
+        }
+      }
+
+      Object.keys(data).forEach((key) => {
+        let internalValue = data[key];
+
+        const dep = new Dep();
+
+        // 1. 使用 Object.defineProperty 為 data 的每個值加上 getter 和 setter
+        Object.defineProperty(data, key, {
+          get() {
+            // 3. 把依賴收集起來
+            dep.depend();
+            return internalValue;
+          },
+
+          set(newValue) {
+            internalValue = newValue;
+            // 6. 觸發 notify 
+            dep.notify();
+          },
+        });
+      });
+
+      function watcher(myFunc) {
+        target = myFunc;
+        target();
+        target = null;
+      }
+
+
+      watcher(() => {
+        // 2. 觸發 price 和 quantity 裏的 getter
+        total = data.price * data.quantity;
+      });
+
+
+      console.log(total); // 200
+      // 5. 修改 price 
+      data.price = 200;
+      console.log(total); // 400
+</code></pre>
+
+<p>
+    當我們修改 price 時，關鍵就在於 Dep 裏的 notify() 函式。透過執行 notify()，把之前儲存在 Dep 實體的 subscribers 裏的依賴，即是 total = data.price * data.quantity 跑一次，就能重新計算 total，達成響應式的效果。
+</p>
+
+<h3><b>總結</b></h3>
+<p>
+    ● Vue 無法偵測列陣列和物件資料的變動，需要使用Vue.set()或Vue.delete() 等語法。<br />
+    ● Vue 2 是透過Object.defineProperty，把在 data 物件裏最外層的屬性逐一加上 getter 和 setter。<br />
+    ● 要實現響應式，Vue 利用getter/setter、Watcher函式、Dep實體來處理。當修改一個值時，會觸發setter來更新該值。<br />
+    ● 同時，也要更新其他有使過這個值的部分。因此 Vue 在建立元件時，利用Watcher() 函式，把所有依賴（dependency）都記錄起來，利用Dep實體裏的depend()的方法，儲存到對應的 Dep 實體裏。當該值出現變化時，就會觸發setter，以及執行在Dep裏的 notify()，重新執行所有儲存起來的「依賴」，從而得出所有需要更新的值，並重新渲染到畫面，達成響應式的效果。
+</p>
+
+<div class="ref">
+    參考 :<a href="https://ithelp.ithome.com.tw/m/articles/10263739">https://ithelp.ithome.com.tw/m/articles/10263739</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue2 響應式原理";
+        seo.metaTitle = "Vue2 響應式原理";
+        seo.metaDescription = @" 在 Vue 2，我們需要使用 .set() 等 Vue 語法來修改在 data 裏的物件或陣列資料裏的值。這是因為 Vue 2 是使用 Object.defineProperty() 實現響應式（reactivity）。在此機制下，Vue 只會為 data 裏最外層的屬性加上 getter 和 setter，因此只會偵測到最外層資料的變動，無法偵測到下一層的資料，並作出更新。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
