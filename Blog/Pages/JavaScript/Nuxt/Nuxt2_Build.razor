@@ -1,0 +1,74 @@
+﻿@page "/nuxt2build"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Nuxt2打包部署到線上</h1>
+
+<h2><b>Nuxt打包部署到線上</b></h2>
+<br />
+
+<p>
+    nuxt有兩種打包方式<br />
+    nuxt.config.js文件需要對不同打包方式進行配置
+</p>
+
+target: 'server', //build打包用server，generate用static 默认 server
+
+<pre><code class="JAVASCRIPT">
+    target: 'server', //build打包用server，generate用static 默認 server
+</code></pre>
+<br />
+
+<h3><b>generate打包</b></h3>
+<p>
+    這是靜態部署，比較簡單
+</p>
+<pre><code class="JAVASCRIPT">
+    npm run generate
+</code></pre>
+<p>
+    生成dist文件夾，直接放到服務器就可以訪問<br />
+    但是 如果後台修改數據，前端還是顯示之前打包的數據
+</p>
+
+<h3><b>build打包</b></h3>
+<pre><code class="JAVASCRIPT">
+    npm run build
+</code></pre>
+<pre><code class="JAVASCRIPT">
+    .nuxt
+    static
+    nuxt.config.js
+    package.json
+</code></pre>
+
+<p>
+    把這四個文件放到遠程服務器中的文件夾里<br />
+    在遠程服務器中安裝node<br />
+    cmd這個文件夾，執行
+</p>
+
+<pre><code class="JAVASCRIPT">
+    npm install
+    npm run start
+</code></pre>
+
+<p>
+    就能生成個本地鏈接進行訪問
+</p>
+
+<div class="ref">
+    參考 :<a href="https://cloud.tencent.com/developer/article/1852111">https://cloud.tencent.com/developer/article/1852111</a><br />
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Nuxt2打包部署到線上";
+        seo.metaTitle = "Nuxt2打包部署到線上";
+        seo.metaDescription = @"Nuxt2有兩種打包方式，nuxt.config.js文件需要對不同打包方式進行配置，分別對應 npm run generate、 npm run build";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
