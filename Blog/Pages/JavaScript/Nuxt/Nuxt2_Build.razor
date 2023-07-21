@@ -56,6 +56,42 @@ target: 'server', //build打包用server，generate用static 默认 server
     就能生成個本地鏈接進行訪問
 </p>
 
+
+<h3><b>以下提供為由 docker 啟動 nuxt 的範例 </b></h3>
+<p>
+    Dockerfile
+</p>
+<pre><code class="JAVASCRIPT">
+    FROM node:16.19.0
+
+    WORKDIR /app
+
+    COPY package.json .
+    COPY package-lock.json .
+
+    RUN npm install
+    COPY . .
+    RUN npm run build
+
+    CMD ["npm", "run", "start"]
+</code></pre>
+
+<p>
+    docker.compose.yml
+</p>
+<pre><code class="JAVASCRIPT">
+    version: "3"
+    services:
+      frontend:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8089:8089"
+        environment:
+          - NODE_ENV=prod
+</code></pre>
+
 <div class="ref">
     參考 :<a href="https://cloud.tencent.com/developer/article/1852111">https://cloud.tencent.com/developer/article/1852111</a><br />
 </div>
