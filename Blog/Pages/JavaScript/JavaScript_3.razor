@@ -6,6 +6,59 @@
 <h2><b>傳統函式 VS 箭頭函式</b></h2>
 <br />
 
+<p>
+    在JavaScript中，回調函數（callback function）的this關鍵字指向取決於該回調函數的調用方式。this關鍵字引用調用函數的對象，其值在不同的上下文中可能不同。以下是一些常見的情況：<br /><br />
+
+    全局上下文：<br />
+    如果回調函數被聲明為一個普通函數（不是對象的方法），並且在沒有指定特定上下文的情況下調用，this將引用全局對象，即瀏覽器中的window對象或Node.js中的全局對象。<br />
+    示例：
+</p>
+
+<pre><code class="javascript">
+    function globalCallback() {
+      console.log(this); // Will output the global object (e.g., window in browsers)
+    }
+
+    globalCallback();
+</code></pre>
+
+<p>
+    顯式綁定 this：<br/>
+    你可以使用bind、call或apply等函數來顯式綁定this的值。這樣可以控制回調函數內this的指向。<br />
+    示例（使用bind）：
+</p>
+<pre><code class="javascript">
+    const obj1 = {
+      x: 42,
+      getX: function() {
+        console.log(this.x);
+      }
+    };
+
+    const unboundGetX = obj1.getX;
+    const boundGetX = unboundGetX.bind(obj1);
+
+    boundGetX(); // 将输出 42
+</code></pre>
+
+<p>
+    箭頭函數：<br/>
+    箭頭函數沒有自己的this綁定，而是捕獲了其外部上下文中的this值。因此，箭頭函數內部的this值與周圍代碼中的this值相同。<br/>
+    示例：
+</p>
+<pre><code class="javascript">
+   const obj2 = {
+      name: 'Alice',
+      logName: function() {
+        setTimeout(() => {
+          console.log(this.name); // 这里的 `this` 指向 obj2
+        }, 1000);
+      }
+    };
+
+    obj2.logName(); // 将在一秒后输出 "Alice"
+</code></pre>
+
 <h3><b>傳統函式的 this 問題</b></h3>
 <p>
     傳統函式中 this 的指向是隨著呼叫的方式不同而定
