@@ -1,0 +1,179 @@
+﻿@page "/tswebpack"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - 建構 Webpack 結合 TypeScript 環境</h1>
+
+<h2><b>建構 Webpack 結合 TypeScript 環境</b></h2>
+<br />
+
+<img src="images/tswebpack1.png" alt="gcpdocker_1" class="imgfmt">
+<p>
+    （圖為官方網站對於 Webpack 的示意圖）<br/>
+    事實上 Webpack 不僅僅只有打包純 JavaScript 相關的檔案而已，它連任何靜態資源，諸如：CSS、Sass、Image 等等相關的檔案都可以打包在一起。<br /><br />
+
+    而打包專案一切的方式就是用所謂的 Loader 進行，比如說：想要將 CSS 檔案打包進去，就會有所謂的 css-loader；想要編譯 Sass 相關的檔案，就會有 sass-loader 之類的東西 —— 而如果今天要將 TypeScript 的檔案編譯並且打包進去，官方就有出所謂的 ts-loader。
+</p>
+
+<p>
+    首先，在任何想要建構環境的資料夾中下一系列的指令：
+</p>
+
+<pre><code class="linux">
+    // 到你想要建構環境的資料夾內
+    $ cd PATH_TO_DIR
+
+    // 初始化 package.json
+    $ npm init -y
+
+    // 初始化 tsconfig.json
+    $ tsc --init
+</code></pre>
+
+<h3><b>下載 Webpack 相關套件</b></h3>
+<pre><code class="linux">
+    $ npm install webpack webpack-cli --save-dev
+</code></pre>
+<p>
+    另外，因為我們需要讓 TypeScript 與專案結合，必須要重新下載 typescript 與下載打包時需要的 Loader —— 也就是 ts-loader：
+</p>
+<pre><code class="linux">
+    $ npm install typescript ts-loader --save-dev
+</code></pre>
+<p>
+    npm 模組的 global 模式下載的 $ npm install -g typescript，在 Webpack 上是無法使用的 <br/>
+
+    事實上 Webpack 認得的 TypeScript 編譯器並不會從 Global 的 NPM 模組參照，而是在專案內部參照。因此每一次建構 Webpack 結合 TypeScript 的環境時，必須額外下載 typescript 在專案內部。
+</p>
+
+<h3><b>專案設定</b></h3>
+<pre><code class="linux">
+    // 建構 /src 與 /dist 這兩種不同的檔案資料夾
+    $ mkdir src
+    $ mkdir dist
+
+    // 新增 ./src/index.ts 檔案
+    $ touch ./src/index.ts
+</code></pre>
+<p>
+    在 index.ts 裡隨便寫一行 console.log
+</p>
+
+<p>tsconfig.json</p>
+<pre><code class="javascript">
+    {
+      "compilerOptions": {
+        /* 略... */
+        "target": "es5",
+        "module": "es6",
+        "outDir": "./dist/",
+        "rootDir": "./src/",
+        "strict": "true",
+        "noImplicitAny": true,
+        "strictNullChecks": true
+        /* 略... */
+      }
+    }
+</code></pre>
+
+<p>
+    另外，建立 webpack.config.js 並且填入以下內容：
+</p>
+<pre><code class="javascript">
+    const path = require('path')
+
+    module.exports = {
+        entry: './src/index.ts',
+        module: {
+            rules: [
+                {
+                    test: /\.ts$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                }
+            ]
+        },
+        resolve: {
+            extensions: ['.ts', '.js']
+        },
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist')
+        }
+    }
+</code></pre>
+<p>
+    entry 部分代表的是 Webpack 要打包的檔案輸入位置，也就是 ./src/index.ts 檔 <br/>
+    module 裡面通常都是放置 Loader 相關設定 —— 其中 TypeScript 相關檔案都會經由 ts-loader 進行編譯處理的動作<br />
+    output 則是設定 Webpack 打包過後的專案輸出點 —— 以上面的設定來說，它會把檔案打包到 ./dist 資料夾內，並且取名為 bundle.js<br />
+</p>
+
+<h3><b>編譯到測試開發流程</b></h3>
+<p>
+    我們可以使用 lite-server 簡單地 Host HTML 檔案並且監控靜態檔案的變更 —— 如果該 HTML 檔引入的 JavaScript 檔案有被變動時，就會自動幫我們刷新頁面。<br />
+
+    首先，我們當然得先要有 index.html 來測試我們編譯過後的 JavaScript 檔案，以下是 index.html 的程式碼內容。
+</p>
+
+<pre><code class="html">
+    &lt!DOCTYPE html>
+    &lthtml>
+    &lthead>
+    &lttitle>Page Title &lt/title>
+    &lt/head>
+    &ltbody>
+    
+    &lth1>This is a Heading &lt/h1>
+    &ltp>This is a paragraph. &lt/p>
+ 
+    &ltscript src="./dist/bundle.js">&lt/script>
+    &lt/body>
+    &lt/html>
+</code></pre>
+
+<p>
+    另外，我們除了想要使用 lite-server 外，通常使用 webpack 打包專案時，可以使用 webpack -w 開啟 Watch 模式 —— 只要專案一有變動，Webpack 就會自動重新打包並更新輸出結果。<br />
+
+    不過這樣子又會遇到必須同時開兩個終端機，分別執行 lite-server 與 webpack -w 這兩個指令，於是我們也可以使用 concurrently 這個套件 —— 協助我們同時執行這兩種指令。<br />
+
+    首先，下載 lite-server 與 concurrenly 這兩個套件：
+</p>
+
+<pre><code class="html">
+    $ npm install lite-server concurrently --save-dev
+</code></pre>
+
+<p>
+    並且將 package.json 裡的 scripts 修改成：
+</p>
+
+<pre><code class="html">
+    {
+      /* 略... */
+      "scripts": {
+        "start:watch": "webpack -w",
+        "start:serve": "lite-server",
+        "start": "concurrently npm:start:*"
+      },
+      /* 略... */
+    }
+</code></pre>
+
+<p>
+    我們就可以使用 npm start 同時執行 webpack -w 與 lite-server 這兩種指令。
+    另外，lite-server 會自動打開瀏覽器，並且鎖定 localhost:3000 這個 Port。（如果本來的 3000 Port 被佔據了，則會打開 3001，依此類推）
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "建構 Webpack 結合 TypeScript 環境";
+        seo.metaTitle = "建構 Webpack 結合 TypeScript 環境";
+        seo.metaDescription = @" Webpack 不僅僅只有打包純 JavaScript 相關的檔案而已，它連任何靜態資源，諸如：CSS、Sass、Image 等等相關的檔案都可以打包在一起。
+            而打包專案一切的方式就是用所謂的 Loader 進行，比如說：想要將 CSS 檔案打包進去，就會有所謂的 css-loader；想要編譯 Sass 相關的檔案，就會有 sass-loader 之類的東西 —— 而如果今天要將 TypeScript 的檔案編譯並且打包進去，官方就有出所謂的 ts-loader。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
+
