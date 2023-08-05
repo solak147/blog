@@ -1,0 +1,89 @@
+﻿@page "/vueloadsh"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue  Loadsh</h1>
+
+<h2><b> Loadsh 介紹</b></h2>
+<br />
+
+<p>
+    Lodash 是一個流行的 JavaScript 實用工具庫，提供了許多用於簡化編程任務的實用函數。它被廣泛用於前端和後端開發，可以大大提高代碼的效率和可讀性。以下是關於 Lodash 的一些重要信息和功能介紹：
+    <br /><br />
+    函數式編程支持： Lodash 提供了大量的函數式編程工具，可以幫助你更輕松地處理數據。它的函數可以接受函數作為參數，支持函數的組合和鏈式調用，這有助於編寫更模塊化和可維護的代碼。
+      <br /><br />
+    提供廣泛的工具函數： Lodash 提供了許多用於處理數組、對象、字符串、函數等數據類型的實用工具函數。例如，你可以使用 _.map 進行映射操作，使用 _.filter 進行過濾，使用 _.reduce 進行累積操作等等。
+    <br /><br />
+    數據處理： Lodash 提供了大量的函數用於對數據進行處理，如排序、過濾、映射、分組、歸約等操作。這些函數使數據處理變得更加簡潔和高效。
+    <br /><br />
+    鏈式調用： Lodash 的函數支持鏈式調用，這意味著你可以按順序調用多個函數，每個函數都在前一個函數的結果上操作。這可以使你的代碼更具可讀性。
+      <br /><br />
+    性能優化： Lodash 在設計上注重了性能，許多函數都經過了優化，可以在處理大數據集時提供更好的性能。此外，Lodash 還提供了一些延遲執行的函數，可以幫助你避免不必要的計算。
+      <br /><br />
+    瀏覽器和 Node.js 支持： Lodash 可以在瀏覽器環境和 Node.js 環境中使用，適用於前端和後端開發。你可以通過 npm 或 yarn 安裝它，並在項目中引入使用。
+</p>
+
+<h2><b>在 Vue 中使用 Loadsh</b></h2>
+<p>
+    在 Vue 項目中引入 Lodash 非常簡單。你可以通過以下步驟完成：<br />
+</p>
+
+<h2><b>1.安装 Lodash 包：</b></h2>
+<p>
+    在你的 Vue 項目根目錄下，打開終端並運行以下命令來安裝 Lodash 包：
+</p>
+<pre><code class="linux">
+    npm install lodash
+</code></pre>
+
+<h2><b>2.在 Vue 組件中引入並使用 Lodash：</b></h2>
+<p>
+    在你的 Vue 組件中，你可以通過 import 語句引入 Lodash：
+</p>
+<pre><code class="javascript">
+    import _ from 'lodash';
+
+    export default {
+      // ...
+      methods: {
+        exampleMethod() {
+          // 使用 Lodash 函数
+          const sortedArray = _.sortBy([3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]);
+          console.log(sortedArray);
+        }
+      }
+    }
+
+</code></pre>
+
+<p>
+    在這個示例中，我們首先使用 import 語句導入了 Lodash 庫，並將其命名為 _。然後在 exampleMethod 中使用了 Lodash 的 _.sortBy 函數對數組進行排序，並將結果打印到控制台。<br /><br />
+
+    這樣就完成了在 Vue 項目中引入和使用 Lodash 庫的過程。你可以在 Vue 組件的任何地方使用 Lodash 提供的函數來處理數據和執行操作。
+
+    詳細 Loadsh 套件的相關方法如何使用，可以參考 <a href="https://lodash.com/docs/4.17.15#chunk">官方文檔</a>。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue  Loadsh";
+        seo.metaTitle = "Vue  Loadsh";
+        seo.metaDescription = @"Lodash 是一個流行的 JavaScript 實用工具庫，提供了許多用於簡化編程任務的實用函數。它被廣泛用於前端和後端開發，可以大大提高代碼的效率和可讀性。以下是關於 Lodash 的一些重要信息和功能介紹：
+
+            函數式編程支持： Lodash 提供了大量的函數式編程工具，可以幫助你更輕松地處理數據。它的函數可以接受函數作為參數，支持函數的組合和鏈式調用，這有助於編寫更模塊化和可維護的代碼。
+
+            提供廣泛的工具函數： Lodash 提供了許多用於處理數組、對象、字符串、函數等數據類型的實用工具函數。例如，你可以使用 _.map 進行映射操作，使用 _.filter 進行過濾，使用 _.reduce 進行累積操作等等。
+
+            數據處理： Lodash 提供了大量的函數用於對數據進行處理，如排序、過濾、映射、分組、歸約等操作。這些函數使數據處理變得更加簡潔和高效。
+
+            鏈式調用： Lodash 的函數支持鏈式調用，這意味著你可以按順序調用多個函數，每個函數都在前一個函數的結果上操作。這可以使你的代碼更具可讀性。
+
+            性能優化： Lodash 在設計上注重了性能，許多函數都經過了優化，可以在處理大數據集時提供更好的性能。此外，Lodash 還提供了一些延遲執行的函數，可以幫助你避免不必要的計算。
+
+            瀏覽器和 Node.js 支持： Lodash 可以在瀏覽器環境和 Node.js 環境中使用，適用於前端和後端開發。你可以通過 npm 或 yarn 安裝它，並在項目中引入使用。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
