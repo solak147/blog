@@ -1,0 +1,143 @@
+﻿@page "/vuecomponentstr"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Vue 字串中使用 Component</h1>
+
+<h2><b>字串中使用 Component</b></h2>
+<br />
+
+<p>
+    如果必須在字符串中插入自定義組件，可以考慮使用 Vue 的動態組件 (&lt;component>) 和 Vue 的$mount() 方法來實現。
+    <br/>
+    下面是一個示例，演示如何在字符串中動態插入自定義組件：
+    <br /><br />
+    1.首先，確保你的自定義組件已經定義好，例如 components/CustomComponent.vue：
+</p>
+
+<pre><code class="javascript">
+    &lt;template>
+      &lt;div>
+        &lt;p>This is a custom component.&lt;/&lt;p>
+      &lt;/&lt;div>
+    &lt;/&lt;template>
+</code></pre>
+
+<p>
+    2.在父組件中使用動態組件來實現在字符串中插入自定義組件：
+</p>
+
+<pre><code class="javascript">
+    &lt;template>
+    &lt;div>
+        &lt;!-- 使用动态组件容器 -->
+        &lt;component :is="dynamicComponent"> &lt;/component>
+
+        &lt;!-- 字符串中的自定义组件标签 -->
+        &lt;div v-html="htmlWithComponent">&lt;/div>
+    &lt;/div>
+    &lt;/template>
+
+    &lt;script>
+    import CustomComponent from '~/components/CustomComponent.vue';
+
+    export default {
+      components: {
+        CustomComponent,
+      },
+      data() {
+        return {
+          dynamicComponent: null,
+          htmlWithComponent: '&lt;custom-component> &lt;/custom-component>',
+        };
+      },
+      mounted() {
+        // 创建动态组件实例并挂载
+        const DynamicComponent = Vue.extend(CustomComponent);
+        this.dynamicComponent = new DynamicComponent().$mount();
+      },
+    };
+     &lt;/script>
+
+</code></pre>
+
+<p>
+    這個示例中，我們首先在模板中使用 &lt;component> 元素來容納動態組件，然後在 htmlWithComponent 字符串中嵌入自定義組件的標簽。在組件的 mounted 鉤子中，我們動態創建了自定義組件的實例並將其掛載到了動態組件容器中。
+    <br /><br />
+    需要注意的是，這種方式可能會帶來一些覆雜性和潛在的問題，例如組件生命周期的管理和事件的處理。確保你的設計能夠處理這些問題，同時要謹慎考慮是否真的需要在字符串中插入自定義組件，以避免引入不必要的覆雜性。
+</p>
+
+<p>
+    另外提供另一種方式，用解析字符串中的組件標簽並建立 html element 在 Vue 模板中渲染：
+</p>
+
+<pre><code class="javascript">
+&lt;template>
+  &lt;div>
+    &lt;!-- 使用动态组件容器 -->
+    &lt;component :is="dynamicComponent">&lt;/component>
+    &lt;button @@click="loadCustomComponent">Load Custom Component&lt;/button>
+  &lt;/div>
+&lt;/template>
+
+&lt;script>
+import CustomComponent from '~/components/CustomComponent.vue';
+
+export default {
+  components: {
+    CustomComponent,
+  },
+  data() {
+    return {
+      dynamicComponent: null,
+      // 包含自定义组件标签的字符串
+      stringWithComponent: '&lt;custom-component>&lt;/custom-component>',
+    };
+  },
+  methods: {
+    loadCustomComponent() {
+      // 解析字符串中的组件标签并动态加载
+      this.dynamicComponent = this.renderComponentFromString(this.stringWithComponent);
+    },
+    // 帮助函数：将包含组件标签的字符串解析为动态组件
+    renderComponentFromString(content) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = content;
+
+      // 查找并处理所有的组件标签
+      const componentTags = wrapper.querySelectorAll('custom-component');
+      componentTags.forEach((tag) => {
+        // 创建组件实例并挂载
+        const componentInstance = new CustomComponent();
+        componentInstance.$mount();
+        // 替换标签为组件实例的 DOM 元素
+        tag.parentNode.replaceChild(componentInstance.$el, tag);
+      });
+
+      return wrapper.innerHTML;
+    },
+  },
+};
+&lt;/script>
+
+</code></pre>
+
+<p>
+    在這個示例中，我們首先在模板中使用一個動態組件 (&lt;component>)，並且將 dynamicComponent 綁定到動態組件的 :is 屬性上。當點擊按鈕時，loadCustomComponent 方法會調用 renderComponentFromString 幫助函數，該函數會解析字符串中的組件標簽，並動態加載自定義組件。
+        <br /><br />
+    這個示例允許在字符串中插入自定義組件標簽，並在點擊按鈕後在客戶端渲染這些組件。這樣可以繞過服務器端渲染（SSR）的限制，但需要注意在實際應用中，需要考慮一些細節，例如處理組件的生命周期、事件綁定等。
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Vue 字串中使用自定義 Component";
+        seo.metaTitle = "Vue 字串中使用自定義 Component";
+        seo.metaDescription = @"如果必須在字符串中插入自定義組件，可以考慮使用 Vue 的動態組件 (&lt;component>) 和 Vue 的$mount() 方法來實現。
+            或是利用解析字符串中的組件標簽並建立 html element 在 Vue 模板中渲染";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
+
