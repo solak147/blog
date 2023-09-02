@@ -1,0 +1,108 @@
+﻿@page "/flutterenv"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Flutter 開發環境建置</h1>
+
+<h2><b>Flutter 開發環境建置</b></h2>
+<br />
+
+<h3><b>下載 Flutter(For Windows)</b></h3>
+<p>
+    1.安裝Git for Windows(<a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a>) <br/>
+    2.下載Flutter SDK<br/>
+    在C槽點滑鼠右鍵「Git bash here」，便會開啟git bash，你就可以在裡面下git command。<br />
+    3.接著輸入git clone -b stable https://github.com/flutter/flutter.git
+    電腦就會自己去找Flutter官方發布的最新穩定版本並下載到當前資料夾。
+</p>
+
+<h3><b>安裝 Flutter</b></h3>
+<p>
+    1.進到flutter資料夾，執行flutter_console.bat<br/>
+    可以在這裡下flutter的指令，輸入「flutter doctor」，系統會自動去檢查電腦環境，並幫你下載Dart的SDK。<br />
+    最後會產生一個簡易的報表，這時你可能會看到一些錯誤或警告。<br />
+</p>
+
+<img src="images/flutter_env1.png" alt="flutter 開發環境建置" style="width: 80%" />
+
+<p>
+    2.設定環境變數，之後就可以直接在 cmd 或 powershell 使用 flutter commands
+    在使用者變數區域找到「path」變數，新增一個路徑到 C:\flutter\bin
+</p>
+
+<h3><b>下載安裝 Android Studio</b></h3>
+官方網站<a href="https://developer.android.com/studio" style="margin-bottom: 20px">https://developer.android.com/studio</a>
+
+<h3><b>設定模擬器</b></h3>
+
+<img src="images/flutter_env2.png" alt="flutter 設定模擬器" style="width: 80%; margin-bottom: 20px" />
+
+<h3><b>安裝 Flutter 和 dart plugin</b></h3>
+<p>
+    點選上方 Tools -> SDK Manager -> 搜尋flutter安裝第一個。<br />
+    建議Flutter Snippts也可以安裝，之後寫程式很方便，這個外掛讓我們只要輸入縮寫就能產生常用的程式碼模板
+</p>
+<img src="images/flutter_env3.png" alt="flutter plugins" style="width: 80%; margin-bottom: 20px" />
+
+<h3><b>flutter doctor 問題</b></h3>
+<p>
+    Andriod toolchain<br />
+    Unable to locate the Android SDK<br />
+
+    解決:<br />
+    flutter config --android-sdk &lt;your android sdk 如下圖 上方 Tools -> SDK Manager ><br />
+    然後點選 edit 更新 SDK
+</p>
+<img src="images/flutter_env4.png" alt="flutter 設定模擬器" style="width: 80%; margin-bottom: 20px" />
+
+<p>
+    some android licenses not accepted<br />
+    解決:<br />
+    flutter doctor --android-licenses 然後全部選 y
+</p>
+
+<h3><b>flutter cli</b></h3>\
+<pre><code class="linux">
+    #顯示各個 flutter 指令用途
+    flutter -h
+
+    #顯示 flutter 版本
+    flutter --version
+
+    #列出或切換 Flutter channel
+    flutter channel
+
+    #設定 Flutter 相關設定
+    flutter config
+
+    #更新或降版 Flutter sdk
+    flutter upgrade/downgrade
+
+    #創建 Flutter 專案所使用的指令
+    flutter create
+
+    #開發執行相關設定
+    flutter run #使用預設執行模式執行    
+</code></pre>
+
+<div class="ref">
+    參考 : <a href="https://ithelp.ithome.com.tw/articles/10290961">https://ithelp.ithome.com.tw/articles/10290961</a><br/>
+    <a href="https://ithelp.ithome.com.tw/articles/10215158">https://ithelp.ithome.com.tw/articles/10215158</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Flutter 開發環境建置";
+        seo.metaTitle = "Flutter 開發環境建置";
+        seo.metaDescription = @"1.安裝Git for Windows(<a href=""https://git-scm.com/download/win"">https://git-scm.com/download/win</a>)
+                2.下載Flutter SDK < br />
+                在C槽點滑鼠右鍵「Git bash here」，便會開啟git bash，你就可以在裡面下git command。< br />
+                3.接著輸入git clone - b stable https://github.com/flutter/flutter.git
+            電腦就會自己去找Flutter官方發布的最新穩定版本並下載到當前資料夾。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
+
