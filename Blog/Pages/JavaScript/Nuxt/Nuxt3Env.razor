@@ -1,0 +1,193 @@
+﻿@page "/nuxt3env"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Nuxt 3 + TypeScript + ESLint + Prettier 環境建置 </h1>
+
+<h2><b>Nuxt 3 + TypeScript + ESLint + Prettier 環境建置</b></h2>
+
+<h3><b>使用 nuxi 建立 Nuxt 3 專案</b></h3>
+<pre><code class="linux">
+    npx nuxi init 專案名稱
+</code></pre
+
+<pre><code class="linux">
+    cd 專案名稱
+    npm install
+    npm run dev -- -o
+</code></pre>
+<p>
+    可以看到 Nitro 幫我們啟動了 Nuxt 3 的服務。
+</p>
+
+<h3><b>Nuxt CLI 常用指令</b></h3>
+<pre><code class="linux">
+   #個 nuxi init 指令是用來初始化一個 Nuxt 專案，等價 nuxi create 指令
+   npx nuxi init|create [dir]
+
+   #當我們執行 npm run dev -- -o 時，依據 package.json 中的 scripts 所列，其實就是在執行 nuxi dev -o，其中的 -o 表示服務啟動後開啟瀏覽器。
+   #如果啟動服務發現 Port 衝突，你也可以透過 -p 來將預設的監聽的 Port: 3000 調整為其他數值。
+   #e.g. nuxi dev -p 3001 或 npm run dev -- -o -p 3001
+   npx nuxi dev [--open, -o] [--port, -p]
+
+   #nuxi cleanup 等價 nuxi clean 指令，用來刪除 Nuxt 自動產生的檔案和緩存包括：
+   #.nuxt
+   #.output
+   #node_modules/.vite
+   #node_modules/.cache
+   npx nuxi clean|cleanup
+
+   #這個指令可以用來將目前專案的 Nuxt 3 升級至最新的版本，如果有一些可能行為調整或不相容的情況，可以再依據實際情境搭配 -f 參數來強制更新。
+   npx nuxi upgrade [--force|-f]
+</code></pre>
+
+<h3><b>TypeScript</b></h3>
+<p>
+    Nuxt 3 已經有內建支援 TypeScript，一些 TypeScript 設定都可以在專案根目錄下配置 tsconfig.json
+</p>
+
+<h3><b>設置類型檢查</b></h3>
+<h3><b>Step 1. 安裝 VS Code 插件</b></h3>
+
+<p>
+    Vue Language Features (Volar): 寫 Vue 3 強力推薦必裝的插件，包含了上色、語法提示、編輯器快速分割等強大功能，而且也是 Nuxt 3 推薦的編輯器插件。
+    TypeScript Vue Plugin (Volar): Vue 的 TypeScript 插件。
+</p>
+
+<h3><b>Step 2. 安裝 Vue 類型檢查套件</b></h3>
+<pre><code class="linux">
+    npm install -D vue-tsc
+</code></pre
+
+<h3><b>Step 3. 調整 nuxt.config.ts 設定</b></h3>
+<pre><code class="linux">
+    export default defineNuxtConfig({
+      typescript: {
+        typeCheck: true
+      }
+    })
+</code></pre>
+
+<h3><b>Step 4. 重新啟動開發環境服務</b></h3>
+<pre><code class="linux">
+    npm run dev -- -o
+</code></pre>
+
+<h3><b>ESLint</b></h3>
+<p>
+    ESLint 是一個 JavaScript Linter，它用來檢查 JavaScript Coding Style 的工具，主要能用來統一風格，例如，縮排空白數、字串要用單引號或雙引號等，也能幫你分析並找到語法錯誤，提醒你刪掉多餘程式碼或遵照最佳的實踐方式，確保程式碼能具有一定的水準。在團隊協作下 ESLint 更能讓大家撰寫程式碼時遵照規則，確保程式碼品質。ESLint 除了提供你可以使用大公司如 Google、Airbnb 等的規則配置來作為檢查基準，也可以客製自訂出自己喜好或團隊共識的規則來分析與提醒你校正語法。
+</p>
+
+<h3><b>設置 ESLint 環境</b></h3>
+<h3><b>Step 1. 安裝 ESLint 套件</b></h3>
+<pre><code class="linux">
+   npm install -D eslint @@nuxtjs/eslint-config-typescript eslint-plugin-vue
+</code></pre>
+
+<h3><b>Step 2. 配置 ESLint 設定檔件</b></h3>
+<p>
+    在專案根目錄下建立 .eslintrc.js 檔案，內容如下：
+</p>
+<pre><code class="javascript">
+   module.exports = {
+      env: {
+        browser: true,
+        es2021: true
+      },
+      extends: ['@@nuxtjs/eslint-config-typescript', 'plugin:vue/vue3-recommended', 'prettier'],
+      parserOptions: {
+        ecmaVersion: 13,
+        sourceType: 'module'
+      },
+      plugins: ['prettier'],
+      rules: {
+        'prettier/prettier': [
+          'error',
+          {
+            endOfLine: 'auto' // windows 換行用
+          }
+        ]
+      },
+      overrides: [
+        {
+          files: [
+            '**/pages/**/*.{js,ts,vue}',
+            '**/layouts/**/*.{js,ts,vue}',
+            '**/app.{js,ts,vue}',
+            '**/error.{js,ts,vue}'
+          ],
+          rules: {
+            'vue/multi-word-component-names': 'off'
+          }
+        }
+      ]
+    }
+</code></pre>
+
+<h3><b>用 ESLint 來嘗試檢查，在 package.json 設置腳本</b></h3>
+<p>
+    在 package.json 的 scripts 腳本中，我們可以新增一個指令 "lint": "eslint --ext .ts,.js,.vue ."，這樣一來我們就可以使用如下指令來檢查專案目錄下的所有包含 .ts, .js, .vue 副檔名的檔案。
+</p>
+<pre><code class="linux">
+   npm run lint
+</code></pre>
+
+<h3><b>存擋自動修正</b></h3>
+<p>
+    透過添加 VS Code 的設定檔，如專案目錄下新增 .vscode/settings.json
+</p>
+<pre><code class="json">
+   {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+      }
+    }
+</code></pre>
+
+<h3><b>Prettier</b></h3>
+<p>
+    Prettier 是程式碼格式化的工具，也可以與 ESLint 進行搭配，ESLint 與 Prettier 就能各司其職將 JaveScript 與 Vue 等檔案依照配置進行檢查與排版。
+</p
+
+<h3><b>設置 Prettier</b></h3>
+<h3><b>Step 1. 安裝 Prettier 套件</b></h3>
+<pre><code class="linux">
+   npm install -D prettier eslint-config-prettier eslint-plugin-prettier
+</code></pre>
+
+<h3><b>Step 2. 配置 Prettier 設定檔案</b></h3>
+<p>
+    在專案根目錄下建立 .prettierrc.js 檔案，內容如下:
+</p>
+<pre><code class="javascript">
+    module.exports = {
+        printWidth: 100,          // 每行文字數量達 100 字元就換到新的一行
+        semi: false,              // 每個語句的結尾不需要分號
+        singleQuote: true,        // 字串使用單引號，而不是雙引號
+        trailingComma: 'none'     // 如 Object、Array 內的元素不需要尾隨逗號
+    }
+</code></pre>
+
+<h3><b>Step 3. 安裝 VS Code 的 Prettier 插件</b></h3>
+<p>
+    Prettier - Code formatter: 提供我們做程式碼的格式化，最重要的是來協助我們自動載入 .prettierrc.js 配置。
+</p>
+
+<div class="ref">
+    參考 :<a href="https://ithelp.ithome.com.tw/m/articles/10293758">https://ithelp.ithome.com.tw/m/articles/10293758</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Nuxt 3 + TypeScript + ESLint + Prettier 環境建置";
+        seo.metaTitle = "Nuxt 3 + TypeScript + ESLint + Prettier 環境建置";
+        seo.metaDescription = @" 我們將使用 nuxi 建立 Nuxt 3 專案，搭琣 TypeScript + ESLint + Prettier 來開發。
+            Nuxt 3 已經有內建支援 TypeScript，一些 TypeScript 設定都可以在專案根目錄下配置 tsconfig.json。
+            ESLint 是一個 JavaScript Linter，它用來檢查 JavaScript Coding Style 的工具，主要能用來統一風格，例如，縮排空白數、字串要用單引號或雙引號等，也能幫你分析並找到語法錯誤，提醒你刪掉多餘程式碼或遵照最佳的實踐方式，確保程式碼能具有一定的水準。在團隊協作下 ESLint 更能讓大家撰寫程式碼時遵照規則，確保程式碼品質。ESLint 除了提供你可以使用大公司如 Google、Airbnb 等的規則配置來作為檢查基準，也可以客製自訂出自己喜好或團隊共識的規則來分析與提醒你校正語法。
+            Prettier 是程式碼格式化的工具，也可以與 ESLint 進行搭配，ESLint 與 Prettier 就能各司其職將 JaveScript 與 Vue 等檔案依照配置進行檢查與排版。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
