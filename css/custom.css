@@ -17,6 +17,10 @@ article {
     padding: 30px;
 }
 
+pre code.hljs {
+    padding: 0 0.1em 1rem 0.1rem;
+}
+
 a {
     color: #0f8eec;
 }
