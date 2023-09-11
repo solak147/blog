@@ -1,0 +1,173 @@
+﻿@page "/nuxt3tailwindcss"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Nuxt3 use TailwindCss </h1>
+
+<h2><b>Nuxt3 use TailwindCss</b></h2>
+
+<p>
+    Tailwind CSS 是一個非常熱門的Utility-First CSS框架，這種框架的設計理念是將小型、單一用途的CSS類別應用於HTML元素，以構建網頁界面。這種方法與傳統的CSS框架和方法不同，傳統方法通常涉及編寫自定義的CSS規則，而不是重用現有的類別。以下是Utility-First CSS框架和Tailwind CSS的主要特點和概念：
+    <br /><br/>
+    小型、單一用途的類別： Utility-First CSS框架提供了大量的小型CSS類別，每個類別都專注於執行一個具體的樣式操作。這樣的類別可以應用到HTML元素上，以快速實現所需的樣式，而無需手動編寫大量的自定義CSS代碼。
+    <br /><br />
+    即時反饋和預覽： Tailwind CSS 提供了即時反饋功能，當你編輯HTML文件時，你可以立即看到樣式的變化。這有助於快速迭代和調整設計。
+     <br /><br/>
+    可定制性： 儘管提供了大量的預設類別，但你可以根據項目的需要自定義和擴展Tailwind CSS，以添加新的類別或調整現有的類別。
+     <br /><br/>
+    組件化： Utility-First CSS也鼓勵將UI元素拆分為可重用的組件，每個組件都可以使用相應的類別來定義樣式。
+    <br /><br />
+    響應式設計： Tailwind CSS 提供了內置的響應式類別，可以根據不同屏幕寬度應用樣式，從而實現響應式設計。
+    <br /><br />
+    優化和性能： 雖然看起來會生成大量的HTML類別，但Tailwind CSS可以通過不同的工具進行優化，以減小文件大小，並提高性能。這些工具可以刪除未使用的類別，以減少文件大小。
+    <br /><br />
+    開發速度提升： Utility-First CSS框架可以加速前端開發速度，因為你可以快速應用預定義的類別，而無需經常編寫自定義CSS代碼。
+    <br /><br />
+    總之，Utility-First CSS框架，特別是Tailwind CSS，已經在近年來變得非常受歡迎，因為它們能夠提高前端開發效率，同時保持代碼的可讀性和可維護性。這種方法有助於簡化設計和開發過程，並促使團隊更迅速地交付現代化、具有吸引力的網頁界面。
+</p>
+
+<h3><b>Tailwind CSS 官方指引步驟安裝</b></h3>
+<h3><b>Step 1. 安裝相關套件</b></h3>
+<p>進入Nuxt 專案目錄下</p>
+<pre><code class="linux">
+    npm install -D tailwindcss postcss@latest postcss-custom-properties@latest autoprefixer@latest
+</code></pre>
+
+<h3><b>Step 2. 建立 tailwind.config.js</b></h3>
+<p>安裝完套件後，可以執行下列指令進行初始化，完成後會在專案根目錄下產生一個名為 tailwind.config.js 的 Tailwind CSS 設定檔。</p>
+<pre><code class="linux">
+    npx tailwindcss init
+</code></pre>
+
+<h3><b>Step 3. 調整 tailwind.config.js</b></h3>
+<p>打開剛剛產生的設定檔 tailwind.config.js，在配置中的 content 陣列添加一些路徑，這些路徑皆是跟 Nuxt 有關的資料夾目錄與檔案，完成後檔案內容如下。</p>
+<pre><code class="javascript">
+    /** @@type {import('tailwindcss').Config} */
+    module.exports = {
+      content: [
+        './components/**/*.{vue,js,ts}',
+        './layouts/**/*.vue',
+        './pages/**/*.vue',
+        './composables/**/*.{js,ts}',
+        './plugins/**/*.{js,ts}',
+        './app.{js,ts,vue}'
+      ],
+      theme: {
+        extend: {}
+      },
+      plugins: []
+    }
+</code></pre>
+
+<h3><b>Step 4. 建立 tailwind.css</b></h3>
+<p>我們在專案目錄下建立 assets 與子目錄 css 用來放置 Tailwind CSS 的自定義指令，我們將其放置在 tailwind.css 供後續做使用， tailwind.css 的路徑應會是 ./assets/css/tailwind.css 檔案內容如下。</p>
+<pre><code class="linux">
+    @@tailwind base;
+    @@tailwind components;
+    @@tailwind utilities;
+</code></pre>
+
+<h3><b>Step 5. 配置全域共用 CSS</b></h3>
+<p>修改專案根目錄的 nuxt.config.ts 檔案，在 css 參數陣列內新增 tailwind.css 路徑，讓 Nuxt 可以配置全域共用的 CSS，並添加 postcss 選項及我們剛才安裝的套件作為插件，最後 nuxt.config.ts 檔案看起來如下。</p>
+<pre><code class="linux">
+    // https://v3.nuxtjs.org/api/configuration/nuxt.config
+    export default defineNuxtConfig({
+      postcss: {
+        plugins: {
+          'postcss-import': {},
+          'tailwindcss/nesting': {},
+          tailwindcss: {},
+          autoprefixer: {}
+        }
+      },
+      css: ['@@/assets/css/tailwind.css'],
+      typescript: {
+        typeCheck: true
+      }
+    })
+</code></pre>
+
+<p>
+    至此便設定完成，我們專案目錄檔案如下結構。
+</p>
+
+<pre><code class="linux">
+    nuxt-app
+    ├── .nuxt/
+    ├── assets/
+    │   └── css/
+    │       └── tailwind.css      // 手動新增的檔案，用於設置 Tailwind CSS 指令並讓全部頁面引用
+    ├── node_modules/
+    ├── .eslintrc.js
+    ├── .gitignore
+    ├── .prettierrc.js
+    ├── app.vue
+    ├── nuxt.config.ts
+    ├── package-lock.json
+    ├── package.json
+    ├── README.md
+    ├── tailwind.config.js       // Tailwind 初始化指令產生的設定檔
+    └── tsconfig.json
+</code></pre>
+
+
+<h3><b>自動排序 Tailwind CSS 的 Class</b></h3>
+<h3><b>Tailwind x Prettier</b></h3>
+<h3><b>Step 1. 安裝插件</b></h3>
+<pre><code class="linux">
+    npm install -D prettier-plugin-tailwindcss
+</code></pre>
+
+
+<h3><b>Step 2. 配置設定檔</b></h3>
+<p>開啟 .prettierrc.js 檔案，添加 'prettier-plugin-tailwindcss' 至 plugins 陣列中：</p>
+<pre><code class="linux">
+    module.exports = {
+      plugins: [
+        'prettier-plugin-tailwindcss'
+      ],
+      printWidth: 100,          // 每行文字數量達 100 字元就換到新的一行
+      semi: false,              // 每個語句的結尾不需要分號
+      singleQuote: true,        // 字串使用單引號，而不是雙引號
+      trailingComma: 'none'     // 如 Object、Array 內的元素不需要尾隨逗號
+    }
+</code></pre>
+
+<h3><b>Step 3. 自動修正效果</b></h3>
+<p>
+    透過添加 VS Code 的設定檔，如專案目錄下新增 .vscode/settings.json
+</p>
+<pre><code class="json">
+   {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+      }
+    }
+</code></pre>
+
+
+<h3><b>Step 4. VS Code 安裝 Tailwind CSS IntelliSense 和 Prettier - Code formatter</b></h3>
+
+<div class="ref">
+    參考 :<a href="https://ithelp.ithome.com.tw/m/articles/10294705">https://ithelp.ithome.com.tw/m/articles/10294705</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = " Nuxt3 use TailwindCss";
+        seo.metaTitle = " Nuxt3 use TailwindCss";
+        seo.metaDescription = @"Tailwind CSS 是一個非常熱門的Utility-First CSS框架，這種框架的設計理念是將小型、單一用途的CSS類別應用於HTML元素，以構建網頁界面。這種方法與傳統的CSS框架和方法不同，傳統方法通常涉及編寫自定義的CSS規則，而不是重用現有的類別。以下是Utility-First CSS框架和Tailwind CSS的主要特點和概念：
+            小型、單一用途的類別： Utility-First CSS框架提供了大量的小型CSS類別，每個類別都專注於執行一個具體的樣式操作。這樣的類別可以應用到HTML元素上，以快速實現所需的樣式，而無需手動編寫大量的自定義CSS代碼。
+            即時反饋和預覽： Tailwind CSS 提供了即時反饋功能，當你編輯HTML文件時，你可以立即看到樣式的變化。這有助於快速迭代和調整設計。
+            可定制性： 儘管提供了大量的預設類別，但你可以根據項目的需要自定義和擴展Tailwind CSS，以添加新的類別或調整現有的類別。
+            組件化： Utility-First CSS也鼓勵將UI元素拆分為可重用的組件，每個組件都可以使用相應的類別來定義樣式。
+            響應式設計： Tailwind CSS 提供了內置的響應式類別，可以根據不同屏幕寬度應用樣式，從而實現響應式設計。
+            優化和性能： 雖然看起來會生成大量的HTML類別，但Tailwind CSS可以通過不同的工具進行優化，以減小文件大小，並提高性能。這些工具可以刪除未使用的類別，以減少文件大小。
+            開發速度提升： Utility-First CSS框架可以加速前端開發速度，因為你可以快速應用預定義的類別，而無需經常編寫自定義CSS代碼。
+            總之，Utility-First CSS框架，特別是Tailwind CSS，已經在近年來變得非常受歡迎，因為它們能夠提高前端開發效率，同時保持代碼的可讀性和可維護性。這種方法有助於簡化設計和開發過程，並促使團隊更迅速地交付現代化、具有吸引力的網頁界面。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
