@@ -1,0 +1,84 @@
+﻿@page "/javascriptIframe"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - iframe子頁面跨域向父頁面傳遞消息</h1>
+
+<h2><b>iframe子頁面跨域向父頁面傳遞消息</b></h2>
+<br />
+
+<p>
+    前言: 主要是為了實現從外部網頁按下按鈕，能夠跳轉進 ios webclip 的 h5 偽應用
+</p>
+
+<h3><b>iframe內部讓父級頁面跳轉</b></h3>
+<pre><code class="javascript">
+    parent.location.href
+
+    top.location.href
+</code></pre>
+<p>
+   一開始想到此種方式，不過這種方式在網域不同時，會有跨域問題
+</p>
+
+<p>
+    最後找到使用 H5 的 postMessage() 方法<br/>
+
+    嵌入iframe的父頁面
+</p>
+
+<pre><code class="javascript">
+    window.addEventListener('message', function (e) {
+    //接收消息
+        if (e.data == 1) {
+            待执行逻辑
+        }
+    }, false);
+</code></pre>
+
+<p>
+    iframe子页面
+</p>
+
+<pre><code class="javascript">
+    let parentDomain = "https://www.google.com/"
+    top.postMessage(msg, parentDomain);
+</code></pre>
+
+<p>
+    反之也可從父頁面向子頁面傳遞消息
+</p>
+
+<pre><code class="javascript">
+    //嵌入iframe的父頁面
+    //指定iframe
+    var iframe = document.getElementById("myiframe").contentWindow;
+    //发送的消息
+    var msg = 1;
+    //嵌入iframe的域名 *表示允许所有域名
+    var childDomain = https://www.google.com/";
+
+    iframe.postMessage(msg, childDomain);
+</code></pre>
+
+<pre><code class="javascript">
+    //iframe子页面
+    window.addEventListener('message', function (e) {
+    //接收消息
+        if (e.data == 1) {
+            待执行逻辑
+        }
+    }, false);
+</code></pre>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "iframe子頁面跨域向父頁面傳遞消息";
+        seo.metaTitle = "iframe子頁面跨域向父頁面傳遞消息";
+        seo.metaDescription = @"iframe子頁面跨域向父頁面傳遞消息-使用 H5 的 postMessage() 方法";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
