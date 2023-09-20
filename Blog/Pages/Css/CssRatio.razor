@@ -1,0 +1,148 @@
+﻿@page "/cssRatio"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Css 實現固定寬高比</h1>
+
+<h3><b>實現固定寬高比</b></h3>
+<br />
+
+<h3><b>一、可替換元素實現固定寬高比</b></h3>
+<p>
+    可替換元素(如&lt;img>、&lt;video>)和其他元素不同，它們本身有像素寬度和高度的概念。所以如果想實現這一類元素固定寬高比，就比較簡單。<br />
+    我們可以指定其寬度或者高度值，另一邊自動計算就可以了。<br /><br />
+
+    如下，我們固定圖片元素的寬度，高度自適應：
+</p>
+
+<pre><code class="html">
+    &lt;div class="img-wrapper">
+        &lt;img src="https://p3.ssl.qhimg.com/t01f7d210920c0c73bd.jpg" alt="">
+    &lt;/div>
+</code></pre>
+
+<pre><code class="css">
+   .img-wrapper {
+      width: 50vw;
+      margin: 100px auto;
+      padding: 10px;
+      border: 5px solid lightsalmon;
+      font-size: 0;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+</code></pre>
+
+<h3><b>二、普通元素實現固定寬高比</b></h3>
+<p>
+    雖然我們上面實現了可替換元素的固定寬高比，但是這個比例主要是因為可替換元素本身有尺寸，而且這個比例還會受到原有尺寸比例的限制。顯然，這並不靈活，那我們該如何針對普通元素實現固定寬高比呢。<br /><br />
+    首先我們來看看最經典的padding-bottom/padding-top的 hack 方式。
+</p>
+
+<h3><b>2.1 padding-bottom實現普通元素固定寬高比</b></h3>
+<p>
+    能這樣做的原因在於 : <span class="imtdot">垂直方向上的內外邊距使用百分比做單位時，是基於包含塊的寬度來計算的。</span><br />
+    通過借助padding-bottom我們就可以實現一個寬高比例固定的元素，以div為例。
+</p>
+
+<pre><code class="html">
+     &lt;div class="wrapper">
+        &lt;div class="intrinsic-aspect-ratio-container"> &lt;/div>
+     &lt;/div>
+</code></pre>
+
+<pre><code class="css">
+    .wrapper {
+        width: 40vw;
+    }
+
+    .intrinsic-aspect-ratio-container {
+        width: 100%;
+        height: 0;
+        padding: 0;
+        padding-bottom: 75%;
+        margin: 50px;
+        background-color: lightsalmon;
+    }
+    </code></pre>
+
+<p>
+    如上代碼，我們將div元素的高度設為了0，通過padding-bottom來撐開盒子的高度，實現了4/3的固定寬高比。<br />
+    這樣是實現了固定寬高比，但其只是一個徒有其表的空盒子，里面沒有內容。如果想在里面放入內容，我們還需要將div內部的內容使用絕對定位來充滿固定尺寸的容器元素。<br /><br />
+    如下：
+</p>
+
+<pre><code class="css">
+    .intrinsic-aspect-ratio {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding: 0;
+      padding-bottom: 75%;
+      margin: 50px;
+      background-color: lightsalmon;
+    }
+
+    .content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+</code></pre>
+
+<p>
+    通過這種方式我們就可以實現一個可以填充內容的固定尺寸的容器了。<br /><br />
+
+    此外，尺寸比例，我們也可以通過calc()來計算，這樣比較靈活。我們可以快速的寫出任意比例，如padding-bottom: calc(33 / 17 * 100%);。
+</p>
+
+<h3><b>2.2 aspect-ratio屬性指定元素寬高比</b></h3>
+<p>
+    由於固定寬高比的需求存在已久，通過padding-bottom來 hack 的方式也很不直觀，並且需要元素的嵌套。<br /><br />
+
+    W3C 的 CSS 工作組為了避免這一問題，已經實現這樣一個屬性 aspect-ratio。<br />
+    aspect-ratio的語法格式如下：aspect-ratio: width / height。<br /><br />
+
+    如下，我們可以將width或height設為auto，然後指定aspect-ratio。另一個值就會按照比例自動變化。
+</p>
+
+<pre><code class="css">
+    /* 高度随动 */
+    .box1 {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
+    }
+
+    /* 宽度随动 */
+    .box2 {
+        height: 100%;
+        width: auto;
+        aspect-ratio: 16/9;
+    }
+</code></pre>
+
+
+<div class="ref">
+    參考 :<a href="https://juejin.cn/post/6844904070679887886">https://juejin.cn/post/6844904070679887886</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Css 實現固定寬高比";
+        seo.metaTitle = "Css 實現固定寬高比";
+        seo.metaDescription = @"如果元素的尺寸已知的話，計算好寬高寫上去就行了。如果元素尺寸未知又分為以下幾種：
+                                如果是可替換元素<img>或<video>，可以將width/height其一設定尺寸，另一個設為auto，則可替換元素會根據其固有尺寸進行變化。
+                                如果是普通的元素，我們可以通過padding-top/padding-bottom的方式來模擬固定寬高比，不過這種方式不靈活，只能夠高度隨著寬度變。
+                                CSS 工作組引入一種新的方案aspect-ratio，可以很方便地指定寬高比。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
