@@ -1,0 +1,83 @@
+﻿@page "/cssanim"
+@inherits Blog.Base.Base
+<h1 style="display: none;"> @h1Title - Animate.css</h1>
+
+<h2><b>Animate.css</b></h2>
+<br />
+
+<p>
+    Animate.css 是一個流行的CSS動畫庫，它提供了一個快速且簡單的方式，以在網頁項目中添加各種動畫效果。該庫包含了大量預定義的動畫效果，你可以輕鬆地應用到HTML元素，從而使網站或應用程序變得更加生動和有趣。
+    <br /> <br />
+    <span class="imtdot">以下是一些Animate.css的特點和使用方式：</span>
+    <br /> <br />
+    簡單易用： Animate.css 非常容易使用。只需在HTML元素上添加所需的CSS類別，就可以啟動動畫效果。
+    <br /> <br />
+    預定義的動畫效果： Animate.css 包含許多預定義的動畫效果，如淡入、滑動、旋轉、縮放、彈跳等。你可以從這些效果中選擇，或者根據需要自定義它們。
+    <br /> <br />
+    輕量級： Animate.css是一個相對輕量級的庫，並不需要任何JavaScript。它僅包含CSS樣式，使它容易集成到現有的專案中。
+    <br /> <br />
+    瀏覽器支援： Animate.css支援各種現代瀏覽器，因此你可以在多數瀏覽器中使用這些動畫效果。
+    <br /> <br />
+    社區支援： 由於其受歡迎程度，你可以在互聯網上找到大量的示例、教程和社區資源，以幫助你使用和自定義Animate.css。
+    <br /> <br />
+    <span class="imtdot">使用Animate.css的基本步驟如下：</span>
+    <br /> <br />
+    安裝Animate.css庫，你可以使用npm、Yarn或直接在HTML文件中引入它。
+    <br /> <br />
+    在你的HTML文件中，為要添加動畫的元素添加適當的Animate.css類別。例如，你可以使用 animate__animated 類別，以指定該元素將應用動畫效果。
+    <br /> <br />
+    在該元素上添加其他類別以指定所需的動畫效果，例如 animate__fadeIn 或 animate__slideInLeft。
+    <br /> <br />
+    根據需要自定義動畫的持續時間、延遲和其他屬性。
+    <br /> <br />
+    這是一個簡單的示例：
+</p>
+
+<pre><code class="html">
+    &lt;div class="animate__animated animate__fadeIn">這是一個帶有淡入效果的文本&lt;/div>
+</code></pre>
+
+<p>
+    通過這種方式，你可以輕鬆地為網站或應用程序的各個元素添加動畫，從而增強使用者體驗。
+</p>
+
+<h3><b>Installing with npm:</b></h3>
+<pre><code class="linux">
+    npm install animate.css --save
+</code></pre>
+
+<h3><b>Import it into your file:</b></h3>
+<p>
+    vue can type in main.js
+</p>
+<pre><code class="javascript">
+    import 'animate.css';
+</code></pre>
+
+<p>
+    其他詳細用法可以參照<a href="https://zoego.tech/ex/practice/wow/animateCss.html">https://zoego.tech/ex/practice/wow/animateCss.html</a>
+</p>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "CSS - Animate.css";
+        seo.metaTitle = "CSS - Animate.css";
+        seo.metaDescription = @"Animate.css 是一個流行的CSS動畫庫，它提供了一個快速且簡單的方式，以在網頁項目中添加各種動畫效果。該庫包含了大量預定義的動畫效果，你可以輕鬆地應用到HTML元素，從而使網站或應用程序變得更加生動和有趣。
+            以下是一些Animate.css的特點和使用方式：
+            簡單易用： Animate.css 非常容易使用。只需在HTML元素上添加所需的CSS類別，就可以啟動動畫效果。
+            預定義的動畫效果： Animate.css 包含許多預定義的動畫效果，如淡入、滑動、旋轉、縮放、彈跳等。你可以從這些效果中選擇，或者根據需要自定義它們。
+            輕量級： Animate.css是一個相對輕量級的庫，並不需要任何JavaScript。它僅包含CSS樣式，使它容易集成到現有的專案中。
+            瀏覽器支援： Animate.css支援各種現代瀏覽器，因此你可以在多數瀏覽器中使用這些動畫效果。
+            社區支援： 由於其受歡迎程度，你可以在互聯網上找到大量的示例、教程和社區資源，以幫助你使用和自定義Animate.css。
+            使用Animate.css的基本步驟如下：
+            安裝Animate.css庫，你可以使用npm、Yarn或直接在HTML文件中引入它。
+            在你的HTML文件中，為要添加動畫的元素添加適當的Animate.css類別。例如，你可以使用 animate__animated 類別，以指定該元素將應用動畫效果。
+            在該元素上添加其他類別以指定所需的動畫效果，例如 animate__fadeIn 或 animate__slideInLeft。
+            根據需要自定義動畫的持續時間、延遲和其他屬性。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
