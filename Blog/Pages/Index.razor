@@ -1,10 +1,2 @@
 ﻿@page "/"
 @inherits Blog.Base.Base
-@inject NavigationManager Navigation
-
-@code {
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        Navigation.NavigateTo("/main");
-    }
-}
