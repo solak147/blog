@@ -1,0 +1,92 @@
+﻿@page "/javascriptGA"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Google Analytics (GA4) 分析追蹤網站</h1>
+
+<h2><b>Google Analytics (gtag.js) 分析追蹤網站</b></h2>
+<br />
+
+<h3><b>Google Analytics 是什麼？</b></h3>
+<p>
+    Google Analytics 是一個由 Google 提供的免費的網站分析服務，用於追蹤和報告網站流量。
+    它允許網站擁有者或管理者收集各種有關訪客行為的數據，如訪問量、用戶來源、頁面瀏覽量、訪問時間、訪問設備、流量來源等等。
+    這些數據有助於評估網站的效能和用戶互動情況，並可用於制定網站改進和市場營銷策略。 
+    Google Analytics 提供了豐富的報告和分析工具，讓用戶可以深入了解其網站的運作情況和用戶行為。
+</p>
+
+<h3><b>Google Analytics 設定怎麼做？</b></h3>
+<p>
+    要使用GA分析，首先當然要先擁有Google Analytics帳號並完成GA設定。
+    每一個Google Analytics帳號都能夠同時追蹤數個資源（Property），資源即是管理者想分析和追蹤的個體，可能是一個網站或是App，
+    而在每個資源底下又能篩選出數個資料檢視（View），
+    這些檢視就是根據管理者篩選的條件所留下的資料，如客群年齡、地域、來源等等。
+</p>
+
+<h3><b>Step1：進入GA頁面並登入Google帳號</b></h3>
+<p>登入Google帳戶後，點選開始測量。</p>
+<img src="images/javascriptGA_1.png" alt="Google Analytics" class="imgfmt">
+
+<h3><b>Step2：輸入「帳戶名稱」及「資源名稱」</b></h3>
+<p>輸入帳戶名稱。</p>
+<img src="images/javascriptGA_2.png" alt="Google Analytics" class="imgfmt">
+
+<p>輸入資源名稱。</p>
+<img src="images/javascriptGA_3.png" alt="Google Analytics" class="imgfmt">
+
+<h3><b>Step3：提供「商家資訊」</b></h3>
+<p>選取跟自身網站相符的敘述，以便於GA分析幫助你！</p>
+<img src="images/javascriptGA_4.png" alt="Google Analytics" class="imgfmt">
+
+<h3><b>Step4：設定資料串流：輸入「網站網址」和「串流名稱」</b></h3>
+<img src="images/javascriptGA_5.png" alt="Google Analytics" class="imgfmt">
+
+<h3><b>Step5：取得「追蹤ID」和「全域網站代碼」並於網站加入</b></h3>
+<p>要記得把這些資訊嵌入網站後台！也可藉由Google代碼管理工具協助！</p>
+<img src="images/javascriptGA_6.png" alt="Google Analytics" class="imgfmt">
+
+<p>申請帳號並取得程式碼片段，提交範例：</p>
+<pre><code class="javascript">
+    &lt;!-- Google tag (gtag.js) -->
+    &lt;script async src="https://www.googletagmanager.com/gtag/js?id=Your-GA-Id">&lt;/&lt;script>
+    &lt;script>
+        if (window.location.hostname == 'h5.moonlive56.com' || window.location.hostname == 'h5.moonlive98.com') {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+
+            gtag('config', 'Your-GA-Id');
+        }
+    &lt;script>
+</code></pre>
+
+<p>事件觸發使用範例：</p>
+<pre><code class="javascript">
+    註冊：gtag('event', 'sign_up');
+    首儲：gtag('event', 'purchase', { value: 100, currency: 'THB', });
+</code></pre>
+
+<h3><b>Step6：確認網站是否成功被GA分析所追蹤</b></h3>
+<p>最後當然是要確認有沒有成功被追蹤囉！但也別太心急，資料傳入GA通常會延遲24～48小時，所以設定好後就安心睡一覺，隔幾天再看看有沒有資料傳來！</p>
+
+<h3><b>分析報表</b></h3>
+<img src="images/javascriptGA_7.png" alt="Google Analytics" class="imgfmt">
+
+<div class="ref">
+    參考 :<a href="https://welly.tw/digital-marketing/google-analytics-instruction">https://welly.tw/digital-marketing/google-analytics-instruction</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Google Analytics (GA4) 分析追蹤網站";
+        seo.metaTitle = "Google Analytics (GA4s) 分析追蹤網站";
+        seo.metaDescription = @"Google Analytics 是一個由 Google 提供的免費的網站分析服務，用於追蹤和報告網站流量。
+            它允許網站擁有者或管理者收集各種有關訪客行為的數據，如訪問量、用戶來源、頁面瀏覽量、訪問時間、訪問設備、流量來源等等。
+            這些數據有助於評估網站的效能和用戶互動情況，並可用於制定網站改進和市場營銷策略。
+            Google Analytics 提供了豐富的報告和分析工具，讓用戶可以深入了解其網站的運作情況和用戶行為。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
