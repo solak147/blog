@@ -1,7 +1,7 @@
 {
   "entryAssembly": "Blog",
   "resources": {
-    "hash": "sha256-wnl2SHiN26T3p/QebR63LjF1t3+oX4U+j+iWZG637q8=",
+    "hash": "sha256-U/MWihhVdOjupRuRq2hdAnH+OSomlhQM9BkGZfADtMM=",
     "runtime": {
       "dotnet.6.0.27.zuwq2jt0mq.js": "sha256-26GREQBtzf9waPgLefTus1ODJdcs93wyAEl2cY4aiD0=",
       "dotnet.timezones.blat": "sha256-Hu3yTR07LZhOqoVr6q2tVZ2tv621ulhIVgZRupSxU6A=",
@@ -9,7 +9,7 @@
       "icudt.dat": "sha256-Zuq0dWAsBm6/2lSOsz7+H9PvFaRn61KIXHMMwXDfvyE="
     },
     "assembly": {
-      "Blog.dll": "sha256-FN47rzKgDqfqUPVkiGi3atPHfh0FxYUr1Bv0ww6HsF4=",
+      "Blog.dll": "sha256-BD29gBA4KvGpNUz0ke/mmeshhNReRwPbWg1Xw7rWakM=",
       "Microsoft.AspNetCore.Components.dll": "sha256-ZoMELTrf8bD1QvD6319yB6JJ7CdtW9g4RneyIVAnEnI=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-eP0AyHSp/i3bd1xrhZL8Ev89anboo/4BzsLA6GVuE78=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-wrIO/UfxfzZ4ONYPyoOAXc9GFZwI8jD9mJJ1cm96/yA=",
@@ -80,7 +80,7 @@
     },
     "satelliteResources": {
       "en-US": {
-        "en-US/Blog.resources.dll": "sha256-EBtXxVMJ4+Xk4s5U8gdONRyZbFCgizj8RZFsaAS0sT0="
+        "en-US/Blog.resources.dll": "sha256-c1S0uUOzy9C2bHNgyIeN0Ctbtz3YRlbXbnb5MWcE8rk="
       }
     },
     "runtimeAssets": {
