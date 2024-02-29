@@ -3,7 +3,7 @@
 
 <h1 style="display: none;"> @h1Title - Google Analytics (GA4) 分析追蹤網站</h1>
 
-<h2><b>Google Analytics (gtag.js) 分析追蹤網站</b></h2>
+<h2><b>Google Analytics (GA4) 分析追蹤網站</b></h2>
 <br />
 
 <h3><b>Google Analytics 是什麼？</b></h3>
@@ -71,8 +71,42 @@
 <h3><b>分析報表</b></h3>
 <img src="images/javascriptGA_7.png" alt="Google Analytics" class="imgfmt">
 
+<h3><b>同場加映: Meta Pixel</b></h3>
+<p>
+    「Meta Pixel」指的是 Meta Platforms, Inc.（前身為 Facebook, Inc.）所使用的一種像素追蹤技術。
+    像素是一種小型的程式碼片段，嵌入在網頁上，用於追蹤使用者在網站上的活動，例如點擊、購買等。這些像素可以幫助廣告主評估其廣告活動的效果，並進行定向廣告投放。
+    Meta Pixel 可能是 Meta Platforms, Inc.（前 Facebook, Inc.）所提供的其中一種像素追蹤技術，用於其廣告平台上。
+</p>
+
+<p>1. 申請帳號並取得事件代碼，提交範例：</p>
+<pre><code class="javascript">
+    &lt;!-- Meta Pixel Code -->
+    &lt;script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'Your-Pixel-id');
+        fbq('track', 'PageView');
+    &lt;/script>
+    &lt;noscript>&lt;img height="1" width="1" style="display:none"
+                      src="https://www.facebook.com/tr?id=Your-Pixel-id&ev=PageView&noscript=1" />&lt;/noscript>
+    &lt;!-- End Meta Pixel Code -->
+</code></pre>
+
+<p>2. 事件觸發使用 pixel 的標準事件，例如：</p>
+<pre><code class="javascript">
+    註冊：fbq('track', 'CompleteRegistration');
+    首儲：fbq('track', 'Purchase', { currency: “THB”, value: 100});
+</code></pre>
+
 <div class="ref">
     參考 :<a href="https://welly.tw/digital-marketing/google-analytics-instruction">https://welly.tw/digital-marketing/google-analytics-instruction</a>
+    <a href="https://digimkt.com.tw/digital_marketing/facebook-pixel/">https://digimkt.com.tw/digital_marketing/facebook-pixel/</a>
 </div>
 
 @code {
