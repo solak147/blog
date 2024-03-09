@@ -1,0 +1,59 @@
+﻿@page "/javascriptHistoryBack"
+@inherits Blog.Base.Base
+
+<h1 style="display: none;"> @h1Title - Js 阻止行動裝置觸發返回事件</h1>
+
+<h2><b>Js 阻止行動裝置觸發返回事件</b></h2>
+<br />
+
+<p>這部分會使用到 pushState 這個功能，簡單介紹一下它使用</p>
+<p>
+    pushState 可以讓我們在不移動頁面的情況下，添加一筆歷史紀錄，它一共有三個參數<br /><br />
+
+    state: 這個參數可以接受一個物件，該物件裡可以存放任何資料。<br />
+    title: 這是一個被暫時保留的參數，實際上沒有任何用途，且會被瀏覽器忽略。<br />
+    URL: 這個參數是用來設定我們添加的這筆歷史紀錄的網址，可傳可不傳。
+</p>
+
+<pre><code class="javascript">
+    history.pushState({ name: "max" }, null, "newPage.html");
+</code></pre>
+
+<p>
+    假設我們原本所在頁面的網址是 https://maxleebk.com/index.html，那當我們執行上面這段程式碼時，網址就會被改成 https://maxleebk.com/newPage.html，並且歷史紀錄會被加上一筆，所以如果點擊上一頁，又會回到 /index.html。
+
+    更有趣的是，當網址被改為 /newPage.html 時，瀏覽器不會真的去讀取 newPage.html 這個文件，而是維持在 index.html，直到使用者進行重新整理。
+</p>
+
+<h3><b>阻止行動裝置觸發返回事件</b></h3>
+<p>
+    至於要阻止行動裝置(瀏覽器)預設觸發的返回事件，就是當前頁面事先新增一筆空的歷史紀錄，在返回事件觸發時便會導向此筆紀錄。
+</p>
+<pre><code class="javascript">
+    history.pushState('forward', null, '')
+    window.onpopstate = function(event) {
+
+        //可以藉由 event.state 上述 forward 參數
+        history.pushState('forward', null, '')  
+    };
+</code></pre>
+
+<div class="ref">
+    參考 :<a href="https://ithelp.ithome.com.tw/m/articles/10273613">https://ithelp.ithome.com.tw/m/articles/10273613</a>
+</div>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        parameters.SetParameterProperties(this);
+
+        seo.pageTitle = "Js 阻止行動裝置觸發返回事件";
+        seo.metaTitle = "Js 阻止行動裝置觸發返回事件";
+        seo.metaDescription = @"pushState 可以讓我們在不移動頁面的情況下，添加一筆歷史紀錄，它一共有三個參數
+                state: 這個參數可以接受一個物件，該物件裡可以存放任何資料。
+                title: 這是一個被暫時保留的參數，實際上沒有任何用途，且會被瀏覽器忽略。
+                URL: 這個參數是用來設定我們添加的這筆歷史紀錄的網址，可傳可不傳。";
+
+        await base.SetParametersAsync(ParameterView.Empty);
+    }
+}
